@@ -1,5 +1,5 @@
 <template>
-  <header class="header">
+  <header class="header" :class="{ blur: isBlur }">
     <div class="header-inner">
       <div class="controls">
         <div class="window-icon-bg" @click="minimize">
@@ -25,13 +25,26 @@ export default {
   name: 'window-header',
   data () {
     return {
+      isBlur: false,
       isMaximized: false
     }
   },
   mounted () {
-    window.onresize = (e) => {
-      this.isMaximized = win.isMaximized()
-    }
+    win.on('blur', () => {
+      this.isBlur = true
+    })
+
+    win.on('focus', () => {
+      this.isBlur = false
+    })
+
+    win.on('maximize', () => {
+      this.isMaximized = true
+    })
+
+    win.on('unmaximize', () => {
+      this.isMaximized = false
+    })
   },
   methods: {
     maximize () {
@@ -63,6 +76,10 @@ export default {
   height: 34px;
   width: 100%;
   background: rgb(40, 44, 52);
+
+  &.blur {
+    background: rgb(40, 44, 52);
+  }
 }
 
 .header-inner {

@@ -1,7 +1,9 @@
 <template>
   <div id="app" class="app">
     <window-header></window-header>
-    <router-view></router-view>
+    <div class="app-wrap">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -14,7 +16,7 @@
   }
 </script>
 
-<style>
+<style lang="scss">
 * {
     margin: 0;
     padding: 0;
@@ -28,11 +30,17 @@ body {
 }
 
 .app {
-    border: 1px solid rgb(51, 51, 51);
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
+  border: 1px solid rgb(51, 51, 51);
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+
+  .app-wrap {
+    position: relative;
+    margin-top: 34px;
+    height: calc(100vh - 34px);
+  }
 }
 </style>
