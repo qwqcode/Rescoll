@@ -24,9 +24,12 @@
     box-sizing: border-box;
 }
 
-body {
-  color: #fff;
-  -webkit-backface-visibility: hidden;
+body, html {
+  font-family: "Helvetica Neue", "PingFangSC-Light", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+  color: #FFF;
+  background-color: #535f6f;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
 }
 
 .app {
@@ -40,7 +43,7 @@ body {
   .app-wrap {
     position: relative;
     margin-top: 34px;
-    height: calc(100vh - 34px);
+    height: calc(100vh - 34px - 3px);
   }
 }
 </style>

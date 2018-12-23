@@ -1,73 +1,98 @@
 <template>
-  <div class="workspace" @mousedown="onMouseDown" @mousemove="onMouseMove" @mouseup="onMouseUp">
-    <div class="workspace-canvas"><div class="233" style="width: 100px;height: 20px;background: rgb(76, 151, 255);text-align: center;border-radius: 3px;left: 200px;top: 200px;position: absolute;">233</div></div>
+  <div class="workspace">
+    <div class="workspace-canvas-wrap" ref="canvasWrap">
+      <div class="workspace-canvas" ref="canvas">
+        <workspace-block ref="startBlock"></workspace-block>
+      </div>
+    </div>
     <div class="float-btns">
       <button type="button" @click="zoomIn">+</button>
       <button type="button" @click="zoomOut">-</button>
+      <button type="button" @click="backToCenter">0</button>
     </div>
   </div>
 </template>
 
 <script>
+import WorkspaceBlock from './Workspace/WorkspaceBlock.vue'
+
 export default {
   name: 'wrokspace',
   data () {
     return {
-      canvasEl: null,
-      dragMode: false,
-      drag: {startX: 0, startY: 0},
-      scale_: 1,
-      lastTransform: {x: 0, y: 0}
+      scale_: 1
     }
   },
+  components: { WorkspaceBlock },
   mounted () {
-    this.canvasEl = document.querySelector('.workspace-canvas')
+    this.canvasEl = this.$refs.canvas
+    this.canvasWrapEl = this.$refs.canvasWrap
     // this.update(1.0)
+
+    this.canvasDragMove = false
+    this.canvasCurPos = {x: 0, y: 0}
+    window.addEventListener('mousedown', this.onMouseDown, 0)
+    window.addEventListener('mousemove', this.onMouseMove, 0)
+    window.addEventListener('mouseup', this.onMouseUp, 0)
+
+    let canvasCenterPos = this.canvasCenterPos = {x: this.canvasEl.offsetWidth / 2, y: this.canvasEl.offsetHeight / 2}
+    this.screenCenterPos = {x: this.canvasWrapEl.offsetWidth / 2, y: this.canvasWrapEl.offsetHeight / 2}
+
+    let startBlockEl = this.$refs.startBlock.$el
+    startBlockEl.style.left = `${canvasCenterPos.x - startBlockEl.offsetWidth / 2}px`
+    startBlockEl.style.top = `${canvasCenterPos.y - startBlockEl.offsetHeight / 2}px`
+
+    this.backToCenter()
   },
   methods: {
-    moveTo (x, y) {
-      this.setTransform(null, x, y)
-    },
-
-    zoomIn () {
-      this.setTransform(this.scale_ + 0.5, null, null)
-    },
-
-    zoomOut () {
-      this.setTransform(this.scale_ - 0.5, null, null)
-    },
-
     onMouseDown (e) {
-      this.dragMode = true
-      this.drag.startX = e.pageX - this.lastTransform.x
-      this.drag.startY = e.pageY - this.lastTransform.y
-    },
-
-    onMouseMove (e) {
-      e.preventDefault()
-      if (!this.dragMode) {
+      if (['workspace-canvas', 'workspace-canvas-wrap'].indexOf(e.target.className) <= -1) {
         return false
       }
 
-      let newDx = e.pageX - this.drag.startX
-      let newDy = e.pageY - this.drag.startY
+      this.canvasCurPos.x = e.clientX
+      this.canvasCurPos.y = e.clientY
+      this.canvasDragMove = true
 
-      this.moveTo(newDx, newDy)
+      e.preventDefault()
+    },
+
+    onMouseMove (e) {
+      if (!this.canvasDragMove) {
+        return false
+      }
+
+      this.canvasWrapEl.scrollLeft -= -this.canvasCurPos.x + (this.canvasCurPos.x = e.clientX)
+      this.canvasWrapEl.scrollTop -= -this.canvasCurPos.y + (this.canvasCurPos.y = e.clientY)
+
+      e.preventDefault()
     },
 
     onMouseUp () {
-      if (this.dragMode) {
-        this.dragMode = false
+      if (this.canvasDragMove) {
+        this.canvasDragMove = false
       }
     },
 
-    setTransform (scale, transformX, transformY) {
-      this.scale_ = scale || this.scale_
-      this.lastTransform.x = transformX || this.lastTransform.x
-      this.lastTransform.y = transformY || this.lastTransform.y
-      this.canvasEl.style.transform = `scale(${this.scale_})` // translate(${this.lastTransform.x}px, ${this.lastTransform.y}px)
-      this.canvasEl.style.top = this.lastTransform.y + 'px'
-      this.canvasEl.style.left = this.lastTransform.x + 'px'
+    backToCenter () {
+      this.canvasWrapEl.scrollTo((this.canvasWrapEl.scrollWidth - this.canvasWrapEl.clientWidth) / 2, (this.canvasWrapEl.scrollHeight - this.canvasWrapEl.clientHeight) / 2)
+    },
+
+    zoomIn () {
+      let multiple = 0.3
+
+      this.scale_ += multiple
+      this.canvasEl.style.transform = `scale(${this.scale_})`
+    },
+
+    zoomOut () {
+      let multiple = 0.3
+      if (this.scale_ <= multiple) {
+        return false
+      }
+
+      this.scale_ -= multiple
+      this.canvasEl.style.transform = `scale(${this.scale_})`
     }
   }
 }
@@ -81,16 +106,28 @@ export default {
   overflow: hidden;
 }
 
-.workspace-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
+.workspace-canvas-wrap {
+  position: relative;
   width: 100%;
   height: 100%;
+  overflow: auto;
+}
+
+.workspace-canvas-wrap::-webkit-scrollbar {
+  /* width: 0px;
+  height: 0px; */
+}
+
+.workspace-canvas {
+  width: 20000px;
+  height: 20000px;
   background-color: #F9F9F9;
   outline: none;
-  overflow: hidden;
-  background: url('~@/assets/grid-points.svg') repeat
+  background-image: url('~@/assets/grid-points.svg');
+  background-repeat: repeat;
+  transition: transform 200ms;
+  transform: scale(1);
+  transform-origin: center;
 }
 
 .float-btns {

@@ -6538,6 +6538,11 @@ pkg-up@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
+plain-draggable@^2.5.12:
+  version "2.5.12"
+  resolved "https://registry.npmjs.org/plain-draggable/-/plain-draggable-2.5.12.tgz#d97c6d91740c0afd6c9738245efd2698ddf56a66"
+  integrity sha512-NVt88QV/MffzEPPRYB77OQjHJ0jtKcyjQcHhBjPvHiMNE1qKSz6eSlJB8YYi5reRxMHVJeOq4jZXTMozHe1SCQ==
+
 plist@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/plist/-/plist-3.0.1.tgz#a9b931d17c304e8912ef0ba3bdd6182baf2e1f8c"
