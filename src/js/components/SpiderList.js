@@ -12,8 +12,25 @@ SpiderList.Business = {
 SpiderList.Business.CollItemDescImg = {
   label: '商品详情页图片解析',
   genForm: function () {
-    Form.textInput('PageUrl', '详情页链接', '', InputValidators.isUrl)
-    Form.selectInput('PageType', '链接类型', {
+    var pageUrlEl = Form.textInput('PageUrl', '详情页链接', '', InputValidators.isUrl)
+    pageUrlEl.on('input propertychange', function () {
+      var urlVal = $.trim(pageUrlEl.val())
+      var urlMap = {
+        'Tmall': ['https://detail.tmall.com'],
+        'Taobao': ['https://item.taobao.com'],
+        'Alibaba': ['https://detail.1688.com'],
+        'Suning': ['https://product.suning.com'],
+        'Gome': ['https://item.gome.com.cn']
+      }
+      for (var key in urlMap) {
+        for (var i in urlMap[key]) {
+          if (urlVal.indexOf(urlMap[key][i]) === 0) {
+            PageTypeEl.val(key)
+          }
+        }
+      }
+    })
+    var PageTypeEl = Form.selectInput('PageType', '链接类型', {
       'Tmall': '天猫',
       'Taobao': '淘宝',
       'Alibaba': '阿里巴巴',

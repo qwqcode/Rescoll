@@ -19,6 +19,7 @@ const Form = {
     var formInput = $('<input id="' + tagId + '" name="' + fieldName + '" type="text" class="form-control" autocomplete="off" spellcheck="false" placeholder="输入文字" value="' + defaultVal + '">')
     formInput.appendTo(formGroup)
     this._currentInfoAdd(fieldName, label, tagId, validator)
+    return formInput
   },
   // 数字框
   numberInput: function (fieldName, label, defaultVal, min, max) {
@@ -30,6 +31,7 @@ const Form = {
     var formInput = $('<input id="' + tagId + '" name="' + fieldName + '" type="number" class="form-control" autocomplete="off" spellcheck="false" placeholder="输入数字" value="' + defaultVal + '" min="' + min + '" max="' + max + '">')
     formInput.appendTo(formGroup)
     this._currentInfoAdd(fieldName, label, tagId)
+    return formInput
   },
   // 多行文本框
   textareaInput: function (fieldName, label, defaultVal, height) {
@@ -39,6 +41,7 @@ const Form = {
     var formInput = $('<textarea id="' + tagId + '" name="' + fieldName + '" class="form-control" spellcheck="false" placeholder="输入文字">' + defaultVal + '</textarea>').appendTo(formGroup)
     if (height) formInput.css('height', height) // 设置高度
     this._currentInfoAdd(fieldName, label, tagId)
+    return formInput
   },
   // 选择菜单
   selectInput: function (fieldName, label, values, selectValue) {
@@ -54,6 +57,7 @@ const Form = {
     var formInput = $(inputHtml)
     formInput.appendTo(formGroup)
     this._currentInfoAdd(fieldName, label, tagId)
+    return formInput
   }
 }
 
