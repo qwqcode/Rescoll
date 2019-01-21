@@ -3,6 +3,7 @@
     <div class="workspace-canvas-wrap" ref="canvasWrap">
       <div class="workspace-canvas" ref="canvas">
         <workspace-block ref="startBlock"></workspace-block>
+        <workspace-block></workspace-block>
       </div>
     </div>
     <div class="float-btns">
@@ -15,6 +16,7 @@
 
 <script>
 import WorkspaceBlock from './Workspace/WorkspaceBlock.vue'
+import { setTimeout } from 'timers'
 
 export default {
   name: 'wrokspace',
@@ -35,14 +37,15 @@ export default {
     window.addEventListener('mousemove', this.onMouseMove, 0)
     window.addEventListener('mouseup', this.onMouseUp, 0)
 
-    let canvasCenterPos = this.canvasCenterPos = {x: this.canvasEl.offsetWidth / 2, y: this.canvasEl.offsetHeight / 2}
+    this.canvasCenterPos = {x: this.canvasEl.offsetWidth / 2, y: this.canvasEl.offsetHeight / 2}
     this.screenCenterPos = {x: this.canvasWrapEl.offsetWidth / 2, y: this.canvasWrapEl.offsetHeight / 2}
 
-    let startBlockEl = this.$refs.startBlock.$el
-    startBlockEl.style.left = `${canvasCenterPos.x - startBlockEl.offsetWidth / 2}px`
-    startBlockEl.style.top = `${canvasCenterPos.y - startBlockEl.offsetHeight / 2}px`
-
     this.backToCenter()
+
+    setTimeout(() => {
+      let startBlockEl = this.$refs.startBlock.$el
+      startBlockEl.style.transform = `translate(${this.canvasCenterPos.x - startBlockEl.offsetWidth / 2}px, ${this.canvasCenterPos.y - startBlockEl.offsetHeight / 2}px)`
+    }, 80)
   },
   methods: {
     onMouseDown (e) {

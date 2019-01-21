@@ -1,6 +1,7 @@
 <template>
-  <header class="header" :class="{ blur: isBlur }">
-    <div class="header-inner">
+  <div class="title-bar" :class="{ blur: isBlur }">
+    <div class="inner">
+      <div class="brand">RESCOLL</div>
       <div class="controls">
         <div class="window-icon-bg" @click="minimize">
           <div class="window-icon window-minimize"></div>
@@ -13,7 +14,7 @@
         </div>
       </div>
     </div>
-  </header>
+  </div>
 </template>
 
 <script>
@@ -22,7 +23,7 @@ import { remote } from 'electron'
 let win = remote.getCurrentWindow()
 
 export default {
-  name: 'window-header',
+  name: 'title-bar',
   data () {
     return {
       isBlur: false,
@@ -67,28 +68,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.header {
-  position: fixed;
+.title-bar {
+  @extend %top-bar;
   top: 1px;
-  left: 1px;
-  right: 1px;
-  z-index: 100;
-  height: 34px;
-  width: 100%;
-  background: rgb(40, 44, 52);
+  height: 29px;
+  z-index: 101;
+  background: #21252b;
 
   &.blur {
-    background: rgb(40, 44, 52);
+    background: #21252b;
   }
 }
 
-.header-inner {
-  height: 34px;
+.inner {
+  position: relative;
   width: 100%;
-  position: fixed;
-  top: 1px;
-  left: 1px;
-  right: 1px;
+  height: 100%;
   -webkit-app-region: drag;
   user-select: none;
   display: flex;
@@ -96,12 +91,25 @@ export default {
   align-items: center;
 }
 
+.brand {
+  padding: 2px 22px 2px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  position: absolute;
+  top: -1px;
+  left: 10px;
+  font-size: 17px;
+  color: #FFF;
+  font-family: 'SAOUI';
+  border-top: 1px solid #808080;
+}
+
 .controls {
   display: flex;
   width: 136px;
-  height: 34px;
+  height: 29px;
   justify-content: space-between;
-  position: fixed;
+  position: absolute;
+  top: 0;
   right: 0px;
 
   .window-icon-bg {
@@ -113,7 +121,7 @@ export default {
     .window-icon {
       height: 100%;
       width: 100%;
-      -webkit-mask-size: 23.1%;
+      -webkit-mask-size: 23.1% !important;
       background-color: #9da5b4;
 
       &.window-minimize {
@@ -135,6 +143,10 @@ export default {
 
     &:hover {
       background-color: hsla(0,0%,100%,.1);
+
+      .window-icon {
+        background-color: #ffffff;
+      }
     }
 
     &.red:hover {

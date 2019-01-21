@@ -1,6 +1,5 @@
 <template>
   <div id="app" class="app">
-    <window-header></window-header>
     <div class="app-wrap">
       <router-view></router-view>
     </div>
@@ -8,27 +7,25 @@
 </template>
 
 <script>
-  import WindowHeader from './components/WindowHeader'
+  import 'material-design-iconic-font/dist/css/material-design-iconic-font.min.css'
+  import 'normalize.css/normalize.css'
 
   export default {
     name: 'rescoll',
-    components: { WindowHeader }
+    components: { }
   }
 </script>
 
 <style lang="scss">
-* {
-    margin: 0;
-    padding: 0;
-    text-rendering: optimizeLegibility;
-    box-sizing: border-box;
+@font-face {
+  font-family: SAOUI;
+  src: url('~@/fonts/SAOUI.otf');
 }
 
 body, html {
   font-family: "Helvetica Neue", "PingFangSC-Light", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
   color: #FFF;
   background-color: #535f6f;
-  margin: 0;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -42,8 +39,10 @@ body, html {
 
   .app-wrap {
     position: relative;
-    margin-top: 34px;
-    height: calc(100vh - 34px - 3px);
+    margin-top: 70px;
+    margin-left: calc(250px + 10px);
+    margin-right: 10px;
+    height: calc(100vh - 65px - 1px);
   }
 }
 </style>
