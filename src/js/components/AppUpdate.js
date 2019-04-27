@@ -7,16 +7,16 @@ const AppConfig = window.AppConfig
  * 升级检测
  */
 const AppUpdate = {
-  check: function (atDocumentReady, onFinish) {
+  check (atDocumentReady, onFinish) {
     atDocumentReady = atDocumentReady || false
     var ajaxOpt = {
       type: 'GET',
       url: AppConfig.updateCheckUrl,
       dataType: 'json',
       data: { 'token': AppConfig.updateCheckToken },
-      beforeSend: function () {}
+      beforeSend () {}
     }
-    ajaxOpt.success = function (json) {
+    ajaxOpt.success = (json) => {
       if (typeof (onFinish) === 'function') {
         onFinish(json)
       }
@@ -42,7 +42,7 @@ const AppUpdate = {
         if (!atDocumentReady) AppLayer.Notify.success('暂无更新')
       }
     }
-    ajaxOpt.error = function () {
+    ajaxOpt.error = () => {
       if (typeof (onFinish) === 'function') {
         onFinish(null)
       }

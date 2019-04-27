@@ -2,7 +2,7 @@
  * 小部件
  */
 const AppWidget = {
-  loadingIndicator: function (putInto) {
+  loadingIndicator (putInto) {
     $('<div class="loading-indicator" style="opacity: .9;"><div class="inner"><svg viewBox="25 25 50 50"><circle cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"></circle></svg></div></div>').prependTo(putInto)
 
     var indicatorObj = {}
@@ -12,13 +12,13 @@ const AppWidget = {
 
     return indicatorObj
   },
-  floatImg: function (parent, imgSrc) {
+  floatImg (parent, imgSrc) {
     if ($('body .widget-float-img').length !== 0) { return }
 
     var parentDom = $(parent)
     var parentPos = $(parent)[0].getBoundingClientRect()
 
-    setTimeout(function () {
+    setTimeout(() => {
       if ($(':hover').filter(parentDom).length === 0) { return }
 
       var left = parentPos['left']
@@ -36,12 +36,12 @@ const AppWidget = {
       var loadingIndicator = AppWidget.loadingIndicator(floaterDom)
 
       var imgDom = $('<img src="' + imgSrc + '" class="anim-fade-in" style="display: none;">').appendTo(floaterDom)
-      imgDom.on('load', function () {
+      imgDom.on('load', () => {
         loadingIndicator.remove()
         imgDom.show()
       })
 
-      parentDom.on('mouseout', function (e) {
+      parentDom.on('mouseout', (e) => {
         floaterDom.remove()
       })
     }, 200)

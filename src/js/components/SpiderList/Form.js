@@ -3,7 +3,7 @@ import TaskGen from '../TaskGen'
 // 表单控件
 const Form = {
   // 当前表单数据添加
-  _currentInfoAdd: function (fieldName, label, inputTagId, validator) {
+  _currentInfoAdd (fieldName, label, inputTagId, validator) {
     TaskGen.current.inputs[fieldName] = {
       label: label,
       inputSel: '#' + inputTagId
@@ -11,51 +11,71 @@ const Form = {
     // 验证器
     if (validator) { TaskGen.current.inputs[fieldName].validator = validator }
   },
-  // 文本框
-  textInput: function (fieldName, label, defaultVal, validator) {
+  _genBaseFormGroup (tagId, label) {
+    let formGroup = $(`
+      <div class="form-group">
+      <label for="${tagId}">${label}</label>
+      </div>
+    `).appendTo(TaskGen.sel.form)
+    return formGroup
+  },
+  _genBaseTextInput (tagId, fieldName, label, defaultVal) {
     defaultVal = defaultVal || ''
-    var tagId = 'TaskGen_' + fieldName
-    var formGroup = $('<div class="form-group">\n<label for="' + tagId + '">' + label + '</label>\n</div>').appendTo(TaskGen.sel.form)
-    var formInput = $('<input id="' + tagId + '" name="' + fieldName + '" type="text" class="form-control" autocomplete="off" spellcheck="false" placeholder="输入文字" value="' + defaultVal + '">')
-    formInput.appendTo(formGroup)
-    this._currentInfoAdd(fieldName, label, tagId, validator)
+    let inputElem = $(`
+      <input id="${tagId}" name="${fieldName}" type="text"
+              class="form-control" autocomplete="off" spellcheck="false"
+              placeholder="输入文字" value="${defaultVal}">
+    `)
+    inputElem.appendTo(this._genBaseFormGroup(tagId, label))
+    return inputElem
+  },
+  _genBaseTextarea (tagId, fieldName, label, defaultVal) {
+    defaultVal = defaultVal || ''
+    let formInput = $(`<textarea id="${tagId}" name="${fieldName}" class="form-control" spellcheck="false" placeholder="输入文字"></textarea>`)
+      .html(defaultVal)
+      .appendTo(this._genBaseFormGroup(tagId, label))
     return formInput
+  },
+  // 文本框
+  textInput (fieldName, label, defaultVal, validator) {
+    let tagId = 'TaskGen_' + fieldName
+    let inputElem = this._genBaseTextInput(tagId, fieldName, label, defaultVal)
+    this._currentInfoAdd(fieldName, label, tagId, validator)
+    return inputElem
   },
   // 数字框
-  numberInput: function (fieldName, label, defaultVal, min, max) {
-    defaultVal = defaultVal || ''
+  numberInput (fieldName, label, defaultVal, min, max) {
     min = min || ''
     max = max || ''
-    var tagId = 'TaskGen_' + fieldName
-    var formGroup = $('<div class="form-group">\n<label for="' + tagId + '">' + label + '</label>\n</div>').appendTo(TaskGen.sel.form)
-    var formInput = $('<input id="' + tagId + '" name="' + fieldName + '" type="number" class="form-control" autocomplete="off" spellcheck="false" placeholder="输入数字" value="' + defaultVal + '" min="' + min + '" max="' + max + '">')
-    formInput.appendTo(formGroup)
+    let tagId = 'TaskGen_' + fieldName
+    let inputElem = this._genBaseTextInput(tagId, fieldName, label, defaultVal)
+    inputElem.attr('type', 'number')
+    inputElem.attr('placeholder', '输入数字')
+    inputElem.attr('min', min)
+    inputElem.attr('max', max)
     this._currentInfoAdd(fieldName, label, tagId)
-    return formInput
+    return inputElem
   },
   // 多行文本框
-  textareaInput: function (fieldName, label, defaultVal, height) {
-    defaultVal = defaultVal || ''
-    var tagId = 'TaskGen_' + fieldName
-    var formGroup = $('<div class="form-group">\n<label for="' + tagId + '">' + label + '</label>\n</div>').appendTo(TaskGen.sel.form)
-    var formInput = $('<textarea id="' + tagId + '" name="' + fieldName + '" class="form-control" spellcheck="false" placeholder="输入文字">' + defaultVal + '</textarea>').appendTo(formGroup)
-    if (height) formInput.css('height', height) // 设置高度
+  textareaInput (fieldName, label, defaultVal, height) {
+    let tagId = 'TaskGen_' + fieldName
+    let textareaElem = this._genBaseTextarea(tagId, fieldName, label, defaultVal)
+    if (height) textareaElem.css('height', height) // 设置高度
     this._currentInfoAdd(fieldName, label, tagId)
-    return formInput
+    return textareaElem
   },
   // 选择菜单
-  selectInput: function (fieldName, label, values, selectValue) {
-    var tagId = 'TaskGen_' + fieldName
-    var formGroup = $('<div class="form-group">\n<label for="' + tagId + '">' + label + '</label>\n</div>').appendTo(TaskGen.sel.form)
-    var inputHtml = '<select id="' + tagId + '" name="' + fieldName + '" class="form-control">\n'
+  selectInput (fieldName, label, values, selectValue) {
+    let tagId = 'TaskGen_' + fieldName
+    let inputHtml = `<select id="${tagId}" name="${fieldName}" class="form-control">`
     $.each(values, function (val, label) {
       val = (typeof (val) !== 'number') ? val : label
-      var afterOpt = (val === selectValue ? 'selected' : '')
-      inputHtml += '<option value="' + val + '" ' + afterOpt + '>' + label + '</option>'
+      let afterOpt = (val === selectValue ? 'selected' : '')
+      inputHtml += `<option value="${val}" ${afterOpt}>${label}</option>`
     })
-    inputHtml += '\n</select>'
-    var formInput = $(inputHtml)
-    formInput.appendTo(formGroup)
+    inputHtml += `</select>`
+    let formInput = $(inputHtml)
+    formInput.appendTo(this._genBaseFormGroup(tagId, label))
     this._currentInfoAdd(fieldName, label, tagId)
     return formInput
   }
