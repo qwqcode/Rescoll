@@ -2,43 +2,45 @@
  * 内容层 通知
  */
 const Notify = {
-  sel: {
-    notifyLayer: '.notify-layer'
-  },
-  success: function (message) {
+  success (message) {
     this.show(message, 's')
   },
-  error: function (message) {
+  error (message) {
     this.show(message, 'e')
   },
   // level: s, e
-  show: function (message, level, timeout) {
-    timeout = (timeout !== undefined && typeof timeout === 'number') ? timeout : 2000
+  show (message, level, timeout) {
+    timeout = (typeof timeout === 'number') ? timeout : 2000
 
-    var layerDom = $(this.sel.notifyLayer)
-    if (layerDom.length === 0) { layerDom = $('<div class="notify-layer" />').appendTo('body') }
+    let layerElem = $('.notify-layer')
+    if (!layerElem.length) {
+      layerElem = $('<div class="notify-layer" />').appendTo('body')
+    }
 
-    var notifyDom = $('<div class="notify-item anim-fade-in ' + (level ? 'type-' + level : '') + '"><p class="notify-content">' + message + '</p></div>').prependTo(layerDom)
+    let notifyElem = $(`
+      <div class="notify-item anim-fade-in ${level ? ('type-' + level) : ''}">
+        <p class="notify-content">${message}</p>
+      </div>
+    `).prependTo(layerElem)
 
-    var notifyRemove = function () {
-      notifyDom.addClass('anim-fade-out')
-      setTimeout(function () {
-        notifyDom.remove()
+    let notifyRemove = () => {
+      notifyElem.addClass('anim-fade-out')
+      setTimeout(() => {
+        notifyElem.remove()
       }, 200)
     }
 
-    var autoOut = true
-    notifyDom.click(function () {
-      notifyRemove()
-      autoOut = false
-    })
-
+    let timeoutFn
     if (timeout > 0) {
-      setTimeout(function () {
-        if (!autoOut) return
+      timeoutFn = setTimeout(() => {
         notifyRemove()
       }, timeout)
     }
+
+    notifyElem.click(() => {
+      notifyRemove()
+      clearTimeout(timeoutFn) // 不再定时 out
+    })
   }
 }
 

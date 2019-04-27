@@ -81,7 +81,7 @@ const Downloads = {
   },
   // 列表项目获取 Selector
   getItemSelector: function (key) {
-    return $.sprintf('%s [data-key="%s"]', this.sel.downloadsList, key) // $().find() 导致界面不停更新；当不断执行一个方法时，拒绝使用 find()
+    return `${this.sel.downloadsList} [data-key="${key}"]` // $().find() 导致界面不停更新；当不断执行一个方法时，拒绝使用 find()
   },
   // 更新列表项目 UI
   updateItemUi: function (key) {
@@ -128,12 +128,12 @@ const Downloads = {
 
           if (progressBar.css('width') !== progressPercentage) { progressBar.css('width', progressPercentage) }
 
-          descriptionText = $.sprintf('%s，速度 %s，已下载 %s，共 %s', progressPercentage, speed, received, total)
+          descriptionText = `${progressPercentage}，速度 ${speed}，已下载 ${received}，共 ${total}`
         } else {
           // Indeterminate Progress
           if (!progress.hasClass('indeterminate')) { progress.addClass('indeterminate') }
 
-          descriptionText = $.sprintf('速度 %s，已下载 %s', speed, received)
+          descriptionText = `速度 ${speed}，已下载 ${received}`
         }
 
         actionBarHtml = '<a onclick="Downloads.taskAction(\'' + key + '\', Downloads.actionList.pause)">暂停</a>' +
@@ -143,10 +143,10 @@ const Downloads = {
       case this.statusList.pause:
         if (taskData.totalBytes !== 0) {
           // Progress Bar
-          descriptionText = $.sprintf('%s，已下载 %s，共 %s', progressPercentage, received, total)
+          descriptionText = `${progressPercentage}，已下载 ${received}，共 ${total}`
         } else {
           // Indeterminate Progress
-          descriptionText = $.sprintf('已下载 %s', received)
+          descriptionText = `已下载 ${received}`
         }
 
         actionBarHtml = '<a onclick="Downloads.taskAction(\'' + key + '\', Downloads.actionList.resume)">恢复</a>' +
@@ -154,7 +154,7 @@ const Downloads = {
         break
         // 完毕
       case this.statusList.done:
-        descriptionText = $.sprintf('总大小：%s', received)
+        descriptionText = `总大小：${received}`
         actionBarHtml = '<a onclick="Downloads.fileShowInExplorer(\'' + key + '\')">在文件夹中显示</a>'
         break
         // 已取消

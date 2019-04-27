@@ -1,6 +1,6 @@
-import Sidebar from './AppLayer/Sidebar'
-import Dialog from './AppLayer/Dialog'
-import Notify from './AppLayer/Notify'
+import Sidebar from './Sidebar'
+import Dialog from './Dialog'
+import Notify from './Notify'
 
 /**
  * 内容层

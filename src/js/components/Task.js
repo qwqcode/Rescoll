@@ -65,7 +65,16 @@ const Task = {
     // 显示任务信息
     taskObj.showInfo = function () {
       console.log(AppNavbar)
-      AppLayer.Dialog.open('任务信息', 'ID：' + taskId + '<br>标题：' + taskObj.getTitle() + '<br><br>调用类标签：' + taskObj.getClassLabel() + '<br>调用类名：' + taskObj.getTypeName() + '<br><br>执行开始时间：' + new Date(parseInt(taskId)) + '<br><br>参数：' + JSON.stringify(parmsObj) + '')
+      AppLayer.Dialog.open(
+        '任务信息',
+
+        `ID：${taskId}<br>` +
+        `标题：${taskObj.getTitle()}<br><br>` +
+        `调用类标签：${taskObj.getClassLabel()}<br>` +
+        `调用类名：${taskObj.getTypeName()}<br><br>` +
+        `执行开始时间：${new Date(parseInt(taskId))}<br><br>` +
+        `参数：${JSON.stringify(parmsObj)}`
+      )
     }
     // 日志
     taskObj.log = function (text, level) {
@@ -97,8 +106,8 @@ const Task = {
     // 删除
     taskObj.remove = function () {
       if (taskObj.getIsInProgress()) {
-        AppLayer.Dialog.open('删除任务', '任务 “' + taskObj.getTitle() + '” 正在执行中...',
-          ['中止并删除任务', function () {
+        AppLayer.Dialog.open('删除任务', `任务 “${taskObj.getTitle()}” 正在执行中...`,
+          ['中止并删除任务', () => {
             TaskController.abortTask(taskId).then(function (isSuccess) {
               if (isSuccess) {
                 taskObj._remove()
@@ -107,7 +116,7 @@ const Task = {
               }
             })
           }],
-          ['取消', function () {}])
+          ['取消', () => {}])
       } else {
         taskObj._remove()
       }

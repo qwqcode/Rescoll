@@ -66,7 +66,7 @@ $(document).ready(function () {
     }
   })
 
-  // 开发者工具显示方式
+  // 打开 开发者工具
   $(document).keydown(function (e) {
     if (e.altKey && event.keyCode === 123) {
       AppAction.showDevTools()
@@ -74,13 +74,13 @@ $(document).ready(function () {
   })
 })
 
-// 根据URL创建一个下载任务
+// 根据 URL 创建一个下载任务
 window.downloadFile = function (srcUrl) {
   AppAction.downloadUrl(srcUrl)
 }
 
 /**
- * jQuery 扩展函数
+ * 扩展函数
  */
 $.extend({
   getPosition: function ($element) {
@@ -100,23 +100,5 @@ $.extend({
     var outerDims = isBody ? { width: $(window).width(), height: $(window).height() } : null
 
     return $.extend({}, elRect, scroll, outerDims, elOffset)
-  },
-  sprintf: function (str) {
-    var args = arguments
-
-    var flag = true
-
-    var i = 1
-
-    str = str.replace(/%s/g, function () {
-      var arg = args[i++]
-
-      if (typeof arg === 'undefined') {
-        flag = false
-        return ''
-      }
-      return arg
-    })
-    return flag ? str : ''
   }
 })

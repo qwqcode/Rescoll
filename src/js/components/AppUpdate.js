@@ -25,8 +25,8 @@ const AppUpdate = {
         // 有更新
         var UpdateLog = (!!json['updateLog'] && json['updateLog'].hasOwnProperty(UpdateVersion)) ? json['updateLog'][UpdateVersion] : '无说明'
 
-        AppLayer.Dialog.open('Nacollector 可更新至 ' + json['latest'] + ' 版本', UpdateLog,
-          ['现在更新', function () {
+        AppLayer.Dialog.open(`Nacollector 可更新至 ${json['latest']} 版本`, UpdateLog,
+          ['现在更新', () => {
             if (!json['updateRes'] || !json['updateRes'].hasOwnProperty(UpdateVersion)) {
               AppLayer.Notify.error('更新地址获取失败')
               return
@@ -37,7 +37,7 @@ const AppUpdate = {
             }
             AppAction.appUpdateAction(json['updateRes'][UpdateVersion], updateType)
           }],
-          ['以后再说', function () {}])
+          ['以后再说', () => {}])
       } else {
         if (!atDocumentReady) AppLayer.Notify.success('暂无更新')
       }

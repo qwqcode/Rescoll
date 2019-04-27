@@ -4826,12 +4826,7 @@ jquery@^3.3.1:
   resolved "https://registry.npmjs.org/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
   integrity sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg==
 
-js-base64@^2.1.8:
-  version "2.5.0"
-  resolved "https://registry.npmjs.org/js-base64/-/js-base64-2.5.0.tgz#42255ba183ab67ce59a0dee640afdc00ab5ae93e"
-  integrity sha512-wlEBIZ5LP8usDylWbDNhKPEFVFdI5hCHpnVoT/Ysvoi/PRhJENm/Rlh9TvjYB38HFfKZN7OzEbRjmjvLkFw11g==
-
-js-base64@^2.5.0:
+js-base64@^2.1.8, js-base64@^2.5.0:
   version "2.5.0"
   resolved "http://r.cnpmjs.org/js-base64/download/js-base64-2.5.0.tgz#42255ba183ab67ce59a0dee640afdc00ab5ae93e"
   integrity sha1-QiVboYOrZ85ZoN7mQK/cAKta6T4=
@@ -5087,6 +5082,11 @@ listr@^0.14.2:
     listr-verbose-renderer "^0.5.0"
     p-map "^2.0.0"
     rxjs "^6.3.3"
+
+lit-html@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/lit-html/download/lit-html-1.0.0.tgz#3dc3781a8ca68a9b5c2ff2a61e263662b9b2267b"
+  integrity sha1-PcN4GoymiptcL/KmHiY2YrmyJns=
 
 load-json-file@^1.0.0:
   version "1.1.0"

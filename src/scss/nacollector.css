@@ -329,7 +329,7 @@ button, input, select, textarea {
 .title-bar .controls .window-icon {
     height: 100%;
     width: 100%;
-    -webkit-mask-size: 23.1%;
+    -webkit-mask-size: 25% !important;
     background-color: #ffffff;
 }
 

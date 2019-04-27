@@ -1,10 +1,10 @@
 /**
  * 导航栏
  */
-import Panel from './AppNavbar/Panel'
-import Btn from './AppNavbar/Btn'
-import Task from './Task'
-import Setting from './Setting'
+import Panel from './Panel'
+import Btn from './Btn'
+import Task from '../Task'
+import Setting from '../Setting'
 import { Base64 } from 'js-base64'
 
 const AppNavbar = {
