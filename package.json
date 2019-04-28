@@ -19,6 +19,7 @@
   "dependencies": {
     "jquery": "^3.4.0",
     "js-base64": "^2.5.0",
+    "lodash": "^4.17.11",
     "material-design-iconic-font": "^2.2.0"
   },
   "devDependencies": {

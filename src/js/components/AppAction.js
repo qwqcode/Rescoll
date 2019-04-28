@@ -4,7 +4,7 @@ import Setting from './Setting'
  * functions in .cs
  */
 const AppAction = window.AppAction || {}
-AppAction.utilsReqIeProxy = function (isEnable) {
+AppAction.utilsReqIeProxy = (isEnable) => {
   if (isEnable === undefined) { isEnable = !!Setting.get('UtilsReqIeProxy') }
 
   Setting.set('UtilsReqIeProxy', isEnable)
@@ -15,7 +15,7 @@ AppAction.utilsReqIeProxy = function (isEnable) {
     console.error('AppAction._utilsReqIeProxy 调用失败')
   }
 }
-AppAction.tryGetVersion = function (func) {
+AppAction.tryGetVersion = (func) => {
   try {
     AppAction.getVersion().then(func)
   } catch {

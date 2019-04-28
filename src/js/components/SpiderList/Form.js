@@ -1,4 +1,5 @@
 import TaskGen from '../TaskGen'
+import _ from 'lodash'
 
 // 表单控件
 const Form = {
@@ -68,7 +69,7 @@ const Form = {
   selectInput (fieldName, label, values, selectValue) {
     let tagId = 'TaskGen_' + fieldName
     let inputHtml = `<select id="${tagId}" name="${fieldName}" class="form-control">`
-    $.each(values, function (val, label) {
+    _.each(values, (label, val) => {
       val = (typeof (val) !== 'number') ? val : label
       let afterOpt = (val === selectValue ? 'selected' : '')
       inputHtml += `<option value="${val}" ${afterOpt}>${label}</option>`

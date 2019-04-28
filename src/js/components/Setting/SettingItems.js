@@ -1,37 +1,37 @@
-import AppAction from './AppAction'
-import AppLayer from './AppLayer'
-import Downloads from './Downloads'
-import AppUpdate from './AppUpdate'
+import AppAction from '../AppAction'
+import AppLayer from '../AppLayer'
+import Downloads from '../Downloads'
+import AppUpdate from '../AppUpdate'
 
-export default function (setting, group, itemAt) {
-  var groupDownloads = group('downloads', '下载内容')
-  itemAt(groupDownloads).btnBlock('下载列表清空', function () {
+export default (setting, group, itemAt) => {
+  let groupDownloads = group('downloads', '下载内容')
+  itemAt(groupDownloads).btnBlock('下载列表清空', () => {
     Downloads.removeDataList()
     AppLayer.Notify.success('下载列表已清空')
   })
 
-  var groupNetwork = group('downloads', '网络配置')
-  itemAt(groupNetwork).btnToggle('采集请求跟随 IE 代理配置', function () {
+  let groupNetwork = group('downloads', '网络配置')
+  itemAt(groupNetwork).btnToggle('采集请求跟随 IE 代理配置', () => {
     AppAction.utilsReqIeProxy(true)
-  }, function () {
+  }, () => {
     AppAction.utilsReqIeProxy(false)
   }).setVal(!!setting.get('UtilsReqIeProxy'))
 
-  var groupMaintenance = group('maintenance', '维护')
-  itemAt(groupMaintenance).btnBlock('日志文件清理', function () {
-    AppAction.logFileClear().then(function () {
+  let groupMaintenance = group('maintenance', '维护')
+  itemAt(groupMaintenance).btnBlock('日志文件清理', () => {
+    AppAction.logFileClear().then(() => {
       AppLayer.Notify.success('日志文件已清理')
     })
   })
-  var updateBtn = itemAt(groupMaintenance).btnBlock('检查更新', function () {
+  let updateBtn = itemAt(groupMaintenance).btnBlock('检查更新', () => {
     updateBtn.text('正在检查更新...')
-    AppUpdate.check(false, function () {
+    AppUpdate.check(false, () => {
       updateBtn.text('检查更新')
     })
   })
-  var groupAbout = group('about', '关于')
-  var infoAppVersion = itemAt(groupAbout).infoShow('版本号', '').find('.value')
-  AppAction.tryGetVersion(function (version) {
+  let groupAbout = group('about', '关于')
+  let infoAppVersion = itemAt(groupAbout).infoShow('版本号', '').find('.value')
+  AppAction.tryGetVersion((version) => {
     infoAppVersion.text(version || '未知版本号')
   })
   itemAt(groupAbout).infoShow('作者', '<a href="https://github.com/qwqcode" target="_blank">qwqcode</a>')

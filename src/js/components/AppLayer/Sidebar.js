@@ -13,14 +13,14 @@ const Sidebar = {
       throw Error(`侧边栏层：${key} 已存在于list中`)
     }
 
-    var layerSel = this.getLayerSel()
+    let layerSel = this.getLayerSel()
     $(`<div class="sidebar-block" data-sidebar-layer-key="${key}" />`)
       .appendTo($(layerSel))
-    var sidebarSel = `[data-sidebar-layer-key="${key}"]`
-    var sidebarObj = {}
+    let sidebarSel = `[data-sidebar-layer-key="${key}"]`
+    let sidebarObj = {}
     // 设置标题
     sidebarObj.setTitle = (val, titleBg) => {
-      var header = $(`
+      let header = $(`
       <div class="sidebar-header">
         <div class="header-left">${val}</div>
         <div class="header-right">
@@ -73,7 +73,7 @@ const Sidebar = {
 
       // 若点按的元素非 block 内元素
       setTimeout(() => {
-        $(document).bind('click.sidebar-layer-' + key, function (e) {
+        $(document).bind('click.sidebar-layer-' + key, (e) => {
           if (!$(e.target).is(sidebarSel) && !$(e.target).closest(sidebarSel).length) {
             sidebarObj.hide()
           }
@@ -140,7 +140,7 @@ const Sidebar = {
   },
   // 获取层 Selector
   getLayerSel () {
-    var layerSel = '.sidebar-layer'
+    let layerSel = '.sidebar-layer'
 
     if ($(layerSel).length === 0) { $('<div class="sidebar-layer" />').appendTo('body') }
 

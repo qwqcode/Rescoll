@@ -264,7 +264,7 @@ const Downloads = {
   fileLaunch (key) {
     if (!this.data.list[key] || this.data.list[key].status !== this.statusList.done) { return }
 
-    CrDownloadsCallBack.fileLaunch(this.data.list[key].fullPath).then(function (isSuccess) {
+    CrDownloadsCallBack.fileLaunch(this.data.list[key].fullPath).then((isSuccess) => {
       if (!isSuccess) {
         Downloads.data.list[key].status = Downloads.statusList.cancelled
         Downloads.updateItemUi(key)
@@ -281,7 +281,7 @@ const Downloads = {
   fileShowInExplorer (key) {
     if (!this.data.list[key]) { return }
 
-    CrDownloadsCallBack.fileShowInExplorer(this.data.list[key].fullPath).then(function (isSuccess) {
+    CrDownloadsCallBack.fileShowInExplorer(this.data.list[key].fullPath).then((isSuccess) => {
       if (!isSuccess) {
         Downloads.data.list[key].status = Downloads.statusList.cancelled
         Downloads.updateItemUi(key)

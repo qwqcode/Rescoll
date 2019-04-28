@@ -29,7 +29,7 @@ const AppWrapEl = window.AppWrapEl = $('.wrap')
 /**
  * 页面初始化
  */
-$(document).ready(function () {
+$(document).ready(() => {
   // 初始化 NavBar
   AppNavbar.init()
 
@@ -37,7 +37,7 @@ $(document).ready(function () {
   $('[data-toggle="tooltip"]').tooltip()
 
   // 浏览器初始化时白色闪光 减少违和感
-  setTimeout(function () {
+  setTimeout(() => {
     $('body').css('opacity', '1')
     $(AppWrapEl).css('opacity', '1')
   }, 10)
@@ -58,7 +58,7 @@ $(document).ready(function () {
   Setting.init()
 
   // 设置程序当前版本号
-  AppAction.tryGetVersion(function (version) {
+  AppAction.tryGetVersion((version) => {
     if (typeof (version) !== 'undefined') {
       AppAction.version = version
       // 检测更新
@@ -67,7 +67,7 @@ $(document).ready(function () {
   })
 
   // 打开 开发者工具
-  $(document).keydown(function (e) {
+  $(document).keydown((e) => {
     if (e.altKey && event.keyCode === 123) {
       AppAction.showDevTools()
     }
@@ -75,7 +75,7 @@ $(document).ready(function () {
 })
 
 // 根据 URL 创建一个下载任务
-window.downloadFile = function (srcUrl) {
+window.downloadFile = (srcUrl) => {
   AppAction.downloadUrl(srcUrl)
 }
 
@@ -83,21 +83,21 @@ window.downloadFile = function (srcUrl) {
  * 扩展函数
  */
 $.extend({
-  getPosition: function ($element) {
-    var el = $element[0]
-    var isBody = el.tagName === 'BODY'
+  getPosition: ($element) => {
+    let el = $element[0]
+    let isBody = el.tagName === 'BODY'
 
-    var elRect = el.getBoundingClientRect()
+    let elRect = el.getBoundingClientRect()
     if (elRect.width === null) {
       // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
       elRect = $.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top })
     }
-    var isSvg = window.SVGElement && el instanceof window.SVGElement
+    let isSvg = window.SVGElement && el instanceof window.SVGElement
     // Avoid using $.offset() on SVGs since it gives incorrect results in jQuery 3.
     // See https://github.com/twbs/bootstrap/issues/20280
-    var elOffset = isBody ? { top: 0, left: 0 } : (isSvg ? null : $element.offset())
-    var scroll = { scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop() }
-    var outerDims = isBody ? { width: $(window).width(), height: $(window).height() } : null
+    let elOffset = isBody ? { top: 0, left: 0 } : (isSvg ? null : $element.offset())
+    let scroll = { scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop() }
+    let outerDims = isBody ? { width: $(window).width(), height: $(window).height() } : null
 
     return $.extend({}, elRect, scroll, outerDims, elOffset)
   }

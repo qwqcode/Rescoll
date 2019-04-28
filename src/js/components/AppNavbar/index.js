@@ -13,14 +13,14 @@ const AppNavbar = {
     navTitle: '.top-nav-bar .nav-title'
   },
   // 初始化 Navbar
-  init: function () {
+  init () {
     $('<div class="left-items"><div class="nav-title"></div></div><div class="right-items"><div class="nav-btns"></div></div>').appendTo(this.sel.nav)
     // 导航栏操作按钮
     AppNavbar.Btn.groupAdd('main-btns', {
       taskManager: {
         icon: 'assignment',
         title: '任务列表',
-        onClick: function () {
+        onClick () {
           Task.taskManagerLayer.toggleLayer()
         }
       },
@@ -31,7 +31,7 @@ const AppNavbar = {
       setting: {
         icon: 'settings',
         title: '设置',
-        onClick: function () {
+        onClick () {
           Setting.getSidebar().toggle()
         }
       }
@@ -41,21 +41,21 @@ const AppNavbar = {
       backToTaskGen: {
         icon: 'chevron-left',
         title: '返回任务生成器',
-        onClick: function () {
+        onClick () {
           Task.hide()
         }
       },
       removeTask: {
         icon: 'close',
         title: '删除任务',
-        onClick: function () {
+        onClick () {
           Task.getCurrent().remove()
         }
       },
       showTaskInfo: {
         icon: 'info',
         title: '任务详情',
-        onClick: function () {
+        onClick () {
           if (!Task.getCurrent()) { return }
 
           Task.getCurrent().showInfo()
@@ -64,19 +64,19 @@ const AppNavbar = {
     }).setMostLeft().hide()
   },
   // 标题设置
-  setTitle: function (value, base64) {
+  setTitle (value, base64) {
     if (typeof base64 === 'boolean' && base64 === true) { value = Base64.decode(value) }
 
-    var navTitleSel = this.sel.navTitle
+    let navTitleSel = this.sel.navTitle
     $(navTitleSel).addClass('changing')
-    setTimeout(function () {
+    setTimeout(() => {
       $(navTitleSel)
         .text(value)
         .removeClass('changing')
     }, 100)
   },
   // 标题获取
-  getTitle: function () {
+  getTitle () {
     return $(this.sel.navTitle).text()
   }
 }
