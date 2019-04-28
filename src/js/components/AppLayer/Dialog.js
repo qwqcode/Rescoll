@@ -1,3 +1,5 @@
+import { html } from 'common-tags'
+
 /**
  * 内容层 对话框
  */
@@ -15,7 +17,7 @@ const Dialog = {
       }, 200)
     }
 
-    let dialogDom = $(`
+    let dialogDom = $(html`
     <div class="dialog-inner">
       <div class="dialog-title">${title}</div>
       <div class="dialog-content">${content}</div>

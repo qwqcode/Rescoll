@@ -9,7 +9,7 @@ const AppConfig = window.AppConfig
 const AppUpdate = {
   check (atDocumentReady, onFinish) {
     atDocumentReady = atDocumentReady || false
-    var ajaxOpt = {
+    let ajaxOpt = {
       type: 'GET',
       url: AppConfig.updateCheckUrl,
       dataType: 'json',
@@ -17,13 +17,15 @@ const AppUpdate = {
       beforeSend () {}
     }
     ajaxOpt.success = (json) => {
-      if (typeof (onFinish) === 'function') {
+      if (typeof onFinish === 'function') {
         onFinish(json)
       }
-      var UpdateVersion = json['latest'] || null
+      let UpdateVersion = json['latest'] || null
       if (!!UpdateVersion && UpdateVersion !== AppAction.version) {
         // 有更新
-        var UpdateLog = (!!json['updateLog'] && json['updateLog'].hasOwnProperty(UpdateVersion)) ? json['updateLog'][UpdateVersion] : '无说明'
+        let UpdateLog = (!!json['updateLog'] && json['updateLog'].hasOwnProperty(UpdateVersion))
+          ? json['updateLog'][UpdateVersion]
+          : '无说明'
 
         AppLayer.Dialog.open(`Nacollector 可更新至 ${json['latest']} 版本`, UpdateLog,
           ['现在更新', () => {
@@ -31,7 +33,7 @@ const AppUpdate = {
               AppLayer.Notify.error('更新地址获取失败')
               return
             }
-            var updateType = 'a'
+            let updateType = 'a'
             if (!!json['updateType'] && json['updateType'].hasOwnProperty(UpdateVersion)) {
               updateType = json['updateType'][UpdateVersion]
             }
@@ -48,6 +50,8 @@ const AppUpdate = {
       }
       if (!atDocumentReady) AppLayer.Notify.error('更新信息获取失败')
     }
+
+    // 执行请求
     $.ajax(ajaxOpt)
   }
 }

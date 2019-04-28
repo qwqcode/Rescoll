@@ -1,6 +1,8 @@
 import AppAction from './AppAction'
 import AppLayer from './AppLayer'
 import SettingItems from './SettingItems'
+import { html } from 'common-tags'
+
 /**
  * 设置
  */
@@ -30,7 +32,11 @@ const Setting = {
     var settingDom = $('<div class="setting"></div>').appendTo(innerDom)
 
     var group = (name, title) => {
-      return $(`<div class="setting-group" data-setting-sidebar-group="${name}"><h2 class="setting-group-title">${title}</h2></div>`).appendTo(settingDom)
+      return $(html`
+        <div class="setting-group" data-setting-sidebar-group="${name}">
+          <h2 class="setting-group-title">${title}</h2>
+        </div>
+      `).appendTo(settingDom)
     }
     var itemAt = (groupDom) => {
       var boxDom = $('<div class="setting-item"></div>').appendTo(groupDom)
@@ -42,7 +48,7 @@ const Setting = {
       }
       // 切换按钮
       innerElement.btnToggle = (text, turnOnEvent, turnOffEvent) => {
-        var btnDom = $(`
+        var btnDom = $(html`
         <button type="button" class="setting-btn-block setting-btn-toggle">
           <div class="left-text">${text}</div>
           <div class="toggle">
@@ -81,7 +87,12 @@ const Setting = {
       }
       // 信息展示
       innerElement.infoShow = (label, value) => {
-        return $(`<div class="two-line"><span class="label">${label}</span><span class="value">${value}</span></div>`).appendTo(boxDom)
+        return $(html`
+          <div class="two-line">
+            <span class="label">${label}</span>
+            <span class="value">${value}</span>
+          </div>
+        `).appendTo(boxDom)
       }
 
       return innerElement
