@@ -32,7 +32,7 @@ class PanelItem {
     this._btnName = btnName
     this._btnElem = AppNavbar.BtnBox.get(this.getBtnName()).getElem()
     this._elem = $(html`<div class="navbar-panel anim-fade-in" data-navbar-panel="${key}" />`)
-    this._isShow = true
+    this._isShow = false
 
     this.getBtnElem().after(this.getElem())
 
