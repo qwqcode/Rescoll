@@ -22,10 +22,6 @@ export default class BtnGroup {
   }
 
   /** 获取 Dom */
-  getDom () {
-    return this.getElem()
-  }
-
   getElem () {
     return this._elem
   }
@@ -63,7 +59,7 @@ export default class BtnGroup {
     }
 
     this._btnList[btnName] = btnObj
-    btnObj.getDom().appendTo(this.getElem())
+    btnObj.getElem().appendTo(this.getElem())
     return btnObj
   }
 

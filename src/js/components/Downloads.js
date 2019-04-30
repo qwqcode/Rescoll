@@ -25,7 +25,7 @@ const Downloads = {
     cancel: 3
   },
   sel: {
-    downloadsList: null
+    downloadsList: '.download-list'
   },
   panelKey: 'downloads',
   localStorageConf: {
@@ -33,11 +33,11 @@ const Downloads = {
   },
   // 初始化
   init () {
+    this.listElem = $('<div class="downloads-list"></div>')
     let panelObj = AppNavbar.Panel.register(this.panelKey, this.navbarBtnName)
     panelObj.setTitle('<i class="zmdi zmdi-download"></i> 下载列表')
-    panelObj.setInner('<div class="downloads-list"></div>')
+    panelObj.setInner(this.listElem)
     panelObj.setSize(400, 430)
-    this.sel.downloadsList = panelObj.getSel() + ' .downloads-list'
     // 读取 localStorage 恢复下载列表
     this.restoreDataList()
   },
@@ -81,17 +81,17 @@ const Downloads = {
     this.storeDataList() // 存储下载列表
   },
   // 列表项目获取 Selector
-  getItemSelector (key) {
-    return `${this.sel.downloadsList} [data-key="${key}"]` // $().find() 导致界面不停更新；当不断执行一个方法时，拒绝使用 find()
+  getItemElem (key) {
+    return this.listElem.find(`[data-key="${key}"]`) // $().find() 导致界面不停更新；当不断执行一个方法时，拒绝使用 find()
   },
   // 更新列表项目 UI
   updateItemUi (key) {
     if (!this.data.list[key]) { throw Error(`${key} 下载任务不存在，或许已被删除`) }
 
     let taskData = this.data.list[key]
-    let selItem = this.getItemSelector(key) // $().find() 导致界面不停更新；当不断执行一个方法时，拒绝使用 find()
+    let itemElem = this.getItemElem(key) // $().find() 导致界面不停更新；当不断执行一个方法时，拒绝使用 find()
 
-    if ($(selItem).length === 0) {
+    if (itemElem.length === 0) {
       // 新增一个 item 并返回 selector
       $(html`
       <div class="download-item" data-key="${key}">
@@ -108,18 +108,18 @@ const Downloads = {
           <button class="remove-btn" title="从列表中移除" onclick="Downloads.taskRemove('${key}')">✕</button>
         </div>
       </div>
-      `).prependTo(this.sel.downloadsList)
+      `).prependTo(this.listElem)
     }
 
-    let fileName = $(selItem + ' .file-name')
-    let progress = $(selItem + ' .progress')
-    let progressBar = $(selItem + ' .progress .progress-bar')
-    let description = $(selItem + ' .description')
-    let actionBar = $(selItem + ' .action-bar')
+    let fileName = itemElem.find('.file-name')
+    let progress = itemElem.find('.progress')
+    let progressBar = itemElem.find('.progress .progress-bar')
+    let description = itemElem.find('.description')
+    let actionBar = itemElem.find('.action-bar')
 
     // 若状态改变 则更新 dl-status
-    if ($(selItem).attr('dl-status') !== this.getStatusName(taskData.status)) {
-      $(selItem).attr('dl-status', this.getStatusName(taskData.status))
+    if (itemElem.attr('dl-status') !== this.getStatusName(taskData.status)) {
+      itemElem.attr('dl-status', this.getStatusName(taskData.status))
     }
 
     // 文件名 （路径 => 文件名）
@@ -212,7 +212,7 @@ const Downloads = {
 
     delete this.data.list[key]
 
-    $(this.getItemSelector(key)).hide()
+    this.getItemElem(key).hide()
 
     this.storeDataList() // 存储下载列表
   },
@@ -254,7 +254,7 @@ const Downloads = {
     }
 
     this.data.list = {}
-    $(this.sel.downloadsList).find('.download-item').remove()
+    this.listElem.find('.download-item').remove()
     localStorage.setItem(this.localStorageConf.key, null)
 
     // 导航栏按钮隐藏通知小红点

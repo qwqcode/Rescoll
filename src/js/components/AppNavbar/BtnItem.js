@@ -35,7 +35,7 @@ export default class BtnItem {
     return this
   }
 
-  getDom () {
+  getElem () {
     return this._elem
   }
 }

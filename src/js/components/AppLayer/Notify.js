@@ -1,3 +1,5 @@
+import { html } from 'common-tags'
+
 /**
  * 内容层 通知
  */
@@ -17,7 +19,7 @@ const Notify = {
       layerElem = $('<div class="notify-layer" />').appendTo('body')
     }
 
-    let notifyElem = $(`
+    let notifyElem = $(html`
       <div class="notify-item anim-fade-in ${level ? ('type-' + level) : ''}">
         <p class="notify-content">${message}</p>
       </div>

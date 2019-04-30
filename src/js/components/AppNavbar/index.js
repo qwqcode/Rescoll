@@ -1,7 +1,7 @@
 /**
  * 导航栏
  */
-import Panel from './Panel'
+import { Panel } from './Panel'
 import BtnBox from './BtnBox'
 import Task from '../Task'
 import Setting from '../Setting'
@@ -86,10 +86,9 @@ const AppNavbar = {
   // 标题获取
   getTitle () {
     return $(this.sel.navTitle).text()
-  }
+  },
+  BtnBox,
+  Panel
 }
-
-AppNavbar.Panel = Panel
-AppNavbar.BtnBox = BtnBox
 
 export default AppNavbar

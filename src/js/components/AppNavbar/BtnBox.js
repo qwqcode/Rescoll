@@ -25,11 +25,11 @@ const BtnBox = {
     _.each(btnList, (value, btnName) => {
       let btnItem = new BtnItem(btnName, value['title'], value['icon'])
       if (typeof value['onClick'] === 'function') {
-        btnItem.getDom().click(() => {
+        btnItem.getElem().click(() => {
           value['onClick']()
         })
       }
-      btnItem.getDom().tooltip()
+      btnItem.getElem().tooltip()
       btnGroup.addBtn(btnName, btnItem)
     })
 
@@ -40,7 +40,10 @@ const BtnBox = {
     if (!this.groupList.hasOwnProperty(groupName)) return null
     return this.groupList[groupName]
   },
-  // 获取 按钮组 / 按钮 对象
+  /**
+   * 获取 按钮组 / 按钮 对象
+   * @return { BtnGroup, BtnItem }
+   */
   get (name) {
     name = name.split('.')
     if (!!name[0] && !!name[1]) { return this.getGroup(name[0]).getBtn(name[1]) }

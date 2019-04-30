@@ -25,7 +25,8 @@ const TaskGen = {
       <div class="namespace-dropdown">
         <div class="dropdown-selected"></div>
         <ul class="dropdown-option anim-fade-in"></ul>
-      </div>`)
+      </div>
+    `)
 
     let dropdownSelectedDom = dropdownDom.find('.dropdown-selected')
 
