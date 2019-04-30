@@ -49,9 +49,11 @@ export default class SettingItem {
     btnObj.getDom = () => {
       return btnDom
     }
+
     btnDom.click(() => {
       btnObj.toggle()
-    }).appendTo(this.getElem())
+    })
+    btnDom.appendTo(this.getElem())
     return btnObj
   }
 

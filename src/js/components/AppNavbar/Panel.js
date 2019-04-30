@@ -9,7 +9,7 @@ const Panel = {
   register (key, btnName) {
     if (this.list.hasOwnProperty(key)) { return '导航栏面板： ' + key + ' 已存在于list中' }
 
-    let btnDom = AppNavbar.Btn.get(btnName).getDom()
+    let btnDom = AppNavbar.BtnBox.get(btnName).getDom()
     btnDom.after('<div class="navbar-panel anim-fade-in" data-navbar-panel="' + key + '" />')
 
     let panelSel = '[data-navbar-panel="' + key + '"]'
@@ -55,7 +55,7 @@ const Panel = {
         panelObj.setPosition()
       })
       // 导航栏按钮隐藏通知小红点
-      AppNavbar.Btn.get(btnName).hideBadge()
+      AppNavbar.BtnBox.get(btnName).hideBadge()
     }
     // 隐藏
     panelObj.hide = () => {

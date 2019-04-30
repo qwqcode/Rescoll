@@ -399,14 +399,14 @@ button, input, select, textarea {
     float: right;
 }
 
-.top-nav-bar .right-items .nav-btns {
+.top-nav-bar .right-items .nav-btn-box {
     float: right;
     overflow: hidden;
     border-radius: 0;
     -webkit-app-region: no-drag;
 }
 
-.top-nav-bar .right-items .nav-btns .btn-group {
+.top-nav-bar .right-items .nav-btn-box .btn-group {
     display: inline-block;
     padding-right: 15px;
     margin-right: 15px;
@@ -414,13 +414,13 @@ button, input, select, textarea {
     -webkit-app-region: no-drag;
 }
 
-.top-nav-bar .right-items .nav-btns .btn-group:last-child {
+.top-nav-bar .right-items .nav-btn-box .btn-group:last-child {
     padding-right: 0;
     margin-right: 0;
     border: none;
 }
 
-.top-nav-bar .right-items .nav-btns .btn-group > a {
+.top-nav-bar .right-items .nav-btn-box .btn-group > a {
     position: relative;
     font-size: 15px;
     color: #FFF;
@@ -432,7 +432,7 @@ button, input, select, textarea {
     margin-left: 5px;
 }
 
-.top-nav-bar .right-items .nav-btns .btn-group > a.show-top-badge:before {
+.top-nav-bar .right-items .nav-btn-box .btn-group > a.show-top-badge:before {
     content: '';
     width: 7px;
     height: 7px;
@@ -453,16 +453,16 @@ button, input, select, textarea {
     animation-iteration-count: infinite;
 }
 
-.top-nav-bar .right-items .nav-btns .btn-group > a:first-child {
+.top-nav-bar .right-items .nav-btn-box .btn-group > a:first-child {
     margin-left: 0;
 }
 
-.top-nav-bar .right-items .nav-btns .btn-group > a > i {
+.top-nav-bar .right-items .nav-btn-box .btn-group > a > i {
     width: 20px;
     text-align: center;
 }
 
-.top-nav-bar .right-items .nav-btns .btn-group > a:hover {
+.top-nav-bar .right-items .nav-btn-box .btn-group > a:hover {
     background: rgba(255,255,255,.2);
 ; }
 

@@ -75,7 +75,7 @@ const Task = {
     taskObj.setTitle()
 
     // 显示导航栏控制按钮组
-    AppNavbar.Btn.get('task-runtime').show()
+    AppNavbar.BtnBox.get('task-runtime').show()
 
     this.currentDisplayedId = taskId
   },
@@ -93,7 +93,7 @@ const Task = {
     this.getCurrent().setOriginalTitle()
 
     // 隐藏导航栏控制按钮组
-    AppNavbar.Btn.get('task-runtime').hide()
+    AppNavbar.BtnBox.get('task-runtime').hide()
 
     this.currentDisplayedId = null
   },

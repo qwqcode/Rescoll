@@ -59,7 +59,7 @@ const Downloads = {
     }
 
     // 导航栏按钮显示通知小红点
-    AppNavbar.Btn.get(this.navbarBtnName).showBadge()
+    AppNavbar.BtnBox.get(this.navbarBtnName).showBadge()
   },
   // 更新任务
   updateTask (json) {
@@ -258,7 +258,7 @@ const Downloads = {
     localStorage.setItem(this.localStorageConf.key, null)
 
     // 导航栏按钮隐藏通知小红点
-    AppNavbar.Btn.get(this.navbarBtnName).hideBadge()
+    AppNavbar.BtnBox.get(this.navbarBtnName).hideBadge()
   },
   // 启动文件
   fileLaunch (key) {
