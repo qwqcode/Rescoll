@@ -25,6 +25,11 @@ const config = {
         loader: 'babel-loader'
       },
       {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      },
+      {
         test: /\.css$/,
         use: [
           IS_DEV ? 'style-loader' : MiniCssExtractPlugin.loader,
@@ -119,6 +124,10 @@ const config = {
     }),
     new CssUrlRelativePlugin()
   ],
+  resolve: {
+    // Add '.ts' and '.tsx' as resolvable extensions.
+    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+  },
   devServer: {
     contentBase: path.join(__dirname, 'src')
   },
