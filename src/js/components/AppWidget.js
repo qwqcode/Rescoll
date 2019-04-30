@@ -41,7 +41,7 @@ const AppWidget = {
 
       let floaterDom = $(html`<div class="widget-float-img anim-fade-in" style="left: ${left}px; top: ${top}px;"></div>`).appendTo('body')
 
-      let loadingIndicator = AppWidget.loadingIndicator(floaterDom)
+      let loadingIndicator = this.loadingIndicator(floaterDom)
 
       let imgDom = $(html`<img src="${imgSrc}" class="anim-fade-in" style="display: none;">`).appendTo(floaterDom)
       imgDom.on('load', () => {
