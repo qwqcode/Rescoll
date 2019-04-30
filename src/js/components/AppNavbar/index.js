@@ -6,6 +6,7 @@ import Btn from './Btn'
 import Task from '../Task'
 import Setting from '../Setting'
 import { Base64 } from 'js-base64'
+import { html } from 'common-tags'
 
 const AppNavbar = {
   sel: {
@@ -14,7 +15,14 @@ const AppNavbar = {
   },
   // 初始化 Navbar
   init () {
-    $('<div class="left-items"><div class="nav-title"></div></div><div class="right-items"><div class="nav-btns"></div></div>').appendTo(this.sel.nav)
+    $(html`
+      <div class="left-items">
+        <div class="nav-title"></div>
+      </div>
+      <div class="right-items">
+        <div class="nav-btns"></div>
+      </div>
+    `).appendTo(this.sel.nav)
     // 导航栏操作按钮
     AppNavbar.Btn.groupAdd('main-btns', {
       taskManager: {
