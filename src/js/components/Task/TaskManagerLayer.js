@@ -36,7 +36,7 @@ const TaskManagerLayer = {
     taskItem.find('[data-toggle="task-remove"]').click(() => {
       Task.get(taskId).remove()
     })
-    taskItem.prependTo(`${this.getLayer().getSel()} .task-manager`)
+    taskItem.prependTo(this.getLayer().getElem().find('.task-manager'))
   },
   removeItem (taskId) {
     if ($(this.getItemSel(taskId)).length === 0) { throw Error(`未找到此任务 ${taskId}`) }
