@@ -12,7 +12,17 @@ const Setting = {
     let settingSidebar = AppLayer.Sidebar.register(this.sidebarKey)
     settingSidebar.setTitle('设置', '#0089ff')
     settingSidebar.setWidth(360)
-    this.setSidebarInner(settingSidebar.getInnerDom())
+    // Setting Content
+    let settingDom = $('<div class="setting"></div>')
+    let group = (name, title) => {
+      return $(html`
+        <div class="setting-group" data-setting-sidebar-group="${name}">
+          <h2 class="setting-group-title">${title}</h2>
+        </div>
+      `).appendTo(settingDom)
+    }
+    SettingContent(this, group)
+    settingSidebar.setInner(settingDom)
   },
   get (key) {
     let settingValue = JSON.parse(localStorage.getItem('setting')) || {}
@@ -26,20 +36,6 @@ const Setting = {
   sidebarKey: 'setting',
   getSidebar () {
     return AppLayer.Sidebar.get(this.sidebarKey)
-  },
-  // 设置侧边栏内容
-  setSidebarInner (innerDom) {
-    let settingDom = $('<div class="setting"></div>').appendTo(innerDom)
-
-    let group = (name, title) => {
-      return $(html`
-        <div class="setting-group" data-setting-sidebar-group="${name}">
-          <h2 class="setting-group-title">${title}</h2>
-        </div>
-      `).appendTo(settingDom)
-    }
-
-    SettingContent(this, group)
   }
 }
 
