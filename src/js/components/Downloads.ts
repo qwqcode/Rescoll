@@ -172,8 +172,8 @@ export default class Downloads {
         }
 
         actionBarHtml = html`
-          <a onclick="Downloads.taskAction('${key}', this.Actions.pause)">暂停</a>
-          <a onclick="Downloads.taskAction('${key}', this.Actions.cancel)">取消</a>
+          <a onclick="Downloads.taskAction('${key}', Downloads.Actions.pause)">暂停</a>
+          <a onclick="Downloads.taskAction('${key}', Downloads.Actions.cancel)">取消</a>
         `
         break
         // 暂停
@@ -187,8 +187,8 @@ export default class Downloads {
         }
 
         actionBarHtml = html`
-          <a onclick="Downloads.taskAction('${key}', this.Actions.resume)">恢复</a>
-          <a onclick="Downloads.taskAction('${key}', this.Actions.cancel)">取消</a>
+          <a onclick="Downloads.taskAction('${key}', Downloads.Actions.resume)">恢复</a>
+          <a onclick="Downloads.taskAction('${key}', Downloads.Actions.cancel)">取消</a>
         `
         break
         // 完毕
