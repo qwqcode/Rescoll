@@ -25,7 +25,7 @@ const AppWidget = {
   floatImg (parent: JQuery, imgSrc: string) {
     if ($('body .widget-float-img').length !== 0) { return }
 
-    let parentDom = parent
+    let parentDom = $(parent)
     let parentPos = parent[0].getBoundingClientRect()
 
     setTimeout(() => {

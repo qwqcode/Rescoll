@@ -14,6 +14,13 @@ const SpiderList: { [key: string]: { [key: string]: { label: string, genForm?: F
       label: '商品详情页图片解析',
       genForm() {
         let pageUrlEl = Form.textInput('PageUrl', '详情页链接', '', InputValidators.isUrl)
+        let PageTypeEl = Form.selectInput('PageType', '链接类型', {
+          'Tmall': '天猫',
+          'Taobao': '淘宝',
+          'Alibaba': '阿里巴巴',
+          'Suning': '苏宁易购',
+          'Gome': '国美在线'
+        })
         pageUrlEl.on('input propertychange', () => {
           let urlVal = $.trim(pageUrlEl.val())
           let urlMap: { [key: string]: string[] } = {
@@ -27,16 +34,10 @@ const SpiderList: { [key: string]: { [key: string]: { label: string, genForm?: F
             for (let i in urlMap[key]) {
               if (urlVal.indexOf(urlMap[key][i]) === 0) {
                 PageTypeEl.val(key)
+                break;
               }
             }
           }
-        })
-        let PageTypeEl = Form.selectInput('PageType', '链接类型', {
-          'Tmall': '天猫',
-          'Taobao': '淘宝',
-          'Alibaba': '阿里巴巴',
-          'Suning': '苏宁易购',
-          'Gome': '国美在线'
         })
         Form.selectInput('ImgType', '图片类型', {
           'Thumb': '主图',
