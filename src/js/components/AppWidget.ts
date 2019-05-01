@@ -4,7 +4,7 @@ import { html } from 'common-tags'
  * 小部件
  */
 const AppWidget = {
-  loadingIndicator (putInto) {
+  loadingIndicator (putInto: JQuery) {
     $(html`
     <div class="loading-indicator" style="opacity: .9;">
       <div class="inner">
@@ -13,18 +13,20 @@ const AppWidget = {
     </div>
     `).prependTo(putInto)
 
-    let indicatorObj = {}
-    indicatorObj.remove = () => {
-      $(putInto).find('.loading-indicator').remove()
+    let indicatorObj = {
+      remove() {
+        $(putInto).find('.loading-indicator').remove()
+      }
     }
 
     return indicatorObj
   },
-  floatImg (parent, imgSrc) {
+
+  floatImg (parent: JQuery, imgSrc: string) {
     if ($('body .widget-float-img').length !== 0) { return }
 
-    let parentDom = $(parent)
-    let parentPos = $(parent)[0].getBoundingClientRect()
+    let parentDom = parent
+    let parentPos = parent[0].getBoundingClientRect()
 
     setTimeout(() => {
       if ($(':hover').filter(parentDom).length === 0) { return }

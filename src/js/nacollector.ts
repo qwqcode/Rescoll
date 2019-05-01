@@ -58,7 +58,7 @@ $(document).ready(() => {
   Setting.init()
 
   // 设置程序当前版本号
-  AppAction.tryGetVersion((version) => {
+  AppAction.tryGetVersion((version: string) => {
     if (typeof (version) !== 'undefined') {
       AppAction.version = version
       // 检测更新
@@ -68,14 +68,14 @@ $(document).ready(() => {
 
   // 打开 开发者工具
   $(document).keydown((e) => {
-    if (e.altKey && event.keyCode === 123) {
+    if (e.altKey && e.keyCode === 123) {
       AppAction.showDevTools()
     }
   })
 })
 
 // 根据 URL 创建一个下载任务
-window.downloadFile = (srcUrl) => {
+window.downloadFile = (srcUrl: string) => {
   AppAction.downloadUrl(srcUrl)
 }
 
@@ -83,7 +83,7 @@ window.downloadFile = (srcUrl) => {
  * 扩展函数
  */
 $.extend({
-  getPosition: ($element) => {
+  getPosition: ($element: JQuery) => {
     let el = $element[0]
     let isBody = el.tagName === 'BODY'
 
@@ -92,7 +92,7 @@ $.extend({
       // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
       elRect = $.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top })
     }
-    let isSvg = window.SVGElement && el instanceof window.SVGElement
+    let isSvg = SVGElement && el instanceof SVGElement
     // Avoid using $.offset() on SVGs since it gives incorrect results in jQuery 3.
     // See https://github.com/twbs/bootstrap/issues/20280
     let elOffset = isBody ? { top: 0, left: 0 } : (isSvg ? null : $element.offset())

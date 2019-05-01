@@ -4,14 +4,14 @@ import { html } from 'common-tags'
  * 内容层 通知
  */
 const Notify = {
-  success (message) {
+  success(message: string): void {
     this.show(message, 's')
   },
-  error (message) {
+  error(message: string): void {
     this.show(message, 'e')
   },
   // level: s, e
-  show (message, level, timeout) {
+  show(message: string, level: string, timeout?: number): void {
     timeout = (typeof timeout === 'number') ? timeout : 2000
 
     let layerElem = $('.notify-layer')
@@ -32,16 +32,16 @@ const Notify = {
       }, 200)
     }
 
-    let timeoutFn
+    let timeoutKey: number
     if (timeout > 0) {
-      timeoutFn = setTimeout(() => {
+      timeoutKey = setTimeout(() => {
         notifyRemove()
       }, timeout)
     }
 
     notifyElem.click(() => {
       notifyRemove()
-      clearTimeout(timeoutFn) // 不再定时 out
+      clearTimeout(timeoutKey) // 不再定时 out
     })
   }
 }

@@ -7,9 +7,8 @@ const AppConfig = window.AppConfig
  * 升级检测
  */
 const AppUpdate = {
-  check (atDocumentReady, onFinish) {
-    atDocumentReady = atDocumentReady || false
-    let ajaxOpt = {
+  check (atDocumentReady: boolean, onFinish?: Function) {
+    let ajaxOpt: JQuery.AjaxSettings = {
       type: 'GET',
       url: AppConfig.updateCheckUrl,
       dataType: 'json',
@@ -17,9 +16,7 @@ const AppUpdate = {
       beforeSend () {}
     }
     ajaxOpt.success = (json) => {
-      if (typeof onFinish === 'function') {
-        onFinish(json)
-      }
+      if (!!onFinish) onFinish(json)
       let UpdateVersion = json['latest'] || null
       if (!!UpdateVersion && UpdateVersion !== AppAction.version) {
         // 有更新
@@ -39,7 +36,7 @@ const AppUpdate = {
             }
             AppAction.appUpdateAction(json['updateRes'][UpdateVersion], updateType)
           }],
-          ['以后再说', () => {}])
+          ['以后再说', () => { }])
       } else {
         if (!atDocumentReady) AppLayer.Notify.success('暂无更新')
       }

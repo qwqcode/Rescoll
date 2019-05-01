@@ -4,7 +4,7 @@ import Downloads from '../Downloads'
 import AppUpdate from '../AppUpdate'
 import ItemAt from './SettingItem'
 
-export default (setting, group) => {
+export default (setting: any, group: Function) => {
   let groupDownloads = group('downloads', '下载内容')
   new ItemAt(groupDownloads).btnBlock('下载列表清空', () => {
     Downloads.removeDataList()
@@ -32,7 +32,7 @@ export default (setting, group) => {
   })
   let groupAbout = group('about', '关于')
   let infoAppVersion = new ItemAt(groupAbout).infoShow('版本号', '').find('.value')
-  AppAction.tryGetVersion((version) => {
+  AppAction.tryGetVersion((version: string) => {
     infoAppVersion.text(version || '未知版本号')
   })
   new ItemAt(groupAbout).infoShow('作者', '<a href="https://github.com/qwqcode" target="_blank">qwqcode</a>')

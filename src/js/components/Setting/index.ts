@@ -7,14 +7,14 @@ import { html } from 'common-tags'
  * 设置
  */
 const Setting = {
-  init () {
+  init() {
     AppAction.utilsReqIeProxy() // 无参数代表同步
     let settingSidebar = AppLayer.Sidebar.register(this.sidebarKey)
     settingSidebar.setTitle('设置', '#0089ff')
     settingSidebar.setWidth(360)
     // Setting Content
     let settingDom = $('<div class="setting"></div>')
-    let group = (name, title) => {
+    let group = (name: string, title: string) => {
       return $(html`
         <div class="setting-group" data-setting-sidebar-group="${name}">
           <h2 class="setting-group-title">${title}</h2>
@@ -24,17 +24,17 @@ const Setting = {
     SettingContent(this, group)
     settingSidebar.setInner(settingDom)
   },
-  get (key) {
+  get(key: string) {
     let settingValue = JSON.parse(localStorage.getItem('setting')) || {}
     return settingValue.hasOwnProperty(key) ? settingValue[key] : null
   },
-  set (key, val) {
+  set(key: string, val: any) {
     let settingValue = JSON.parse(localStorage.getItem('setting')) || {}
     settingValue[key] = val
     localStorage.setItem('setting', JSON.stringify(settingValue))
   },
   sidebarKey: 'setting',
-  getSidebar () {
+  getSidebar() {
     return AppLayer.Sidebar.get(this.sidebarKey)
   }
 }

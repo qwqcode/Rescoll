@@ -3,16 +3,16 @@ import Task from './index'
 import { html } from 'common-tags'
 
 const TaskManagerLayer = {
-  init () {
+  init() {
     let taskManager = AppLayer.Sidebar.register('taskManager')
     taskManager.setTitle('任务列表', '#4265c7')
     taskManager.setWidth(450)
     taskManager.setInner('<div class="task-manager"></div>')
   },
-  getItemSel (taskId) {
+  getItemSel(taskId: string) {
     return '[data-taskmanager-taskid="' + taskId + '"]'
   },
-  addItem (taskId) {
+  addItem(taskId: string) {
     if (!Task.get(taskId)) { throw Error('未找到此任务 ' + taskId) }
 
     let task = Task.get(taskId)
@@ -38,7 +38,7 @@ const TaskManagerLayer = {
     })
     taskItem.prependTo(this.getLayer().getElem().find('.task-manager'))
   },
-  removeItem (taskId) {
+  removeItem(taskId: string) {
     if ($(this.getItemSel(taskId)).length === 0) { throw Error(`未找到此任务 ${taskId}`) }
 
     setTimeout(() => {
@@ -46,10 +46,10 @@ const TaskManagerLayer = {
       $(this.getItemSel(taskId)).remove()
     }, 20)
   },
-  toggleLayer () {
+  toggleLayer() {
     this.getLayer().toggle()
   },
-  getLayer () {
+  getLayer() {
     return AppLayer.Sidebar.get('taskManager')
   }
 }

@@ -1,41 +1,46 @@
 import { html } from 'common-tags'
 
 export default class BtnItem {
-  constructor (name, label, icon) {
+  protected _elem: JQuery;
+  protected _name: string;
+  protected _label: string;
+  protected _icon: string;
+
+  public constructor(name: string, label: string, icon: string) {
     this._name = name
     this._label = label
     this._icon = icon
 
     this._elem = $(html`
-        <a data-placement="bottom" title="${this.getLabel()}">
-          <i class="zmdi zmdi-${this.getIcon()}"></i>
+        <a data-placement="bottom" title="${this._label}">
+          <i class="zmdi zmdi-${this._icon}"></i>
         </a>
       `)
   }
 
-  getName () {
+  public getName() {
     return this._name
   }
 
-  getLabel () {
+  public getLabel() {
     return this._label
   }
 
-  getIcon () {
+  public getIcon() {
     return this._icon
   }
 
-  showBadge () {
+  public getElem() {
+    return this._elem
+  }
+
+  public showBadge() {
     this._elem.addClass('show-top-badge')
     return this
   }
 
-  hideBadge () {
+  public hideBadge() {
     this._elem.removeClass('show-top-badge')
     return this
-  }
-
-  getElem () {
-    return this._elem
   }
 }

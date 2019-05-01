@@ -9,7 +9,20 @@ const TaskController = window.TaskController
  * Task Item
  */
 class TaskItem {
-  constructor (taskId, typeName, classLabel, parmsObj) {
+  protected _elem: JQuery
+
+  protected _taskId: string
+  protected _typeName: string
+  protected _classLabel: string
+  protected _parmsObj: object
+
+  protected _taskItemSel: string
+  protected _taskLogTableSel: string
+
+  protected isInProgress: boolean = true // 任务是否正在进行中
+  protected allowAutoScrollToBottom: boolean = true
+
+  public constructor(taskId: string, typeName: string, classLabel: string, parmsObj: object) {
     this._taskId = taskId
     this._typeName = typeName
     this._classLabel = classLabel
@@ -18,11 +31,8 @@ class TaskItem {
     this._taskItemSel = `[data-task-id="${taskId}"]`
     this._taskLogTableSel = `${this._taskItemSel} .task-log-table`
 
-    this.isInProgress = true // 任务是否正在进行中
-    this.allowAutoScrollToBottom = true
-
     // 初始化界面
-    this.elem = $(html`
+    this._elem = $(html`
       <div class="task-item" data-task-id="${taskId}" style="display: none">
         <div class="container" style="width: 95%;">
         <div class="task-log-table"></div>
@@ -31,51 +41,51 @@ class TaskItem {
   }
 
   /** 获取任务ID */
-  getId () {
+  public getId() {
     return this._taskId
   }
 
   /** 获取任务调用类名 */
-  getTypeName () {
+  public getTypeName() {
     return this._typeName
   }
 
   /** 获取任务调用类标签 */
-  getClassLabel () {
+  public getClassLabel() {
     return this._classLabel
   }
 
   /** 获取任务参数对象 */
-  getParmsObj () {
+  public getParmsObj() {
     return this._parmsObj
   }
 
   /** 设置标题 */
-  setTitle () {
+  public setTitle() {
     AppNavbar.setTitle(this.getTitle())
   }
   /** 获取标题 */
-  getTitle () {
+  public getTitle() {
     return `${this.getClassLabel()} 任务ID：${this.getId()}`
   }
 
   /** 恢复成原来的标题 */
-  setOriginalTitle () {
+  public setOriginalTitle() {
     AppNavbar.setTitle('')
   }
 
   /** 显示 */
-  show () {
+  public show() {
     Task.show(this.getId())
   }
 
   /** 隐藏 */
-  hide () {
+  public hide() {
     Task.hide()
   }
 
   /** 显示任务信息 */
-  showInfo () {
+  public showInfo() {
     AppLayer.Dialog.open(
       '任务信息',
 
@@ -89,15 +99,15 @@ class TaskItem {
   }
 
   /** 日志 */
-  log (text, level) {
+  log(text: string, level?: string) {
     let line = $('<div class="line" style="display: none" />')
-    let levelsList = { I: '消息', S: '成功', W: '警告', E: '错误' }
+    let levelsList: { [key: string]: string } = { I: '消息', S: '成功', W: '警告', E: '错误' }
     let innerText = ''
-    if (levelsList[level]) {
+    if (!!levelsList[level]) {
       line.attr('data-level', level)
       innerText += `<span class="tag">[${levelsList[level]}]</span> `
     }
-    let textHandle = (str) => {
+    let textHandle = (str: string) => {
       return str.replace(/\n/g, '<br/>')
     }
     innerText += textHandle(text)
@@ -120,7 +130,7 @@ class TaskItem {
     if (this.getIsInProgress()) {
       AppLayer.Dialog.open('删除任务', `任务 “${this.getTitle()}” 正在执行中...`,
         ['中止并删除任务', () => {
-          TaskController.abortTask(this.getId()).then((isSuccess) => {
+          TaskController.abortTask(this.getId()).then((isSuccess: boolean) => {
             if (isSuccess) {
               this._remove()
             } else {

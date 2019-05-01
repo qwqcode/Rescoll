@@ -14,7 +14,7 @@ const AppNavbar = {
     navTitle: '.top-nav-bar .nav-title'
   },
   // 初始化 Navbar
-  init () {
+  init() {
     $(html`
       <div class="left-items">
         <div class="nav-title"></div>
@@ -34,7 +34,7 @@ const AppNavbar = {
       },
       downloadManager: {
         icon: 'download',
-        title: '下载列表'
+        title: '下载列表',
       },
       setting: {
         icon: 'settings',
@@ -72,7 +72,7 @@ const AppNavbar = {
     }).setMostLeft().hide()
   },
   // 标题设置
-  setTitle (value, base64) {
+  setTitle(value: string, base64?: boolean) {
     if (typeof base64 === 'boolean' && base64 === true) { value = Base64.decode(value) }
 
     let navTitleSel = this.sel.navTitle
@@ -84,7 +84,7 @@ const AppNavbar = {
     }, 100)
   },
   // 标题获取
-  getTitle () {
+  getTitle() {
     return $(this.sel.navTitle).text()
   },
   BtnBox,

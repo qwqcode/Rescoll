@@ -4,7 +4,7 @@ import { html } from 'common-tags'
  * 内容层 对话框
  */
 const Dialog = {
-  open (title, content, yesBtn, cancelBtn) {
+  open(title: string, content: string, yesBtn?: [string?, Function?], cancelBtn?: [string?, Function?]): void {
     if ($('.dialog-layer').length !== 0) {
       $('.dialog-layer').remove()
     }
@@ -25,7 +25,7 @@ const Dialog = {
     `).appendTo(dialogLayerElem)
 
     // 底部按钮
-    let genBottomBtn = (text, onClickFunc) => {
+    let genBottomBtn = (text: string, onClickFunc: Function) => {
       let dialogBottomElem = $('.dialog-bottom')
       if (!dialogBottomElem.length) {
         dialogBottomElem = $(`<div class="dialog-bottom"></div>`).appendTo(dialogDom)

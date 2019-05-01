@@ -1,10 +1,9 @@
 import TaskGen from '../TaskGen'
-import _ from 'lodash'
 
 // 表单控件
 const Form = {
   // 当前表单数据添加
-  _currentInfoAdd (fieldName, label, inputTagId, validator) {
+  _currentInfoAdd(fieldName: string, label: string, inputTagId: string, validator: Function) {
     TaskGen.current.inputs[fieldName] = {
       label: label,
       inputSel: '#' + inputTagId
@@ -12,7 +11,7 @@ const Form = {
     // 验证器
     if (validator) { TaskGen.current.inputs[fieldName].validator = validator }
   },
-  _genBaseFormGroup (tagId, label) {
+  _genBaseFormGroup(tagId: string, label: string) {
     let formGroup = $(`
       <div class="form-group">
       <label for="${tagId}">${label}</label>
@@ -20,7 +19,7 @@ const Form = {
     `).appendTo(TaskGen.sel.form)
     return formGroup
   },
-  _genBaseTextInput (tagId, fieldName, label, defaultVal) {
+  _genBaseTextInput(tagId: string, fieldName: string, label: string, defaultVal?: string) {
     defaultVal = defaultVal || ''
     let inputElem = $(`
       <input id="${tagId}" name="${fieldName}" type="text"
@@ -30,7 +29,7 @@ const Form = {
     inputElem.appendTo(this._genBaseFormGroup(tagId, label))
     return inputElem
   },
-  _genBaseTextarea (tagId, fieldName, label, defaultVal) {
+  _genBaseTextarea(tagId: string, fieldName: string, label: string, defaultVal?: string) {
     defaultVal = defaultVal || ''
     let formInput = $(`<textarea id="${tagId}" name="${fieldName}" class="form-control" spellcheck="false" placeholder="输入文字"></textarea>`)
       .html(defaultVal)
@@ -38,27 +37,25 @@ const Form = {
     return formInput
   },
   // 文本框
-  textInput (fieldName, label, defaultVal, validator) {
+  textInput(fieldName: string, label: string, defaultVal: string, validator: Function) {
     let tagId = 'TaskGen_' + fieldName
     let inputElem = this._genBaseTextInput(tagId, fieldName, label, defaultVal)
     this._currentInfoAdd(fieldName, label, tagId, validator)
     return inputElem
   },
   // 数字框
-  numberInput (fieldName, label, defaultVal, min, max) {
-    min = min || ''
-    max = max || ''
+  numberInput(fieldName: string, label: string, defaultVal?: number, min?: number, max?: number) {
     let tagId = 'TaskGen_' + fieldName
-    let inputElem = this._genBaseTextInput(tagId, fieldName, label, defaultVal)
+    let inputElem = this._genBaseTextInput(tagId, fieldName, label, defaultVal || '')
     inputElem.attr('type', 'number')
     inputElem.attr('placeholder', '输入数字')
-    inputElem.attr('min', min)
-    inputElem.attr('max', max)
+    if (!!min) inputElem.attr('min', min)
+    if (!!max) inputElem.attr('max', max)
     this._currentInfoAdd(fieldName, label, tagId)
     return inputElem
   },
   // 多行文本框
-  textareaInput (fieldName, label, defaultVal, height) {
+  textareaInput(fieldName: string, label: string, defaultVal?: string, height?: string | number) {
     let tagId = 'TaskGen_' + fieldName
     let textareaElem = this._genBaseTextarea(tagId, fieldName, label, defaultVal)
     if (height) textareaElem.css('height', height) // 设置高度
@@ -66,14 +63,14 @@ const Form = {
     return textareaElem
   },
   // 选择菜单
-  selectInput (fieldName, label, values, selectValue) {
+  selectInput(fieldName: string, label: string, values: object, selectValue?: string) {
     let tagId = 'TaskGen_' + fieldName
     let inputHtml = `<select id="${tagId}" name="${fieldName}" class="form-control">`
-    _.each(values, (label, val) => {
+    for (let [label, val] of Object.entries(values)) {
       val = (typeof (val) !== 'number') ? val : label
-      let afterOpt = (val === selectValue ? 'selected' : '')
+      let afterOpt = ((!!selectValue && (val === selectValue)) ? 'selected' : '')
       inputHtml += `<option value="${val}" ${afterOpt}>${label}</option>`
-    })
+    }
     inputHtml += `</select>`
     let formInput = $(inputHtml)
     formInput.appendTo(this._genBaseFormGroup(tagId, label))

@@ -1,19 +1,24 @@
 interface Window {
-  $: JQueryStatic;
-  AppNavbar: any;
-  TaskGen: any;
-  Task: any;
-  Downloads: any;
-  AppWidget: any;
-  Setting: any;
-  AppLayer: any;
-  AppUpdate: any;
-  AppAction: any;
-  AppWrapEl: any;
+  $: JQueryStatic
+  AppNavbar: any
+  TaskGen: any
+  Task: any
+  Downloads: any
+  AppWidget: any
+  Setting: any
+  AppLayer: any
+  AppUpdate: any
+  AppAction: any
+  AppWrapEl: any
+  AppConfig: any
+  CrDownloadsCallBack: any
+  taskItem: any
+  TaskController: any
+  downloadFile: Function
 }
 
-declare var window: Window;
+declare var window: Window
 
 interface JQuery {
-  tooltip(): Function;
+  tooltip(): Function
 }

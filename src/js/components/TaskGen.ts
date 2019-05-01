@@ -1,6 +1,5 @@
 import SpiderList from './SpiderList'
 import Task from './Task'
-import _ from 'lodash'
 import { html } from 'common-tags'
 
 /**
@@ -15,11 +14,11 @@ const TaskGen = {
   },
   // 当前
   current: {
-    typeName: null,
-    inputs: {}
+    typeName: <string> null,
+    inputs: <{ [key: string]: { label: string, inputSel: string, validator?: Function } }> {}
   },
   // 初始化
-  init () {
+  init() {
     // 遍历列表 生成按钮
     let dropdownDom = $(html`
       <div class="namespace-dropdown">
@@ -55,13 +54,13 @@ const TaskGen = {
       dropdownOptionShow()
     })
 
-    _.each(SpiderList, (eachClass, namespace) => {
-      let li = $(`<li data-namespace="${namespace}">${eachClass._NamespaceLabel}</li>`)
+    for (let [namespace, eachClass] of Object.entries(SpiderList)) {
+      let li = $(`<li data-namespace="${namespace}">${eachClass._NamespaceInfo.label}</li>`)
       // 点击 li
       li.click(() => {
         // 按钮显示
         btnsDom.html('') // 删除原有的所有按钮
-        _.each(eachClass, (classInfo, classname) => {
+        for (let [classname, classInfo] of Object.entries(eachClass)) {
           if (classname.substr(0, 1) === '_') return
           let typeName = namespace + '.' + classname
           let btn = $(`<a>${classInfo['label']}</a>`).appendTo(btnsDom)
@@ -77,7 +76,7 @@ const TaskGen = {
             btnsDom.find('a').removeClass('active')
             btn.addClass('active')
           })
-        })
+        }
         dropdownSelectedDom.text(li.text())
         dropdownSelectedDom.attr('data-namespace', namespace)
         // 选中当前 li
@@ -89,14 +88,14 @@ const TaskGen = {
         // li.insertBefore(dropdownOptionDom.find('li:first-child'));
       })
       li.appendTo(dropdownOptionDom)
-    })
+    }
 
     // 打开第一个任务生成器
     dropdownOptionDom.find('li:first-child').click()
     btnsDom.find('a:first-child').click()
   },
   // 分析 TypeName
-  spiderListGet (typeNameStr) {
+  spiderListGet (typeNameStr: string) {
     let typeName = typeNameStr.split('.') || null
     if (!typeName || !typeName[0] || !typeName[1]) return null
     let namespace = typeName[0]
@@ -106,7 +105,7 @@ const TaskGen = {
     return SpiderList[namespace][classname]
   },
   // 表单装载
-  formLoad (typeName) {
+  formLoad(typeName: string) {
     // 点击操作按钮事件
     if (!this.spiderListGet(typeName)) { throw Error('SpiderList 中没有 ' + typeName + '，无法创建表单！') }
 
@@ -137,14 +136,14 @@ const TaskGen = {
     })
   },
   // 表单提交检验
-  formCheck () {
+  formCheck() {
     let isInputAllRight = true
-    _.each(TaskGen.current.inputs, (obj, i) => {
+    for (let [i, obj] of Object.entries(TaskGen.current.inputs)) {
       if (!obj.inputSel || $(obj.inputSel).length === 0) { throw Error(`表单输入元素 ${i} 的 Selector 无效`) }
 
       let inputSel = obj.inputSel
       let inputDom = $(inputSel)
-      let inputVal = inputDom.val().trim()
+      let inputVal = $.trim(inputDom.val().toString())
 
       if (inputVal === '') {
         inputDom.focus()
@@ -156,12 +155,14 @@ const TaskGen = {
       if (!!obj.validator && !obj.validator(inputVal)) {
         inputDom.addClass('has-error').focus()
         inputDom.bind('input propertychange', (evt) => {
-          if (obj.validator(inputDom.val().trim())) inputDom.unbind('input propertychange').removeClass('has-error')
+          if (obj.validator(
+            $.trim(inputDom.val().toString())
+          )) inputDom.unbind('input propertychange').removeClass('has-error')
         })
         isInputAllRight = false
         return false
       }
-    })
+    }
 
     return isInputAllRight
   }

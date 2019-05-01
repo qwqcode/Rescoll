@@ -10,7 +10,7 @@ const CrDownloadsCallBack = window.CrDownloadsCallBack
 const Downloads = {
   navbarBtnName: 'main-btns.downloadManager',
   data: {
-    list: {}
+    list: <any> {}
   },
   statusList: {
     downloading: 1,
@@ -42,11 +42,11 @@ const Downloads = {
     this.restoreDataList()
   },
   // 新增任务
-  addTask (json) {
+  addTask(json: { key: string, fullPath: string, downloadUrl: string, totalBytes: string}) {
     // console.log("ADD: " + JSON.stringify(json));
-    this._addTask(json['key'], json['fullPath'], json['downloadUrl'], json['totalBytes'])
+    this._addTask(json.key, json.fullPath, json.downloadUrl, json.totalBytes)
   },
-  _addTask (key, fullPath, downloadUrl, totalBytes) {
+  _addTask(key: string, fullPath: string, downloadUrl: string, totalBytes: string) {
     if (this.data.list[key]) { throw Error(`${key} 下载任务已存在，无需再新建`) }
 
     this.data.list[key] = {
@@ -59,14 +59,14 @@ const Downloads = {
     }
 
     // 导航栏按钮显示通知小红点
-    AppNavbar.BtnBox.get(this.navbarBtnName).showBadge()
+    AppNavbar.BtnBox.get(this.navbarBtnName)[1].showBadge()
   },
   // 更新任务
-  updateTask (json) {
+  updateTask(json: { key: string, receivedBytes: string, currentSpeed: string, status: string, fullPath: string, downloadUrl: string }) {
     // console.log("UPD: " + JSON.stringify(json));
-    this._updateTask(json['key'], json['receivedBytes'], json['currentSpeed'], json['status'], json['fullPath'], json['downloadUrl'])
+    this._updateTask(json.key, json.receivedBytes, json.currentSpeed, json.status, json.fullPath, json.downloadUrl)
   },
-  _updateTask (key, receivedBytes, currentSpeed, status, fullPath, downloadUrl) {
+  _updateTask(key: string, receivedBytes: string, currentSpeed: string, status: string, fullPath: string, downloadUrl: string) {
     if (!this.data.list[key]) { throw Error(`${key} 下载任务不存在，或许已被删除`) }
 
     this.data.list[key].receivedBytes = receivedBytes
@@ -81,11 +81,11 @@ const Downloads = {
     this.storeDataList() // 存储下载列表
   },
   // 列表项目获取 Selector
-  getItemElem (key) {
+  getItemElem(key: string) {
     return this.listElem.find(`[data-key="${key}"]`) // $().find() 导致界面不停更新；当不断执行一个方法时，拒绝使用 find()
   },
   // 更新列表项目 UI
-  updateItemUi (key) {
+  updateItemUi(key: string) {
     if (!this.data.list[key]) { throw Error(`${key} 下载任务不存在，或许已被删除`) }
 
     let taskData = this.data.list[key]
@@ -197,13 +197,13 @@ const Downloads = {
     if (actionBar.html() !== actionBarHtml) { actionBar.html(actionBarHtml) }
   },
   // 下达任务操作命令
-  taskAction (key, action) {
+  taskAction(key: string, action: string) {
     if (!this.data.list[key]) { throw Error(`任务操作失败，或许已被删除，未找到 ${key}`) }
 
     CrDownloadsCallBack.downloadingTaskAction(key, action)
   },
   // 任务从列表移除
-  taskRemove (key) {
+  taskRemove(key: string) {
     if (!this.data.list[key]) { throw Error(`任务从列表移除失败，或许已被删除，未找到 ${key}`) }
 
     if (this.isTaskInProgress(key)) {
@@ -217,7 +217,7 @@ const Downloads = {
     this.storeDataList() // 存储下载列表
   },
   // 获取正在下载的任务数
-  countDownloadingTask () {
+  countDownloadingTask() {
     let num = 0
     for (let key in this.data.list) {
       if (this.isTaskInProgress(key)) { num++ }
@@ -225,7 +225,7 @@ const Downloads = {
     return num
   },
   // localStorage 恢复下载列表
-  restoreDataList () {
+  restoreDataList() {
     let data = localStorage.getItem(this.localStorageConf.key)
     if (data === null) return
 
@@ -243,11 +243,11 @@ const Downloads = {
     }
   },
   // localStorage 储存下载列表
-  storeDataList () {
+  storeDataList() {
     localStorage.setItem(this.localStorageConf.key, JSON.stringify(this.data.list))
   },
   // 清空下载列表
-  removeDataList () {
+  removeDataList() {
     // 将正在执行的下载任务取消
     for (let key in this.data.list) {
       if (this.isTaskInProgress(key)) { this.taskAction(key, this.actionList.cancel) }
@@ -258,13 +258,13 @@ const Downloads = {
     localStorage.setItem(this.localStorageConf.key, null)
 
     // 导航栏按钮隐藏通知小红点
-    AppNavbar.BtnBox.get(this.navbarBtnName).hideBadge()
+    AppNavbar.BtnBox.get(this.navbarBtnName)[1].hideBadge()
   },
   // 启动文件
-  fileLaunch (key) {
+  fileLaunch(key: string) {
     if (!this.data.list[key] || this.data.list[key].status !== this.statusList.done) { return }
 
-    CrDownloadsCallBack.fileLaunch(this.data.list[key].fullPath).then((isSuccess) => {
+    CrDownloadsCallBack.fileLaunch(this.data.list[key].fullPath).then((isSuccess: boolean) => {
       if (!isSuccess) {
         Downloads.data.list[key].status = Downloads.statusList.cancelled
         Downloads.updateItemUi(key)
@@ -272,16 +272,16 @@ const Downloads = {
     })
   },
   // URL 在系统默认浏览器中打开
-  urlOpenInDefaultBrowser (key) {
+  urlOpenInDefaultBrowser(key: string) {
     if (!this.data.list[key]) { return }
 
     CrDownloadsCallBack.urlOpenInDefaultBrowser(this.data.list[key].downloadUrl)
   },
   // 文件在资源管理器中显示
-  fileShowInExplorer (key) {
+  fileShowInExplorer(key: string) {
     if (!this.data.list[key]) { return }
 
-    CrDownloadsCallBack.fileShowInExplorer(this.data.list[key].fullPath).then((isSuccess) => {
+    CrDownloadsCallBack.fileShowInExplorer(this.data.list[key].fullPath).then((isSuccess: boolean) => {
       if (!isSuccess) {
         Downloads.data.list[key].status = Downloads.statusList.cancelled
         Downloads.updateItemUi(key)
@@ -289,7 +289,7 @@ const Downloads = {
     })
   },
   // 任务是否正在进行中
-  isTaskInProgress (key) {
+  isTaskInProgress(key: string) {
     if (!this.data.list[key]) { return false }
 
     if ((this.data.list[key].status !== this.statusList.done) &&
@@ -300,19 +300,19 @@ const Downloads = {
     }
   },
   // 重新下载
-  downloadAgain (key) {
+  downloadAgain(key: string) {
     if (!this.data.list[key]) { return false }
 
     AppAction.downloadUrl(this.data.list[key].downloadUrl)
   },
   // 获取任务数据
-  getTask (key) {
+  getTask(key: string) {
     if (!this.data.list[key]) { return null }
 
     return this.data.list[key]
   },
   // 获取状态名
-  getStatusName (status) {
+  getStatusName(status: string) {
     for (let key in this.statusList) {
       if (this.statusList.hasOwnProperty(key) && this.statusList[key] === status) {
         return key
@@ -320,12 +320,12 @@ const Downloads = {
     }
   },
   // 路径中提取文件名
-  extractFilename (path) {
+  extractFilename(path: string) {
     let lastSlash = Math.max(path.lastIndexOf('\\'), path.lastIndexOf('/'))
     return path.substring(lastSlash + 1)
   },
   // bytes 格式化
-  bytesToSize (bytes) {
+  bytesToSize(bytes: number) {
     if (bytes === 0) return '0 B'
     let k = 1000
     // or 1024

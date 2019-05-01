@@ -3,67 +3,65 @@ import BtnBox from './BtnBox'
 import BtnItem from './BtnItem'
 
 export default class BtnGroup {
-  constructor (groupName) {
+  protected _elem: JQuery
+  protected _groupName: string
+  protected _btnList: { [key: string]: BtnItem }
+
+  public constructor(groupName: string) {
     this._elem = $(`<div class="btn-group" data-nav-btn-group="${groupName}"></div>`).appendTo(BtnBox.sel.navBtns)
     this._groupName = groupName
     this._btnList = {}
   }
 
   /** 设置按钮组显示在最左 */
-  setMostLeft () {
-    this.getElem().insertBefore($(AppNavbar.BtnBox.sel.navBtns + ' .btn-group:first-child'))
+  public setMostLeft() {
+    this._elem.insertBefore($(AppNavbar.BtnBox.sel.navBtns + ' .btn-group:first-child'))
     return this
   }
 
   /** 设置按钮组显示在最右 */
-  setMostRight () {
-    this.getElem().insertAfter($(AppNavbar.BtnBox.sel.navBtns + ' .btn-group:last-child'))
+  public setMostRight() {
+    this._elem.insertAfter($(AppNavbar.BtnBox.sel.navBtns + ' .btn-group:last-child'))
     return this
   }
 
   /** 获取 Dom */
-  getElem () {
+  public getElem() {
     return this._elem
   }
 
   /** 获取 GroupName */
-  getGroupName () {
+  public getGroupName() {
     return this._groupName
   }
 
   /** 显示 */
-  show () {
-    this.getElem().show()
+  public show() {
+    this._elem.show()
     return this
   }
 
   /** 隐藏 */
-  hide () {
-    this.getElem().hide()
+  public hide() {
+    this._elem.hide()
     return this
   }
 
   /** 获取按钮列表 */
-  getBtnList () {
+  public getBtnList() {
     return this._btnList
   }
 
   /**
    * 添加图标
-   * @param { String } btnName 按钮名
-   * @param { BtnItem } btnObj BtnItem
    */
-  addBtn (btnName, btnObj) {
-    if (!(btnObj instanceof BtnItem)) {
-      throw Error('addBtn 第二个参数需要 BtnItem')
-    }
-
+  public addBtn(btnName: string, btnObj: BtnItem) {
     this._btnList[btnName] = btnObj
-    btnObj.getElem().appendTo(this.getElem())
+    btnObj.getElem().appendTo(this._elem)
     return btnObj
   }
 
-  getBtn (btnName) {
+  public getBtn(btnName: string) {
     if (!this._btnList[btnName]) return null
     return this._btnList[btnName]
   }
