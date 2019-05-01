@@ -26,7 +26,7 @@ const AppWidget = {
     if ($('body .widget-float-img').length !== 0) { return }
 
     let parentDom = $(parent)
-    let parentPos = parent[0].getBoundingClientRect()
+    let parentPos = parentDom[0].getBoundingClientRect()
 
     setTimeout(() => {
       if ($(':hover').filter(parentDom).length === 0) { return }
