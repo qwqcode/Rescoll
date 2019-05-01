@@ -153,7 +153,7 @@ export default class Downloads {
 
     switch (taskData.status) {
       // 下载中
-      case DownloadsStatus.downloading:
+      case this.Status.downloading:
         if (taskData.totalBytes !== 0) {
           // Progress Bar
           if (progress.hasClass('indeterminate')) { progress.removeClass('indeterminate') }
@@ -172,12 +172,12 @@ export default class Downloads {
         }
 
         actionBarHtml = html`
-          <a onclick="Downloads.taskAction('${key}', DownloadsActions.pause)">暂停</a>
-          <a onclick="Downloads.taskAction('${key}', DownloadsActions.cancel)">取消</a>
+          <a onclick="Downloads.taskAction('${key}', this.Actions.pause)">暂停</a>
+          <a onclick="Downloads.taskAction('${key}', this.Actions.cancel)">取消</a>
         `
         break
         // 暂停
-      case DownloadsStatus.pause:
+      case this.Status.pause:
         if (taskData.totalBytes !== 0) {
           // Progress Bar
           descriptionText = `${progressPercentage}，已下载 ${received}，共 ${total}`
@@ -187,21 +187,21 @@ export default class Downloads {
         }
 
         actionBarHtml = html`
-          <a onclick="Downloads.taskAction('${key}', DownloadsActions.resume)">恢复</a>
-          <a onclick="Downloads.taskAction('${key}', DownloadsActions.cancel)">取消</a>
+          <a onclick="Downloads.taskAction('${key}', this.Actions.resume)">恢复</a>
+          <a onclick="Downloads.taskAction('${key}', this.Actions.cancel)">取消</a>
         `
         break
         // 完毕
-      case DownloadsStatus.done:
+      case this.Status.done:
         descriptionText = `总大小：${received}`
         actionBarHtml = `<a onclick="Downloads.fileShowInExplorer('${key}')">在文件夹中显示</a>`
         break
         // 已取消
-      case DownloadsStatus.cancelled:
+      case this.Status.cancelled:
         actionBarHtml = `<a onclick="Downloads.downloadAgain('${key}')">重试下载</a>`
         break
         // 错误
-      case DownloadsStatus.fail:
+      case this.Status.fail:
         actionBarHtml = `<a onclick="Downloads.downloadAgain('${key}')">重试下载</a>`
         break
     }
@@ -224,7 +224,7 @@ export default class Downloads {
     if (!this.data.list[key]) { throw Error(`任务从列表移除失败，或许已被删除，未找到 ${key}`) }
 
     if (this.isTaskInProgress(key)) {
-      CrDownloadsCallBack.downloadingTaskAction(key, DownloadsActions.cancel)
+      CrDownloadsCallBack.downloadingTaskAction(key, this.Actions.cancel)
     }
 
     delete this.data.list[key]
@@ -256,7 +256,7 @@ export default class Downloads {
       if (!downloadsListObj.hasOwnProperty(key)) { continue }
 
       this.data.list[key] = downloadsListObj[key]
-      if (this.isTaskInProgress(key)) { this.data.list[key].status = DownloadsStatus.cancelled }
+      if (this.isTaskInProgress(key)) { this.data.list[key].status = this.Status.cancelled }
 
       this.updateItemUi(key)
     }
@@ -271,7 +271,7 @@ export default class Downloads {
   public static removeDataList() {
     // 将正在执行的下载任务取消
     for (let key in this.data.list) {
-      if (this.isTaskInProgress(key)) { this.taskAction(key, DownloadsActions.cancel) }
+      if (this.isTaskInProgress(key)) { this.taskAction(key, this.Actions.cancel) }
     }
 
     this.data.list = {}
@@ -284,11 +284,11 @@ export default class Downloads {
 
   // 启动文件
   public static fileLaunch(key: string) {
-    if (!this.data.list[key] || this.data.list[key].status !== DownloadsStatus.done) { return }
+    if (!this.data.list[key] || this.data.list[key].status !== this.Status.done) { return }
 
     CrDownloadsCallBack.fileLaunch(this.data.list[key].fullPath).then((isSuccess: boolean) => {
       if (!isSuccess) {
-        Downloads.data.list[key].status = DownloadsStatus.cancelled
+        Downloads.data.list[key].status = this.Status.cancelled
         Downloads.updateItemUi(key)
       }
     })
@@ -307,7 +307,7 @@ export default class Downloads {
 
     CrDownloadsCallBack.fileShowInExplorer(this.data.list[key].fullPath).then((isSuccess: boolean) => {
       if (!isSuccess) {
-        Downloads.data.list[key].status = DownloadsStatus.cancelled
+        Downloads.data.list[key].status = this.Status.cancelled
         Downloads.updateItemUi(key)
       }
     })
@@ -317,8 +317,8 @@ export default class Downloads {
   public static isTaskInProgress(key: string) {
     if (!this.data.list[key]) { return false }
 
-    if ((this.data.list[key].status !== DownloadsStatus.done) &&
-              (this.data.list[key].status !== DownloadsStatus.cancelled)) {
+    if ((this.data.list[key].status !== this.Status.done) &&
+              (this.data.list[key].status !== this.Status.cancelled)) {
       return true
     } else {
       return false
@@ -341,8 +341,8 @@ export default class Downloads {
 
   // 获取状态名
   public static getStatusName(status: string) {
-    for (let key in DownloadsStatus) {
-      if (DownloadsStatus[key] === status) {
+    for (let key in this.Status) {
+      if (this.Status[key] === status) {
         return key
       }
     }
