@@ -5,23 +5,25 @@ import BtnItem from './BtnItem';
 /**
  * 导航栏 面板
  */
-const Panel = {
-  list: <{ [key: string]: PanelItem }> {},
+class Panel {
+  public static list: { [key: string]: PanelItem } = {}
+
   /**
    * 注册新面板
    * 
    * @param key 面板 key
    * @param btnName navbar 按钮 name
    */
-  register(key: string, btnName: string): PanelItem {
+  public static register(key: string, btnName: string): PanelItem {
     if (this.list.hasOwnProperty(key)) { throw Error(`导航栏面板： ${key} 已存在于list中`) }
     let panelItem = new PanelItem(key, btnName)
     // 加入 List
     this.list[key] = panelItem
     return panelItem
-  },
+  }
+
   // 获取面板
-  get(key: string) {
+  public static get(key: string) {
     if (!this.list.hasOwnProperty(key)) { return null }
     return this.list[key]
   }
@@ -38,7 +40,7 @@ class PanelItem {
   public constructor(key: string, btnName: string) {
     this._key = key
     this._btnName = btnName
-    this._btnItem = AppNavbar.BtnBox.get(this._btnName)[1]
+    this._btnItem = AppNavbar.BtnBox.getBtnItem(this._btnName)
     this._btnElem = this._btnItem.getElem()
     this._elem = $(html`<div class="navbar-panel anim-fade-in" data-navbar-panel="${key}" />`)
 
@@ -102,7 +104,7 @@ class PanelItem {
       this.setPosition()
     })
     // 导航栏按钮隐藏通知小红点
-    let btnItem = AppNavbar.BtnBox.get(this._btnName)[1]
+    let btnItem = AppNavbar.BtnBox.getBtnItem(this._btnName)
     btnItem.hideBadge()
   }
   // 隐藏

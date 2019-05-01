@@ -19,8 +19,8 @@ class TaskItem {
   protected _taskItemSel: string
   protected _taskLogTableSel: string
 
-  protected isInProgress: boolean = true // 任务是否正在进行中
-  protected allowAutoScrollToBottom: boolean = true
+  public isInProgress: boolean = true // 任务是否正在进行中
+  public allowAutoScrollToBottom: boolean = true
 
   public constructor(taskId: string, typeName: string, classLabel: string, parmsObj: object) {
     this._taskId = taskId
@@ -99,7 +99,7 @@ class TaskItem {
   }
 
   /** 日志 */
-  log(text: string, level?: string) {
+  public log(text: string, level?: string) {
     let line = $('<div class="line" style="display: none" />')
     let levelsList: { [key: string]: string } = { I: '消息', S: '成功', W: '警告', E: '错误' }
     let innerText = ''
@@ -116,8 +116,9 @@ class TaskItem {
     line.css('display', '')
     this.scrollToBottom()
   }
+
   // 自动滚动到底部
-  scrollToBottom () {
+  public scrollToBottom () {
     // 功能有待优化，当终端快速显示日志时有问题
     /* if (!this.allowAutoScrollToBottom)
       return; // throw ('不允许自动滚动到底部啦'); */
@@ -126,7 +127,7 @@ class TaskItem {
   }
 
   /** 删除 */
-  remove () {
+  public remove() {
     if (this.getIsInProgress()) {
       AppLayer.Dialog.open('删除任务', `任务 “${this.getTitle()}” 正在执行中...`,
         ['中止并删除任务', () => {
@@ -150,7 +151,7 @@ class TaskItem {
   }
 
   /** 删除，仅限内部调用 */
-  _remove () {
+  protected _remove() {
     if (!!Task.getCurrent() && Task.getCurrent().getId() === this.getId()) {
       this.hide()
     }
@@ -163,22 +164,22 @@ class TaskItem {
   }
 
   /** 设置任务已结束状态 */
-  taskIsEnd () {
+  public taskIsEnd() {
     this.isInProgress = false
   }
 
   /** 获取任务是否在进行中 */
-  getIsInProgress () {
+  public getIsInProgress() {
     return this.isInProgress
   }
 
   /** 获取 Selector */
-  getSel () {
+  public getSel() {
     return this._taskItemSel
   }
 
   /** 获取 Log Table Selector */
-  getLogTableSel () {
+  public getLogTableSel() {
     return this._taskLogTableSel
   }
 }

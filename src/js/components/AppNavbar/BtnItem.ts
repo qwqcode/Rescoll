@@ -1,10 +1,10 @@
 import { html } from 'common-tags'
 
 export default class BtnItem {
-  protected _elem: JQuery;
-  protected _name: string;
-  protected _label: string;
-  protected _icon: string;
+  protected _elem: JQuery
+  protected _name: string
+  protected _label: string
+  protected _icon: string
 
   public constructor(name: string, label: string, icon: string) {
     this._name = name

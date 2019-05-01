@@ -3,8 +3,8 @@ import { html } from 'common-tags'
 /**
  * 内容层 对话框
  */
-const Dialog = {
-  open(title: string, content: string, yesBtn?: [string?, Function?], cancelBtn?: [string?, Function?]): void {
+export default class Dialog {
+  public static open(title: string, content: string, yesBtn?: [string?, Function?], cancelBtn?: [string?, Function?]): void {
     if ($('.dialog-layer').length !== 0) {
       $('.dialog-layer').remove()
     }
@@ -61,5 +61,3 @@ const Dialog = {
     }
   }
 }
-
-export default Dialog

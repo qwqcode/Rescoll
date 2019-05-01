@@ -6,8 +6,8 @@ const AppConfig = window.AppConfig
 /**
  * 升级检测
  */
-const AppUpdate = {
-  check (atDocumentReady: boolean, onFinish?: Function) {
+export default class AppUpdate {
+  public static check(atDocumentReady: boolean, onFinish?: Function) {
     let ajaxOpt: JQuery.AjaxSettings = {
       type: 'GET',
       url: AppConfig.updateCheckUrl,
@@ -52,5 +52,3 @@ const AppUpdate = {
     $.ajax(ajaxOpt)
   }
 }
-
-export default AppUpdate

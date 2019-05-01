@@ -4,13 +4,15 @@ import BtnItem from './BtnItem'
 /**
  * 导航栏按钮
  */
-const BtnBox = {
-  sel: {
+export default class BtnBox {
+  public static readonly sel = {
     navBtns: '.top-nav-bar .nav-btn-box'
-  },
-  groupList: <{[key: string]: BtnGroup}> {},
+  }
+
+  public static groupList = <{[key: string]: BtnGroup}> {}
+
   /** 按钮批量添加 */
-  groupAdd(groupName: string, btnList: { [key: string]: { title: string, icon: string, onClick?: Function } }) {
+  public static groupAdd(groupName: string, btnList: { [key: string]: { title: string, icon: string, onClick?: Function } }) {
     let btnGroup: BtnGroup
     if (!this.getGroup(groupName)) {
       // 创建新的按钮组
@@ -33,23 +35,29 @@ const BtnBox = {
     }
 
     return btnGroup
-  },
+  }
+
   /** 获取按钮组 */
-  getGroup(groupName: string): BtnGroup {
+  public static getGroup(groupName: string): BtnGroup {
     if (!this.groupList.hasOwnProperty(groupName)) return null
     return this.groupList[groupName]
-  },
-  get(name: string): [ BtnGroup, BtnItem ] {
-    let arr: [BtnGroup, BtnItem] = [null, null]
+  }
+  
+  public static getBtnGroup(name: string): BtnGroup {
     let nameS = name.split('.')
     if (!!nameS[0]) {
-      arr[0] = this.getGroup(nameS[0])
-      arr[1] = (!!nameS[1]) ? this.getGroup(nameS[0]).getBtn(nameS[1]) : null
-      return arr
+      return this.getGroup(nameS[0])
+    } else {
+      return null
+    }
+  }
+
+  public static getBtnItem(name: string): BtnItem {
+    let nameS = name.split('.')
+    if (!!nameS[0] && !!nameS[1]) {
+      return this.getGroup(nameS[0]).getBtn(nameS[1])
     } else {
       return null
     }
   }
 }
-
-export default BtnBox

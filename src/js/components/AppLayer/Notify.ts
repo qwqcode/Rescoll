@@ -3,15 +3,17 @@ import { html } from 'common-tags'
 /**
  * 内容层 通知
  */
-const Notify = {
-  success(message: string): void {
+export default class Notify {
+  public static success(message: string): void {
     this.show(message, 's')
-  },
-  error(message: string): void {
+  }
+  
+  public static error(message: string): void {
     this.show(message, 'e')
-  },
+  }
+
   // level: s, e
-  show(message: string, level: string, timeout?: number): void {
+  public static show(message: string, level: string, timeout?: number): void {
     timeout = (typeof timeout === 'number') ? timeout : 2000
 
     let layerElem = $('.notify-layer')
@@ -45,5 +47,3 @@ const Notify = {
     })
   }
 }
-
-export default Notify

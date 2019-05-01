@@ -1,23 +1,26 @@
 import { html } from 'common-tags'
 
-const Sidebar = {
-  list: {},
+class Sidebar {
+  public static list: {[key: string]: SidebarItem} = {}
+
   // 当前显示
-  currentDisplayedKey: <string> null,
+  public static currentDisplayedKey: string = null
+
   /**
    * 注册新的 Sidebar
    */
-  register(key: string): SidebarItem {
+  public static register(key: string): SidebarItem {
     if (this.list.hasOwnProperty(key)) { throw Error(`侧边栏层：${key} 已存在于list中`) }
     let sidebarItem = new SidebarItem(key)
     // 加入 List
     this.list[key] = sidebarItem
     return sidebarItem
-  },
+  }
+  
   /**
    * 获取 sidebarObj
    */
-  get(key: string): SidebarItem {
+  public static get(key: string): SidebarItem {
     if (!this.list.hasOwnProperty(key)) { return null }
     return this.list[key]
   }
@@ -64,13 +67,13 @@ class SidebarItem {
   }
 
   /** 设置内容 */
-  setInner(elem: JQuery|string) {
+  public setInner(elem: JQuery|string) {
     let innerElem = $(`<div class="sidebar-inner"></div>`).appendTo(this._elem)
     innerElem.append(elem)
   }
 
   /** 设置宽度 */
-  setWidth(width?: number) {
+  public setWidth(width?: number) {
     if (width !== undefined) {
       this._width = width
     }
@@ -78,7 +81,7 @@ class SidebarItem {
   }
 
   /** 显示 */
-  show() {
+  public show() {
     if (Sidebar.currentDisplayedKey !== null && Sidebar.currentDisplayedKey !== this.getKey()) {
       Sidebar.get(Sidebar.currentDisplayedKey).hide()
     }
@@ -114,7 +117,7 @@ class SidebarItem {
   }
 
   /** 隐藏 */
-  hide () {
+  public hide () {
     if (
       Sidebar.currentDisplayedKey === null ||
       Sidebar.currentDisplayedKey !== this.getKey()
@@ -134,7 +137,7 @@ class SidebarItem {
   }
 
   /** 显隐切换 */
-  toggle() {
+  public toggle() {
     if (!this.isShow()) {
       this.show()
     } else {
@@ -143,17 +146,17 @@ class SidebarItem {
   }
 
   /** 是否显示 */
-  isShow() {
+  public isShow() {
     return $(this.getLayerElem()).hasClass('show') && this._elem.hasClass('show')
   }
 
   /** 获取 Inner Elem */
-  getInnerElem() {
+  public getInnerElem() {
     return this._elem.find('.sidebar-inner')
   }
 
   /** 获取层 Elem */
-  getLayerElem() {
+  public getLayerElem() {
     let elem = $('.sidebar-layer')
     if (elem.length === 0) {
       elem = $('<div class="sidebar-layer" />').appendTo('body')

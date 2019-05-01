@@ -22,7 +22,7 @@ const SpiderList: { [key: string]: { [key: string]: { label: string, genForm?: F
           'Gome': '国美在线'
         })
         pageUrlEl.on('input propertychange', () => {
-          let urlVal = $.trim(pageUrlEl.val())
+          let urlVal = $.trim(pageUrlEl.val().toString())
           let urlMap: { [key: string]: string[] } = {
             'Tmall': ['https://detail.tmall.com'],
             'Taobao': ['https://item.taobao.com'],

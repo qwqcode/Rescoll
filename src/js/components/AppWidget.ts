@@ -3,8 +3,8 @@ import { html } from 'common-tags'
 /**
  * 小部件
  */
-const AppWidget = {
-  loadingIndicator (putInto: JQuery) {
+export default class AppWidget {
+  public static loadingIndicator(putInto: JQuery) {
     $(html`
     <div class="loading-indicator" style="opacity: .9;">
       <div class="inner">
@@ -20,9 +20,9 @@ const AppWidget = {
     }
 
     return indicatorObj
-  },
+  }
 
-  floatImg (parent: JQuery, imgSrc: string) {
+  public static floatImg (parent: JQuery, imgSrc: string) {
     if ($('body .widget-float-img').length !== 0) { return }
 
     let parentDom = $(parent)
@@ -57,5 +57,3 @@ const AppWidget = {
     }, 200)
   }
 }
-
-export default AppWidget

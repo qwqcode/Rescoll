@@ -2,17 +2,19 @@ import AppLayer from '../AppLayer'
 import Task from './index'
 import { html } from 'common-tags'
 
-const TaskManagerLayer = {
-  init() {
+export default class TaskManagerLayer {
+  public static init() {
     let taskManager = AppLayer.Sidebar.register('taskManager')
     taskManager.setTitle('任务列表', '#4265c7')
     taskManager.setWidth(450)
     taskManager.setInner('<div class="task-manager"></div>')
-  },
-  getItemSel(taskId: string) {
+  }
+
+  public static getItemSel(taskId: string) {
     return '[data-taskmanager-taskid="' + taskId + '"]'
-  },
-  addItem(taskId: string) {
+  }
+
+  public static addItem(taskId: string) {
     if (!Task.get(taskId)) { throw Error('未找到此任务 ' + taskId) }
 
     let task = Task.get(taskId)
@@ -37,21 +39,22 @@ const TaskManagerLayer = {
       Task.get(taskId).remove()
     })
     taskItem.prependTo(this.getLayer().getElem().find('.task-manager'))
-  },
-  removeItem(taskId: string) {
+  }
+
+  public static removeItem(taskId: string) {
     if ($(this.getItemSel(taskId)).length === 0) { throw Error(`未找到此任务 ${taskId}`) }
 
     setTimeout(() => {
       // console.log(this.getItemSel(taskId))
       $(this.getItemSel(taskId)).remove()
     }, 20)
-  },
-  toggleLayer() {
+  }
+
+  public static toggleLayer() {
     this.getLayer().toggle()
-  },
-  getLayer() {
+  }
+
+  public static getLayer() {
     return AppLayer.Sidebar.get('taskManager')
   }
 }
-
-export default TaskManagerLayer

@@ -6,8 +6,8 @@ import { html } from 'common-tags'
 /**
  * 设置
  */
-const Setting = {
-  init() {
+export default class Setting {
+  public static init() {
     AppAction.utilsReqIeProxy() // 无参数代表同步
     let settingSidebar = AppLayer.Sidebar.register(this.sidebarKey)
     settingSidebar.setTitle('设置', '#0089ff')
@@ -23,20 +23,22 @@ const Setting = {
     }
     SettingContent(this, group)
     settingSidebar.setInner(settingDom)
-  },
-  get(key: string) {
+  }
+
+  public static get(key: string) {
     let settingValue = JSON.parse(localStorage.getItem('setting')) || {}
     return settingValue.hasOwnProperty(key) ? settingValue[key] : null
-  },
-  set(key: string, val: any) {
+  }
+
+  public static set(key: string, val: any) {
     let settingValue = JSON.parse(localStorage.getItem('setting')) || {}
     settingValue[key] = val
     localStorage.setItem('setting', JSON.stringify(settingValue))
-  },
-  sidebarKey: 'setting',
-  getSidebar() {
+  }
+
+  public static readonly sidebarKey = 'setting'
+
+  public static getSidebar() {
     return AppLayer.Sidebar.get(this.sidebarKey)
   }
 }
-
-export default Setting

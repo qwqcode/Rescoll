@@ -5,20 +5,22 @@ import { html } from 'common-tags'
 /**
  * Task Generator (任务生成器)
  */
-const TaskGen = {
-  sel: {
+export default class TaskGen {
+  public static readonly sel = {
     form: '.taskgen-form',
     formToggle: '.taskgen-form-toggle',
     formToggleDropdown: '.taskgen-form-toggle .namespace-dropdown',
     formToggleBtns: '.taskgen-form-toggle .classname-btns'
-  },
+  }
+
   // 当前
-  current: {
+  public static current = {
     typeName: <string> null,
     inputs: <{ [key: string]: { label: string, inputSel: string, validator?: Function } }> {}
-  },
+  }
+
   // 初始化
-  init() {
+  public static init() {
     // 遍历列表 生成按钮
     let dropdownDom = $(html`
       <div class="namespace-dropdown">
@@ -93,9 +95,10 @@ const TaskGen = {
     // 打开第一个任务生成器
     dropdownOptionDom.find('li:first-child').click()
     btnsDom.find('a:first-child').click()
-  },
+  }
+
   // 分析 TypeName
-  spiderListGet (typeNameStr: string) {
+  public static spiderListGet (typeNameStr: string) {
     let typeName = typeNameStr.split('.') || null
     if (!typeName || !typeName[0] || !typeName[1]) return null
     let namespace = typeName[0]
@@ -103,9 +106,10 @@ const TaskGen = {
     let classname = typeName[1]
     if (!SpiderList.hasOwnProperty(namespace) || !SpiderList[namespace].hasOwnProperty(classname)) return null
     return SpiderList[namespace][classname]
-  },
+  }
+
   // 表单装载
-  formLoad(typeName: string) {
+  public static formLoad(typeName: string) {
     // 点击操作按钮事件
     if (!this.spiderListGet(typeName)) { throw Error('SpiderList 中没有 ' + typeName + '，无法创建表单！') }
 
@@ -134,9 +138,10 @@ const TaskGen = {
 
       return false
     })
-  },
+  }
+
   // 表单提交检验
-  formCheck() {
+  public static formCheck() {
     let isInputAllRight = true
     for (let [i, obj] of Object.entries(TaskGen.current.inputs)) {
       if (!obj.inputSel || $(obj.inputSel).length === 0) { throw Error(`表单输入元素 ${i} 的 Selector 无效`) }
@@ -167,5 +172,3 @@ const TaskGen = {
     return isInputAllRight
   }
 }
-
-export default TaskGen
