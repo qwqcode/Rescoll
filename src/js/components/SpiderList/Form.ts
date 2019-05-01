@@ -66,7 +66,7 @@ const Form = {
   selectInput(fieldName: string, label: string, values: object, selectValue?: string) {
     let tagId = 'TaskGen_' + fieldName
     let inputHtml = `<select id="${tagId}" name="${fieldName}" class="form-control">`
-    for (let [label, val] of Object.entries(values)) {
+    for (let [val, label] of Object.entries(values)) {
       val = (typeof (val) !== 'number') ? val : label
       let afterOpt = ((!!selectValue && (val === selectValue)) ? 'selected' : '')
       inputHtml += `<option value="${val}" ${afterOpt}>${label}</option>`

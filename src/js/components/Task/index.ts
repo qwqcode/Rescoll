@@ -3,6 +3,7 @@ import AppNavbar from '../AppNavbar'
 import { Base64 } from 'js-base64'
 import TaskItem from './TaskItem'
 import TaskManagerLayer from './TaskManagerLayer'
+import AppLayer from '../AppLayer';
 
 const TaskController = window.TaskController
 
@@ -28,10 +29,16 @@ const Task = {
     this.list[taskId] = taskItem
 
     // 让任务控制器 开始一个执行新任务
-    TaskController.createTask(taskId, typeName, classLabel, JSON.stringify(parmsObj)).then((callback: any) => {
-      taskItem.show()
-      Task.taskManagerLayer.addItem(taskId)
-    })
+    taskItem.show()
+    Task.taskManagerLayer.addItem(taskId)
+    try {
+      TaskController.createTask(taskId, typeName, classLabel, JSON.stringify(parmsObj)).then((callback: any) => {
+        // ... 结束加载
+      })
+    } catch (e) {
+      AppLayer.Notify.error('创建任务失败')
+      throw e
+    }
 
     return taskItem
   },

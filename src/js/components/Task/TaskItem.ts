@@ -130,13 +130,18 @@ class TaskItem {
     if (this.getIsInProgress()) {
       AppLayer.Dialog.open('删除任务', `任务 “${this.getTitle()}” 正在执行中...`,
         ['中止并删除任务', () => {
-          TaskController.abortTask(this.getId()).then((isSuccess: boolean) => {
-            if (isSuccess) {
-              this._remove()
-            } else {
-              AppLayer.Notify.error('任务中止失败')
-            }
-          })
+          try {
+            TaskController.abortTask(this.getId()).then((isSuccess: boolean) => {
+              if (isSuccess) {
+                this._remove()
+              } else {
+                AppLayer.Notify.error('任务中止失败')
+              }
+            })
+          } catch (e) {
+            AppLayer.Notify.error('任务中止失败')
+            throw e
+          }
         }],
         ['取消', () => { }])
     } else {

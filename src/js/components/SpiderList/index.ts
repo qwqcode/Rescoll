@@ -1,7 +1,7 @@
 /**
  * 任务选择列表
  */
-import Form from './Form.js'
+import Form from './Form'
 import InputValidators from '../../utils/InputValidators'
 
 // 操作列表

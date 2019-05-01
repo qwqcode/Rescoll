@@ -42,7 +42,7 @@ const TaskManagerLayer = {
     if ($(this.getItemSel(taskId)).length === 0) { throw Error(`未找到此任务 ${taskId}`) }
 
     setTimeout(() => {
-      console.log(this.getItemSel(taskId))
+      // console.log(this.getItemSel(taskId))
       $(this.getItemSel(taskId)).remove()
     }, 20)
   },

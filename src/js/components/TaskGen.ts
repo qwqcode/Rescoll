@@ -61,7 +61,7 @@ const TaskGen = {
         // 按钮显示
         btnsDom.html('') // 删除原有的所有按钮
         for (let [classname, classInfo] of Object.entries(eachClass)) {
-          if (classname.substr(0, 1) === '_') return
+          if (classname.substr(0, 1) === '_') continue
           let typeName = namespace + '.' + classname
           let btn = $(`<a>${classInfo['label']}</a>`).appendTo(btnsDom)
           // 选中之前点击过的按钮

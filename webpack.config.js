@@ -12,7 +12,7 @@ const IS_DEV = process.env.NODE_ENV === 'dev'
 const config = {
   mode: IS_DEV ? 'development' : 'production',
   devtool: IS_DEV ? 'eval' : 'source-map',
-  entry: './src/js/index.js',
+  entry: './src/js/index.ts',
   output: {
     filename: 'js/[name].[hash].js',
     path: path.resolve(__dirname, 'dist')
@@ -126,7 +126,7 @@ const config = {
   ],
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+    extensions: ['*', '.ts', '.tsx', '.js']
   },
   devServer: {
     contentBase: path.join(__dirname, 'src')

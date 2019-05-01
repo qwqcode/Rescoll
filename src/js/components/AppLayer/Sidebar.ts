@@ -71,7 +71,6 @@ class SidebarItem {
 
   /** 设置宽度 */
   setWidth(width?: number) {
-    console.log(width)
     if (width !== undefined) {
       this._width = width
     }
