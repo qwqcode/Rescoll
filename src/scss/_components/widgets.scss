@@ -1,0 +1,26 @@
+/* Widgets */
+.widget-float-img {
+  position: absolute;
+  z-index: 1000;
+  width: 250px;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 1px;
+  background: #efefef;
+  padding: 10px;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.49);
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  > img {
+    height: auto;
+    width: auto;
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 100%;
+    border-radius: 2px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  }
+}
+
+

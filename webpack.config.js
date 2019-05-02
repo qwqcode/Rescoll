@@ -8,14 +8,23 @@ const PreloadWebpackPlugin = require('preload-webpack-plugin')
 const CssUrlRelativePlugin = require('css-url-relative-plugin')
 
 const IS_DEV = process.env.NODE_ENV === 'dev'
+const ROOT_PATH = path.resolve(__dirname)
+const SRC_PATH = path.resolve(ROOT_PATH, 'src')
+const BUILD_PATH = path.resolve(ROOT_PATH, 'dist')
+
+const VERSION = require('./package.json').version
+const BANNER =
+  'NacollectorFrontend v' + VERSION + '\n' +
+  '(c) 2017-' + new Date().getFullYear() + ' qwqaq.com\n' +
+  'Link: https://github.com/qwqcode/NacollectorFrontend'
 
 const config = {
   mode: IS_DEV ? 'development' : 'production',
-  devtool: IS_DEV ? 'eval' : 'source-map',
-  entry: './src/js/index.ts',
+  devtool: IS_DEV ? 'cheap-module-source-map' : 'source-map',
+  entry: path.resolve(SRC_PATH, './js/index.ts'),
   output: {
     filename: 'js/[name].[hash].js',
-    path: path.resolve(__dirname, 'dist')
+    path: BUILD_PATH
   },
   module: {
     rules: [
@@ -33,15 +42,32 @@ const config = {
         test: /\.css$/,
         use: [
           IS_DEV ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader'
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: IS_DEV
+            }
+          }
         ]
       },
       {
         test: /\.scss$/,
         use: [
           IS_DEV ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader'
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: IS_DEV
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: IS_DEV,
+              includePaths: [SRC_PATH],
+              data: '@import "scss/_variables.scss";'
+            }
+          }
         ]
       },
       {
@@ -101,13 +127,13 @@ const config = {
     }),
     new CopyWebpackPlugin([
       {
-        from: './src/assets',
+        from: path.resolve(SRC_PATH, './assets'),
         to: 'assets'
       }
     ]),
     new HtmlWebPackPlugin({
-      template: path.resolve(__dirname, './src/index.html'),
-      // favicon: path.resolve(__dirname, './src/assets/icon.ico'),
+      template: path.resolve(SRC_PATH, './index.html'),
+      // favicon: path.resolve(SRC_PATH, './assets/icon.ico'),
       minify: !IS_DEV && {
         collapseWhitespace: true,
         preserveLineBreaks: true,
@@ -125,11 +151,13 @@ const config = {
     new CssUrlRelativePlugin()
   ],
   resolve: {
-    // Add '.ts' and '.tsx' as resolvable extensions.
+    alias: {
+      '@': SRC_PATH
+    },
     extensions: ['*', '.ts', '.tsx', '.js']
   },
   devServer: {
-    contentBase: path.join(__dirname, 'src')
+    contentBase: SRC_PATH
   },
   optimization: {
     runtimeChunk: 'single',
@@ -159,6 +187,7 @@ if (!IS_DEV) {
     }),
     new OptimizeCSSAssetsPlugin({})
   )
+  config.plugins.push(new webpack.BannerPlugin(BANNER))
 }
 
 module.exports = config

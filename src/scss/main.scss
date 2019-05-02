@@ -1,0 +1,247 @@
+html, body {
+  overflow: hidden;
+  margin: 0;
+  font-family: "Microsoft YaHei", "Helvitica Neue", Helvitica, Arial, "Hiragino Sans GB", "SimHei", sans-serif;
+  background: #333333;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: rgba(0, 0, 0, 0.6);
+  height: 100%;
+  transition: opacity .2s ease-in-out, background .2s ease-in-out;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  transition: all .2s ease-in-out;
+}
+
+:after, :before {
+  box-sizing: border-box;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.wrap {
+  position: fixed;
+  top: 65px;
+  left: 0;
+  right: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: calc(100vh - 65px);
+  width: 100vw;
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.65, 0.05, 0.36, 1), background 0.4s cubic-bezier(0.65, 0.05, 0.36, 1);
+  background: #21252b;
+}
+
+.container {
+  overflow: hidden;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-top: 35px;
+  padding-bottom: 35px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+
+@media (min-width: 1150px) {
+  .container {
+    width: 1100px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(86, 86, 86, 0.3);
+  &:window-inactive {
+    background: rgba(86, 86, 86, 0.3);
+  }
+  &:vertical {
+    &:hover {
+      background: rgba(65, 74, 82, 0.77);
+    }
+    &:active {
+      background: rgba(41, 47, 53, 0.77);
+    }
+  }
+}
+
+.wrap::-webkit-scrollbar-thumb, .task-runtime::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+
+.wrap::-webkit-scrollbar-thumb, .task-runtime::-webkit-scrollbar-thumb, .wrap::-webkit-scrollbar-thumb:window-inactive, .task-runtime::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(191, 191, 191, 0.57);
+}
+
+.wrap::-webkit-scrollbar-thumb:vertical:hover, .task-runtime::-webkit-scrollbar-thumb:vertical:hover {
+  background: rgba(220, 220, 220, 0.77);
+}
+
+.wrap::-webkit-scrollbar-thumb:vertical:active, .task-runtime::-webkit-scrollbar-thumb:vertical:active {
+  background: rgba(255, 255, 255, 0.77);
+}
+
+::-webkit-input-placeholder {
+  color: #97a4ab;
+}
+
+.row {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.anim-fade-in {
+  animation-name: fadeIn;
+  animation-fill-mode: both;
+  animation-duration: .3s;
+}
+
+.anim-fade-out {
+  animation-name: fadeOut;
+  animation-duration: .2s;
+}
+
+.anim-flash {
+  animation-name: flash;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+@keyframes fadeOut {
+  100% {
+    opacity: 0;
+  }
+
+  0% {}
+}
+
+
+@keyframes flash {
+  0%,50%,to {
+    opacity: 1;
+  }
+
+  25%,75% {
+    opacity: 0;
+  }
+}
+
+
+/* user-select disable */
+.title-bar, .top-nav-bar, .big-header, .app-select, .app-form label, ::-webkit-input-placeholder {
+  user-select: none;
+  cursor: default;
+}
+
+/* Loading Indicator */
+.loading-indicator {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  .inner {
+    position: relative;
+    width: 50px;
+    height: 50px;
+  }
+  svg {
+    animation: loading-indicator-rotate 2s linear infinite;
+    transform-origin: center center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    circle {
+      stroke-dasharray: 1,200;
+      stroke-dashoffset: 0;
+      animation: loading-indicator-dash 1.5s ease-in-out infinite,loading-indicator-color 6s ease-in-out infinite;
+      stroke-linecap: round;
+    }
+  }
+}
+
+@keyframes loading-indicator-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+@keyframes loading-indicator-dash {
+  0% {
+    stroke-dasharray: 1,200;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 89,200;
+    stroke-dashoffset: -35px;
+  }
+
+  100% {
+    stroke-dasharray: 89,200;
+    stroke-dashoffset: -124px;
+  }
+}
+
+
+@keyframes loading-indicator-color {
+  0%,100% {
+    stroke: #ff5652;
+  }
+
+  40% {
+    stroke: #2196F3;
+  }
+
+  66% {
+    stroke: #32c787;
+  }
+
+  80%,90% {
+    stroke: #ffc107;
+  }
+}
