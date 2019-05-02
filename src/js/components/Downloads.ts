@@ -24,7 +24,15 @@ enum DownloadsActions {
 export default class Downloads {
   public static readonly navbarBtnName = 'main-btns.downloadManager'
   public static data = {
-    list: <any> {}
+    list: <{
+      [key: string]: {
+        fullPath: string,
+        downloadUrl: string,
+        totalBytes: number,
+        receivedBytes: number,
+        currentSpeed: number,
+        status: DownloadsStatus
+      }}> {}
   }
 
   public static Status = DownloadsStatus
@@ -52,12 +60,13 @@ export default class Downloads {
   }
 
   // 新增任务
-  public static addTask(json: { key: string, fullPath: string, downloadUrl: string, totalBytes: string}) {
+  public static addTask(json: { key: string, fullPath: string, downloadUrl: string, totalBytes: number}) {
     // console.log("ADD: " + JSON.stringify(json));
+    console.log(json)
     this._addTask(json.key, json.fullPath, json.downloadUrl, json.totalBytes)
   }
 
-  public static _addTask(key: string, fullPath: string, downloadUrl: string, totalBytes: string) {
+  public static _addTask(key: string, fullPath: string, downloadUrl: string, totalBytes: number) {
     if (this.data.list[key]) { throw Error(`${key} 下载任务已存在，无需再新建`) }
 
     this.data.list[key] = {
@@ -74,12 +83,13 @@ export default class Downloads {
   }
 
   // 更新任务
-  public static updateTask(json: { key: string, receivedBytes: string, currentSpeed: string, status: string, fullPath: string, downloadUrl: string }) {
+  public static updateTask(json: { key: string, receivedBytes: number, currentSpeed: number, status: DownloadsStatus, fullPath: string, downloadUrl: string }) {
+    console.log(json)
     // console.log("UPD: " + JSON.stringify(json));
     this._updateTask(json.key, json.receivedBytes, json.currentSpeed, json.status, json.fullPath, json.downloadUrl)
   }
 
-  public static _updateTask(key: string, receivedBytes: string, currentSpeed: string, status: string, fullPath: string, downloadUrl: string) {
+  public static _updateTask(key: string, receivedBytes: number, currentSpeed: number, status: DownloadsStatus, fullPath: string, downloadUrl: string) {
     if (!this.data.list[key]) { throw Error(`${key} 下载任务不存在，或许已被删除`) }
 
     this.data.list[key].receivedBytes = receivedBytes
@@ -340,7 +350,7 @@ export default class Downloads {
   }
 
   // 获取状态名
-  public static getStatusName(status: string) {
+  public static getStatusName(status: DownloadsStatus|string) {
     for (let key in this.Status) {
       if (this.Status[key] === status) {
         return key
