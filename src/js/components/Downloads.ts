@@ -110,7 +110,7 @@ export default class Downloads {
     let taskData = this.list[key]
     let itemElem = this.itemElemList[key]
 
-    if (itemElem.length === 0) {
+    if (!itemElem || (!!itemElem && itemElem.length === 0)) {
       // 初始化 item elem
       itemElem = this.itemElemList[key] = $(html`
       <div class="download-item">
@@ -279,7 +279,7 @@ export default class Downloads {
     
     this.itemElemList[key].hide()
     delete this.list[key]
-    
+
     this.storeDataList() // 存储下载列表
   }
 
