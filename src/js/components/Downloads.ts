@@ -23,18 +23,18 @@ enum DownloadsActions {
  */
 export default class Downloads {
   public static readonly navbarBtnName = 'main-btns.downloadManager'
-  public static data = {
-    list: <{
-      [key: string]: {
-        fullPath: string,
-        downloadUrl: string,
-        totalBytes: number,
-        receivedBytes: number,
-        currentSpeed: number,
-        status: DownloadsStatus,
-        itemElem: JQuery
-      }}> {}
-  }
+
+  public static list: {
+    [key: string]: {
+      fullPath: string,
+      downloadUrl: string,
+      totalBytes: number,
+      receivedBytes: number,
+      currentSpeed: number,
+      status: DownloadsStatus
+    }
+  } = {}
+  public static itemElemList: {[key: string]: JQuery} = {}
 
   public static Status = DownloadsStatus
   public static Actions = DownloadsActions
@@ -43,10 +43,7 @@ export default class Downloads {
     downloadsList: '.download-list'
   }
   public static readonly panelKey = 'downloads'
-  public static readonly localStorageConf = {
-    key: 'downloads'
-  }
-
+  public static readonly localStorageKey = 'downloads'
   public static listElem: JQuery
 
   /** 初始化 */
@@ -67,17 +64,17 @@ export default class Downloads {
   }
 
   public static _addTask(key: string, fullPath: string, downloadUrl: string, totalBytes: number) {
-    if (this.data.list[key]) { throw Error(`${key} 下载任务已存在，无需再新建`) }
+    if (this.list[key]) { throw Error(`${key} 下载任务已存在，无需再新建`) }
 
-    this.data.list[key] = {
+    this.list[key] = {
       fullPath: fullPath,
       downloadUrl: downloadUrl,
       totalBytes: totalBytes,
       receivedBytes: 0,
       currentSpeed: 0,
-      status: 0,
-      itemElem: $()
+      status: 0
     }
+    this.itemElemList[key] = $()
 
     // 导航栏按钮显示通知小红点
     AppNavbar.BtnBox.getBtnItem(this.navbarBtnName).showBadge()
@@ -90,17 +87,17 @@ export default class Downloads {
   }
 
   public static _updateTask(key: string, receivedBytes: number, currentSpeed: number, status: DownloadsStatus, fullPath: string, downloadUrl: string) {
-    if (!this.data.list[key]) { throw Error(`${key} 下载任务不存在，或许已被删除`) }
+    if (!this.list[key]) { throw Error(`${key} 下载任务不存在，或许已被删除`) }
 
-    this.data.list[key].receivedBytes = receivedBytes
-    this.data.list[key].currentSpeed = currentSpeed
-    this.data.list[key].status = status
+    this.list[key].receivedBytes = receivedBytes
+    this.list[key].currentSpeed = currentSpeed
+    this.list[key].status = status
 
-    if (fullPath !== '' && this.data.list[key].fullPath !== fullPath)
-      this.data.list[key].fullPath = fullPath
+    if (fullPath !== '' && this.list[key].fullPath !== fullPath)
+      this.list[key].fullPath = fullPath
     
-    if (this.data.list[key].downloadUrl !== downloadUrl)
-      this.data.list[key].downloadUrl = downloadUrl
+    if (this.list[key].downloadUrl !== downloadUrl)
+      this.list[key].downloadUrl = downloadUrl
 
     this.updateItemUi(key) // 刷新界面
     this.storeDataList() // 存储下载列表
@@ -108,14 +105,14 @@ export default class Downloads {
 
   /** 更新列表项目 UI */
   public static updateItemUi(key: string) {
-    if (!this.data.list[key]) { throw Error(`${key} 下载任务不存在，或许已被删除`) }
+    if (!this.list[key]) { throw Error(`${key} 下载任务不存在，或许已被删除`) }
 
-    let taskData = this.data.list[key]
-    let itemElem = taskData.itemElem
+    let taskData = this.list[key]
+    let itemElem = this.itemElemList[key]
 
     if (itemElem.length === 0) {
       // 初始化 item elem
-      itemElem = taskData.itemElem = $(html`
+      itemElem = this.itemElemList[key] = $(html`
       <div class="download-item">
         <div class="details">
           <div class="header">
@@ -267,29 +264,29 @@ export default class Downloads {
 
   /** 下达任务操作命令 */
   public static taskAction(key: string, action: DownloadsActions) {
-    if (!this.data.list[key]) { throw Error(`任务操作失败，或许已被删除，未找到 ${key}`) }
+    if (!this.list[key]) { throw Error(`任务操作失败，或许已被删除，未找到 ${key}`) }
 
     CrDownloadsCallBack.downloadingTaskAction(key, action)
   }
 
   /** 任务从列表移除 */
   public static taskRemove(key: string) {
-    if (!this.data.list[key]) { throw Error(`任务从列表移除失败，或许已被删除，未找到 ${key}`) }
+    if (!this.list[key]) { throw Error(`任务从列表移除失败，或许已被删除，未找到 ${key}`) }
 
     if (this.isTaskInProgress(key)) {
       CrDownloadsCallBack.downloadingTaskAction(key, DownloadsActions.cancel)
     }
-
-    this.data.list[key].itemElem.hide()
-
-    delete this.data.list[key]
+    
+    this.itemElemList[key].hide()
+    delete this.list[key]
+    
     this.storeDataList() // 存储下载列表
   }
 
   /** 获取正在下载的任务数 */
   public static countDownloadingTask() {
     let num = 0
-    for (let key in this.data.list) {
+    for (let key in this.list) {
       if (this.isTaskInProgress(key)) { num++ }
     }
     return num
@@ -297,23 +294,23 @@ export default class Downloads {
 
   /** localStorage 储存下载列表 */
   public static storeDataList() {
-    localStorage.setItem(this.localStorageConf.key, JSON.stringify(this.data.list))
+    localStorage.setItem(this.localStorageKey, JSON.stringify(this.list))
   }
 
   /** localStorage 恢复下载列表 */
   public static restoreDataList() {
-    let data = localStorage.getItem(this.localStorageConf.key)
+    let data = localStorage.getItem(this.localStorageKey)
     if (data === null) return
 
     let downloadsListObj = JSON.parse(data)
-    this.data.list = {}
+    this.list = {}
 
     // console.log(JSON.stringify(downloadsListJson));
     for (let key in downloadsListObj) {
       if (!downloadsListObj.hasOwnProperty(key)) { continue }
 
-      this.data.list[key] = downloadsListObj[key]
-      if (this.isTaskInProgress(key)) { this.data.list[key].status = DownloadsStatus.cancelled }
+      this.list[key] = downloadsListObj[key]
+      if (this.isTaskInProgress(key)) { this.list[key].status = DownloadsStatus.cancelled }
 
       this.updateItemUi(key)
     }
@@ -322,13 +319,13 @@ export default class Downloads {
   /** 清空下载列表 */
   public static removeDataList() {
     // 将正在执行的下载任务取消
-    for (let key in this.data.list) {
+    for (let key in this.list) {
       if (this.isTaskInProgress(key)) { this.taskAction(key, DownloadsActions.cancel) }
     }
 
-    this.data.list = {}
+    this.list = {}
     this.listElem.find('.download-item').remove()
-    localStorage.setItem(this.localStorageConf.key, null)
+    localStorage.setItem(this.localStorageKey, null)
 
     // 导航栏按钮隐藏通知小红点
     AppNavbar.BtnBox.getBtnItem(this.navbarBtnName).hideBadge()
@@ -336,11 +333,11 @@ export default class Downloads {
 
   /** 启动文件 */
   public static fileLaunch(key: string) {
-    if (!this.data.list[key] || this.data.list[key].status !== DownloadsStatus.done) { return }
+    if (!this.list[key] || this.list[key].status !== DownloadsStatus.done) { return }
 
-    CrDownloadsCallBack.fileLaunch(this.data.list[key].fullPath).then((isSuccess: boolean) => {
+    CrDownloadsCallBack.fileLaunch(this.list[key].fullPath).then((isSuccess: boolean) => {
       if (!isSuccess) {
-        Downloads.data.list[key].status = DownloadsStatus.cancelled
+        Downloads.list[key].status = DownloadsStatus.cancelled
         Downloads.updateItemUi(key)
       }
     })
@@ -348,18 +345,18 @@ export default class Downloads {
 
   /** URL 在系统默认浏览器中打开 */
   public static urlOpenInDefaultBrowser(key: string) {
-    if (!this.data.list[key]) { return }
+    if (!this.list[key]) { return }
 
-    CrDownloadsCallBack.urlOpenInDefaultBrowser(this.data.list[key].downloadUrl)
+    CrDownloadsCallBack.urlOpenInDefaultBrowser(this.list[key].downloadUrl)
   }
 
   /** 文件在资源管理器中显示 */
   public static fileShowInExplorer(key: string) {
-    if (!this.data.list[key]) { return }
+    if (!this.list[key]) { return }
 
-    CrDownloadsCallBack.fileShowInExplorer(this.data.list[key].fullPath).then((isSuccess: boolean) => {
+    CrDownloadsCallBack.fileShowInExplorer(this.list[key].fullPath).then((isSuccess: boolean) => {
       if (!isSuccess) {
-        Downloads.data.list[key].status = DownloadsStatus.cancelled
+        Downloads.list[key].status = DownloadsStatus.cancelled
         Downloads.updateItemUi(key)
       }
     })
@@ -367,10 +364,10 @@ export default class Downloads {
 
   /** 任务是否正在进行中 */
   public static isTaskInProgress(key: string) {
-    if (!this.data.list[key]) { return false }
+    if (!this.list[key]) { return false }
     if (
-      this.data.list[key].status === DownloadsStatus.done ||
-      this.data.list[key].status === DownloadsStatus.cancelled
+      this.list[key].status === DownloadsStatus.done ||
+      this.list[key].status === DownloadsStatus.cancelled
     ) {
       return false
     } else {
@@ -380,9 +377,9 @@ export default class Downloads {
 
   /** 重新下载 */
   public static downloadAgain(key: string) {
-    if (!this.data.list[key]) { return false }
+    if (!this.list[key]) { return false }
 
-    AppAction.downloadUrl(this.data.list[key].downloadUrl)
+    AppAction.downloadUrl(this.list[key].downloadUrl)
   }
 
   /** 获取状态名 */
