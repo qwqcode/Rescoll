@@ -194,8 +194,10 @@ export default class Downloads {
         }
 
         actionBarElemN = $(html`
+        <span>
           <a class="btn-pause">暂停</a>
           <a class="btn-cancel">取消</a>
+        </span>
         `)
         actionBarElemN.find('.btn-pause').click(() => {
           Downloads.taskAction(key, DownloadsActions.pause)
@@ -216,8 +218,10 @@ export default class Downloads {
         }
 
         actionBarElemN = $(html`
+        <span>
           <a class="btn-resume">恢复</a>
           <a class="btn-cancel">取消</a>
+        </span>
         `)
         actionBarElemN.find('.btn-resume').click(() => {
           Downloads.taskAction(key, DownloadsActions.resume)
