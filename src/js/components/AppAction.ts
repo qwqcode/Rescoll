@@ -1,4 +1,6 @@
 import Setting from './Setting'
+import Downloads from './Downloads'
+import AppLayer from './AppLayer'
 
 /**
  * functions in .cs
@@ -21,6 +23,20 @@ AppAction.tryGetVersion = (func: Function) => {
   } catch {
     console.error('AppAction.getVersion 调用失败')
     func(undefined)
+  }
+}
+AppAction.onExitBtnClick = () => {
+  let downloadingTaskNum = Downloads.countDownloadingTask() || 0;
+  if (downloadingTaskNum > 0) {
+    AppLayer.Dialog.open("退出 Nacollector", `有 ${downloadingTaskNum} 个下载任务仍在继续！是否结束下载并退出 Nacollector？`, ['确定', () => {
+      AppAction.appClose();
+    }], ['取消']);
+  } else {
+    try {
+      AppAction.appClose();
+    } catch {
+      console.error("AppAction.appClose 调用失败"); 
+    }
   }
 }
 

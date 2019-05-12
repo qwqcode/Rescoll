@@ -27,7 +27,7 @@
         <div class="window-icon-bg" id="HeaderBtnMaximize" onclick="AppAction.appMaxMini();">
           <div class="window-icon window-maximize" :class="{ 'window-maximize': !this.isMaximized, 'window-unmaximize': this.isMaximized }"></div>
         </div>
-        <div class="window-icon-bg red" id="HeaderBtnClose" onclick="AppAction.appClose();">
+        <div class="window-icon-bg red" id="HeaderBtnClose" onclick="AppAction.onExitBtnClick();">
           <div class="window-icon window-close"></div>
         </div>
       </div>
