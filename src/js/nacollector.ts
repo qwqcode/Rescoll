@@ -12,6 +12,7 @@ import Setting from './components/Setting'
 import AppLayer from './components/AppLayer'
 import AppUpdate from './components/AppUpdate'
 import AppAction from './components/AppAction'
+import InputValidators from './utils/InputValidators'
 
 window.$ = $
 window.AppNavbar = AppNavbar
@@ -23,6 +24,7 @@ window.Setting = Setting
 window.AppLayer = AppLayer
 window.AppUpdate = AppUpdate
 window.AppAction = AppAction
+window.InputValidators = InputValidators
 
 const AppWrapEl = window.AppWrapEl = $('.wrap')
 

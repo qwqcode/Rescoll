@@ -14,7 +14,8 @@ interface Window {
   CrDownloadsCallBack: any
   taskItem: any
   TaskController: any
-  downloadFile: Function
+  downloadFile: Function,
+  InputValidators: any
 }
 
 declare var window: Window

@@ -4,7 +4,7 @@ import { html } from 'common-tags'
 // 表单控件
 export default class Form {
   // 当前表单数据添加
-  protected static currentInfoAdd(fieldName: string, label: string, inputTagId: string, validator?: Function) {
+  protected currentInfoAdd(fieldName: string, label: string, inputTagId: string, validator?: Function) {
     TaskGen.current.inputs[fieldName] = {
       label: label,
       inputSel: '#' + inputTagId
@@ -13,7 +13,7 @@ export default class Form {
     if (validator) { TaskGen.current.inputs[fieldName].validator = validator }
   }
 
-  protected static genBaseFormGroup(tagId: string, label: string) {
+  protected genBaseFormGroup(tagId: string, label: string) {
     let formGroup = $(`
       <div class="form-group">
       <label for="${tagId}">${label}</label>
@@ -22,7 +22,7 @@ export default class Form {
     return formGroup
   }
 
-  protected static genBaseTextInput(tagId: string, fieldName: string, label: string, defaultVal?: string) {
+  protected genBaseTextInput(tagId: string, fieldName: string, label: string, defaultVal?: string) {
     defaultVal = defaultVal || ''
     let inputElem = $(`
       <input id="${tagId}" name="${fieldName}" type="text"
@@ -33,7 +33,7 @@ export default class Form {
     return inputElem
   }
 
-  protected static genBaseTextarea(tagId: string, fieldName: string, label: string, defaultVal?: string) {
+  protected genBaseTextarea(tagId: string, fieldName: string, label: string, defaultVal?: string) {
     defaultVal = defaultVal || ''
     let formInput = $(html`
       <textarea id="${tagId}" name="${fieldName}" class="form-control" spellcheck="false" placeholder="输入文字"></textarea>
@@ -44,7 +44,7 @@ export default class Form {
   }
 
   // 文本框
-  public static textInput(fieldName: string, label: string, defaultVal: string, validator: Function) {
+  public textInput(fieldName: string, label: string, defaultVal: string, validator: Function) {
     let tagId = 'TaskGen_' + fieldName
     let inputElem = this.genBaseTextInput(tagId, fieldName, label, defaultVal)
     this.currentInfoAdd(fieldName, label, tagId, validator)
@@ -52,7 +52,7 @@ export default class Form {
   }
 
   // 数字框
-  public static numberInput(fieldName: string, label: string, defaultVal?: number, min?: number, max?: number) {
+  public numberInput(fieldName: string, label: string, defaultVal?: number, min?: number, max?: number) {
     let tagId = 'TaskGen_' + fieldName
     let inputElem = this.genBaseTextInput(tagId, fieldName, label, String(defaultVal || ''))
     inputElem.attr('type', 'number')
@@ -64,7 +64,7 @@ export default class Form {
   }
 
   // 多行文本框
-  public static textareaInput(fieldName: string, label: string, defaultVal?: string, height?: string | number) {
+  public textareaInput(fieldName: string, label: string, defaultVal?: string, height?: string | number) {
     let tagId = 'TaskGen_' + fieldName
     let textareaElem = this.genBaseTextarea(tagId, fieldName, label, defaultVal)
     if (height) textareaElem.css('height', height) // 设置高度
@@ -73,7 +73,7 @@ export default class Form {
   }
 
   // 选择菜单
-  public static selectInput(fieldName: string, label: string, values: object, selectValue?: string) {
+  public selectInput(fieldName: string, label: string, values: object, selectValue?: string) {
     let tagId = 'TaskGen_' + fieldName
     let inputHtml = `<select id="${tagId}" name="${fieldName}" class="form-control">`
     for (let [val, label] of Object.entries(values)) {
