@@ -34,7 +34,7 @@ export default class Notify {
       }, 200)
     }
 
-    let timeoutKey: number
+    let timeoutKey: NodeJS.Timeout
     if (timeout > 0) {
       timeoutKey = setTimeout(() => {
         notifyRemove()
