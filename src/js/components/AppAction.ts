@@ -1,6 +1,8 @@
 import Setting from './Setting'
 import Downloads from './Downloads'
 import AppLayer from './AppLayer'
+import AppUpdate from './AppUpdate'
+import Notify from './AppLayer/Notify'
 
 /**
  * functions in .cs
@@ -26,6 +28,11 @@ AppAction.tryGetVersion = (func: Function) => {
   }
 }
 AppAction.onExitBtnClick = () => {
+  if (AppUpdate.panel.isUpdating) {
+    Notify.error(`Nacollector 正在升级中，暂时无法退出，请稍等片刻`)
+    return
+  }
+
   let downloadingTaskNum = Downloads.countDownloadingTask() || 0;
   if (downloadingTaskNum > 0) {
     AppLayer.Dialog.open("退出 Nacollector", `有 ${downloadingTaskNum} 个下载任务仍在继续！是否结束下载并退出 Nacollector？`, ['确定', () => {

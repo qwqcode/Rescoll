@@ -15,9 +15,11 @@
   .left-items, .right-items {
     flex: 1;
     padding: 0 10px;
+    display: flex;
+    flex-direction: column;
   }
   .left-items {
-    float: left;
+    place-items: flex-start;
     .nav-title {
       color: #FFF;
       font-size: 14px;
@@ -29,7 +31,7 @@
     }
   }
   .right-items {
-    float: right;
+    place-items: flex-end;
     .nav-btn-box {
       float: right;
       overflow: hidden;

@@ -3,6 +3,7 @@ import AppLayer from '../AppLayer'
 import Downloads from '../Downloads'
 import AppUpdate from '../AppUpdate'
 import ItemAt from './SettingItem'
+import Setting from '.';
 
 export default (setting: any, group: Function) => {
   let groupDownloads = group('downloads', '下载内容')
@@ -16,7 +17,7 @@ export default (setting: any, group: Function) => {
     AppAction.utilsReqIeProxy(true)
   }, () => {
     AppAction.utilsReqIeProxy(false)
-  }).setVal(!!setting.get('UtilsReqIeProxy'))
+  }).setVal(!!Setting.get('UtilsReqIeProxy'))
 
   let groupMaintenance = group('maintenance', '维护')
   new ItemAt(groupMaintenance).btnBlock('日志文件清理', () => {
@@ -25,13 +26,11 @@ export default (setting: any, group: Function) => {
     })
   })
   let updateBtn = new ItemAt(groupMaintenance).btnBlock('检查更新', () => {
-    updateBtn.text('正在检查更新...')
-    AppUpdate.check(false, () => {
-      updateBtn.text('检查更新')
-    })
+    AppUpdate.openPanel()
+    Setting.getSidebar().hide()
   })
   let groupAbout = group('about', '关于')
-  let infoAppVersion = new ItemAt(groupAbout).infoShow('版本号', '').find('.value')
+  let infoAppVersion = new ItemAt(groupAbout).infoShow('主程序版本号', '').find('.value')
   AppAction.tryGetVersion((version: string) => {
     infoAppVersion.text(version || '未知版本号')
   })
@@ -41,5 +40,5 @@ export default (setting: any, group: Function) => {
   new ItemAt(groupAbout).infoShow('GitHub', '<a href="https://github.com/qwqcode/Nacollector" target="_blank">qwqcode/Nacollector</a>')
   new ItemAt(groupAbout).infoShow('反馈问题', '<a href="https://github.com/qwqcode/Nacollector/issues" target="_blank">GitHub issue</a>')
   new ItemAt(groupAbout).infoShow('', '<a href="https://raw.githubusercontent.com/qwqcode/Nacollector/master/LICENSE" target="_blank">您使用 Nacollector 即视为您已阅读并同意本《Nacollector 用户使用许可协议》的约束</a>')
-  new ItemAt(groupAbout).infoShow('', '<a href="https://github.com/qwqcode/Nacollector" target="_blank">Nacollector</a> Copyright (C) 2018 <a href="https://qwqaq.com" target="_blank">qwqaq.com</a>')
+  new ItemAt(groupAbout).infoShow('', `<a href="https://github.com/qwqcode/Nacollector" target="_blank">Nacollector</a> Copyright (C) ${new Date().getFullYear()} <a href="https://qwqaq.com" target="_blank">qwqaq.com</a>`)
 }

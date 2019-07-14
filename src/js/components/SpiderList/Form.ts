@@ -44,7 +44,7 @@ export default class Form {
   }
 
   // 文本框
-  public textInput(fieldName: string, label: string, defaultVal: string, validator: Function) {
+  public textInput(fieldName: string, label: string, defaultVal?: string, validator?: Function) {
     let tagId = 'TaskGen_' + fieldName
     let inputElem = this.genBaseTextInput(tagId, fieldName, label, defaultVal)
     this.currentInfoAdd(fieldName, label, tagId, validator)

@@ -63,10 +63,11 @@ $(document).ready(() => {
   AppAction.tryGetVersion((version: string) => {
     if (typeof (version) !== 'undefined') {
       AppAction.version = version
-      // 检测更新
-      AppUpdate.check(true)
     }
   })
+
+  // 更新模块初始化
+  AppUpdate.init()
 
   // 打开 开发者工具
   $(document).keydown((e) => {
@@ -74,6 +75,8 @@ $(document).ready(() => {
       AppAction.showDevTools()
     }
   })
+
+  initMarked()
 })
 
 // 根据 URL 创建一个下载任务
@@ -104,3 +107,27 @@ $.extend({
     return $.extend({}, elRect, scroll, outerDims, elOffset)
   }
 })
+
+function initMarked () {
+  const marked = require('marked')
+  let renderer = new marked.Renderer()
+  const linkRenderer = renderer.link
+  renderer.link = function (href: any, title: any, text: any) {
+    const html = linkRenderer.call(renderer, href, title, text)
+    return html.replace(/^<a /, '<a target="_blank" ')
+  }
+
+  marked.setOptions({
+    renderer: renderer,
+    pedantic: false,
+    gfm: true,
+    tables: true,
+    breaks: true,
+    sanitize: true, // 净化
+    smartLists: true,
+    smartypants: true,
+    xhtml: false
+  })
+
+  window.marked = marked
+}

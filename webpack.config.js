@@ -23,7 +23,7 @@ const config = {
   devtool: IS_DEV ? 'cheap-module-source-map' : 'source-map',
   entry: path.resolve(SRC_PATH, './js/index.ts'),
   output: {
-    filename: 'js/[name].[hash].js',
+    filename: 'js/[name].js',
     path: BUILD_PATH
   },
   module: {

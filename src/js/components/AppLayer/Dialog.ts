@@ -4,7 +4,7 @@ import { html } from 'common-tags'
  * 内容层 对话框
  */
 export default class Dialog {
-  public static open(title: string, content: string, yesBtn?: [string?, Function?], cancelBtn?: [string?, Function?]): void {
+  public static open(title: string, content: string|JQuery<HTMLElement>, yesBtn?: [string?, Function?], cancelBtn?: [string?, Function?]): JQuery<HTMLElement> {
     if ($('.dialog-layer').length !== 0) {
       $('.dialog-layer').remove()
     }
@@ -19,10 +19,12 @@ export default class Dialog {
 
     let dialogDom = $(html`
     <div class="dialog-inner">
-      <div class="dialog-title">${title}</div>
-      <div class="dialog-content">${content}</div>
+      <div class="dialog-title"><span class="title-text">${title}</span></div>
+      <div class="dialog-content"></div>
     </div>
     `).appendTo(dialogLayerElem)
+
+    dialogDom.find('.dialog-content').append(content)
 
     // 底部按钮
     let genBottomBtn = (text: string, onClickFunc: Function) => {
@@ -53,11 +55,13 @@ export default class Dialog {
 
     // 右上角关闭按钮
     if (!yesBtn && !cancelBtn) {
-      let closeBtn = $('<a class="right-btn"><i class="zmdi zmdi-close"></i></a>')
+      let closeBtn = $('<a class="right-btn close-btn"><i class="zmdi zmdi-close"></i></a>')
       closeBtn.appendTo(dialogDom.find('.dialog-title'))
       closeBtn.click(() => {
         hideDialogLayer()
       })
     }
+
+    return dialogDom
   }
 }
