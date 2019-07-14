@@ -122,4 +122,17 @@ export default class Task {
   }
 
   public static taskManagerLayer = TaskManagerLayer // 任务管理器层
+
+  /** 是否有 task 正在运行 */
+  public static isTaskRunning() {
+    let isTaskRunning = false
+    for (let i in Task.list) {
+      if (Task.list[i].getIsInProgress()) {
+        isTaskRunning = true
+        break;
+      }
+    }
+    
+    return isTaskRunning
+  }
 }

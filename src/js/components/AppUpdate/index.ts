@@ -4,6 +4,7 @@ import Dialog from '../AppLayer/Dialog'
 import { html } from 'common-tags'
 import Notify from '../AppLayer/Notify'
 import AppUpdatePanel from './AppUpdatePanel'
+import Task from '../Task';
 
 const AppConfig = window.AppConfig
 const UpdateAction = window.UpdateAction || {}
@@ -93,11 +94,16 @@ export default class AppUpdate {
       return
     }
 
+    if (Task.isTaskRunning()) {
+      Notify.error('在更新之前，请先终止正在运行的任务')
+      return
+    }
+
     this.panel.setIsUpdating({
       onUiReady: async () => {
         // 创建更新模块列表
         let updateModules: Array<any> = []
-        for (var i in remoteData['modules']) {
+        for (let i in remoteData['modules']) {
           let module = remoteData['modules'][i]
           let remoteVersion = module['version'] || ''
           let localVersion = this.moduleVersionList[module['name']] || ''

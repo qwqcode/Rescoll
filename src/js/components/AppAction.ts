@@ -28,7 +28,7 @@ AppAction.tryGetVersion = (func: Function) => {
   }
 }
 AppAction.onExitBtnClick = () => {
-  if (AppUpdate.panel.isUpdating) {
+  if (!!AppUpdate.panel && AppUpdate.panel.isUpdating) {
     Notify.error(`Nacollector 正在升级中，暂时无法退出，请稍等片刻`)
     return
   }
