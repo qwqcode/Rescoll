@@ -82,6 +82,7 @@ export default class TaskGen {
   }
 
   public static loadSpiderList() {
+    this.dropdownOptionDom.html('') // 清空 dropdown 所有项目
     for (let [namespace, eachClass] of Object.entries(this.spiderList)) {
       let li = $(`<li data-namespace="${namespace}">${eachClass._NamespaceInfo.label}</li>`)
       li.appendTo(this.dropdownOptionDom)

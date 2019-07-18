@@ -123,7 +123,7 @@ function initMarked () {
     gfm: true,
     tables: true,
     breaks: true,
-    sanitize: true, // 净化
+    sanitize: false, // 净化
     smartLists: true,
     smartypants: true,
     xhtml: false
