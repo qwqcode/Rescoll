@@ -1,6 +1,8 @@
 {
   "private": true,
   "name": "nacollector-frontend",
+  "description": "⚔ Web crawling & scraping integration platform for everyone.",
+  "version": "1.0.0",
   "license": "UNLICENSED",
   "author": "qwqcode <1149527164@qq.com>",
   "homepage": "https://github.com/qwqcode/NacollectorFrontend",
@@ -8,88 +10,39 @@
     "type": "git",
     "url": "https://github.com/qwqcode/NacollectorFrontend/tree/master"
   },
-  "version": "1.0.0",
   "scripts": {
-    "build": "webpack -p --progress --mode production --config webpack.config.js",
-    "dev": "cross-env NODE_ENV=dev webpack-dev-server --config webpack.config.js",
-    "lint": "eslint src",
-    "lint:fix": "npm run lint -- --fix",
-    "start": "npm run dev"
+    "lint": "eslint --ext .ts,.js,.vue --ignore-path .gitignore . node_modules .nuxt plugins",
+    "precommit": "yarn lint",
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
   },
   "dependencies": {
+    "@nuxtjs/axios": "5.5.4",
     "jquery": "^3.4.1",
     "js-base64": "^2.5.1",
-    "lodash": "^4.17.14",
+    "lodash": "^4.17.15",
     "marked": "^0.7.0",
-    "material-design-iconic-font": "^2.2.0"
+    "material-design-iconic-font": "^2.2.0",
+    "nuxt": "2.8.1",
+    "nuxt-property-decorator": "2.3.0",
+    "ts-node": "8.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.4",
-    "@babel/preset-env": "^7.5.4",
+    "@nuxt/config": "^2.8.1",
+    "@nuxt/typescript": "2.8.1",
+    "@nuxtjs/style-resources": "^0.1.2",
     "@types/common-tags": "^1.8.0",
     "@types/jquery": "^3.3.30",
     "@types/js-base64": "^2.3.1",
     "@types/lodash": "^4.14.136",
     "@types/marked": "^0.6.5",
-    "babel-eslint": "^10.0.2",
-    "babel-loader": "^8.0.6",
-    "clean-webpack-plugin": "^3.0.0",
+    "@types/node": "10.14.13",
+    "@types/webpack-env": "1.14.0",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
     "common-tags": "^1.8.0",
-    "copy-webpack-plugin": "^5.0.3",
-    "cross-env": "^5.2.0",
-    "css-loader": "^3.0.0",
-    "css-url-relative-plugin": "^1.0.0",
-    "eslint": "^6.0.1",
-    "eslint-config-prettier": "^6.0.0",
-    "eslint-config-standard": "^13.0.1",
-    "eslint-plugin-babel": "^5.3.0",
-    "eslint-plugin-html": "^6.0.0",
-    "eslint-plugin-import": "^2.18.0",
-    "eslint-plugin-jquery": "^1.5.1",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-node": "^9.1.0",
-    "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.14.2",
-    "eslint-plugin-standard": "^4.0.0",
-    "file-loader": "^2.0.0",
-    "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^4.0.0-beta.2",
-    "husky": "^3.0.0",
-    "image-webpack-loader": "^5.0.0",
-    "install": "^0.13.0",
-    "lint-staged": "^9.2.0",
-    "lit-html": "^1.1.1",
-    "mini-css-extract-plugin": "^0.7.0",
     "node-sass": "^4.12.0",
-    "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "preload-webpack-plugin": "^3.0.0-beta.3",
-    "prettier": "^1.18.2",
-    "prettier-package-json": "^2.1.0",
-    "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.1",
-    "terser-webpack-plugin": "^1.3.0",
-    "ts-loader": "^6.0.4",
-    "typescript": "^3.5.3",
-    "uglifyjs-webpack-plugin": "^2.1.3",
-    "url-loader": "^2.0.1",
-    "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.5",
-    "webpack-dev-server": "^3.7.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "package.json": [
-      "prettier-package-json --write",
-      "git add"
-    ],
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
+    "sass-loader": "^7.1.0"
   }
 }

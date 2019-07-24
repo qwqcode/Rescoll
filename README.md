@@ -6,13 +6,17 @@
 
 ``` bash
 # install dependencies
-yarn install
+$ yarn install
 
-# serve with hot reload at localhost:8080
-yarn run dev
+# serve with hot reload at localhost:3000
+$ yarn run dev
 
-# build for production with minification
-yarn run build
+# build for production and launch server
+$ yarn run build
+$ yarn start
+
+# generate static project
+$ yarn run generate
 ```
 
 ## License
