@@ -2,7 +2,7 @@
 	<section class="container">
 		<div>
 			<img width="256" src="~/assets/img/logo.svg">
-			<h1>Rescoll/h1>
+			<h1>Rescoll</h1>
 			<h2>⚔ Web crawling & scraping integration platform for everyone.</h2>
 			<a href="https://nuxtjs.org/" target="_blank" class="btn btn-primary">Documentation</a>
 			<a href="https://github.com/nuxt/nuxt.js" target="_blank" class="btn btn-primary">GitHub</a>

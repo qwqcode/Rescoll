@@ -12,7 +12,7 @@ const config: NuxtConfiguration = {
       { name: 'author', content: 'https://github.com/qwqcode' },
     ],
   },
-	loading: { color: "#000" },
+	loading: { color: "#FFF" },
   css: [
 		'@/assets/css/main.scss'
   ],
@@ -24,6 +24,7 @@ const config: NuxtConfiguration = {
     '@nuxtjs/style-resources',
   ],
   plugins: [
+    '@/plugins/jquery',
     '@/plugins/outclick.min.js',
     '@/plugins/tooltip.js'
   ],
