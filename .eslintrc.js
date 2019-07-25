@@ -1,19 +1,23 @@
 module.exports = {
   root: true,
-  plugins: ['@typescript-eslint'],
+  plugins: ['prettier', '@typescript-eslint'],
   parserOptions: {
     parser: '@typescript-eslint/parser'
   },
   extends: [
-    '@nuxtjs'
+    '@nuxtjs',
+    'prettier',
+    'prettier/vue',
+    'plugin:prettier/recommended',
+    'plugin:nuxt/recommended'
   ],
   rules: {
     '@typescript-eslint/no-unused-vars': 'error'
   },
   env: {
-    'browser': true,
-    'commonjs': true,
-    'es6': true,
-    'jquery': true
-  },
+    browser: true,
+    commonjs: true,
+    es6: true,
+    jquery: true
+  }
 }
