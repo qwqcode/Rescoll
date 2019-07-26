@@ -1,21 +1,24 @@
 <template>
-  <div>
+  <div class="app-main">
     <ControlBox></ControlBox>
     <TabBar></TabBar>
-    <SideBar></SideBar>
-    <nuxt />
+    <NavSidebar></NavSidebar>
+    <div class="app-page-wrap">
+      <nuxt />
+    </div>
+    <SidebarLayer></SidebarLayer>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator'
 import ControlBox from '../components/frame/ControlBox.vue'
 import TabBar from '../components/frame/TabBar.vue'
-import SideBar from '../components/frame/SideBar.vue'
+import NavSidebar from '../components/frame/NavSidebar.vue'
+import SidebarLayer from '../components/frame/SidebarLayer.vue'
 
 @Component({
-  components: { ControlBox, TabBar, SideBar }
+  components: { ControlBox, TabBar, NavSidebar, SidebarLayer }
 })
 export default class extends Vue {}
 </script>

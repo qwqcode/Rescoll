@@ -69,8 +69,8 @@ export default class ControlBox extends Vue {
 
 <style lang="scss" scoped>
 .control-box {
-  @extend %top-bar;
-  z-index: 101;
+  @extend %app-top-bar;
+  z-index: 102;
   top: 1px;
   height: 29px;
   background-color: #21252b;

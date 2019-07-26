@@ -12,7 +12,7 @@ module.exports = {
     'plugin:nuxt/recommended'
   ],
   rules: {
-    '@typescript-eslint/no-unused-vars': 'error'
+    '@typescript-eslint/no-unused-vars': 'warn'
   },
   env: {
     browser: true,

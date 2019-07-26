@@ -1,8 +1,25 @@
-%top-bar {
+%app-top-bar {
   position: fixed;
   left: 1px;
   right: 1px;
-  z-index: 100;
+  z-index: 101;
 
   width: calc(100% - 2px);
+}
+
+%app-layer {
+  opacity: 0;
+  position: fixed;
+  z-index: 100;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: -100%;
+  background-color: rgba(0,0,0,.54);
+  transition: left 0ms cubic-bezier(.23,1,.32,1) 0ms,opacity .4s cubic-bezier(.23,1,.32,1) 0ms;
+
+  &.show {
+    opacity: 1;
+    right: 0;
+  }
 }

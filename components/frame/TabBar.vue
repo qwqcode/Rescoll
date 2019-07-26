@@ -24,7 +24,7 @@ export default class TabBar extends Vue {}
 
 <style lang="scss" scoped>
 .action-bar {
-  @extend %top-bar;
+  @extend %app-top-bar;
   top: 30px;
   height: 35px;
   display: flex;
