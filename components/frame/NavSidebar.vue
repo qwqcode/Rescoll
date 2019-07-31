@@ -2,8 +2,12 @@
   <div class="sidebar-wrap">
     <div class="sidebar">
       <div class="header">
-        <div class="title">TASK</div>
-        <div class="create-btn"><i class="zmdi zmdi-plus"></i></div>
+        <div class="title">
+          TASK
+        </div>
+        <div class="create-btn">
+          <i class="zmdi zmdi-plus" />
+        </div>
       </div>
       <div class="task-list">
         <div class="inner">
@@ -15,11 +19,13 @@
           >
             <div class="info">
               <div class="icon">
-                <i class="zmdi" :class="[`zmdi-${item.icon}`]"></i>
+                <i class="zmdi" :class="[`zmdi-${item.icon}`]" />
               </div>
-              <div class="name">{{ item.name }}</div>
+              <div class="name">
+                {{ item.name }}
+              </div>
             </div>
-            <div class="btn-group"></div>
+            <div class="btn-group" />
           </div>
         </div>
       </div>

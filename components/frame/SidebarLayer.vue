@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar-layer show">
-    <Settings></Settings>
+    <Settings />
   </div>
 </template>
 

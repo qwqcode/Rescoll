@@ -10,8 +10,24 @@ body, html {
   -webkit-font-smoothing: antialiased;
 }
 
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(197, 197, 197, 0.71);
+
+  &:hover {
+    background: rgba(197, 197, 197, 0.95);
+  }
+}
+
 .app-main {
-  border: 1px solid rgb(51, 51, 51);
+  border: 1px solid #333333;
   position: fixed;
   top: 0px;
   left: 0px;
@@ -20,9 +36,12 @@ body, html {
 
   .app-page-wrap {
     position: relative;
-    margin-top: 70px;
-    margin-left: calc(250px + 10px);
-    margin-right: 10px;
+    margin-top: 65px;
+    margin-left: 4px;
+    margin-right: 4px;
+    padding: 0 7px;
     height: calc(100vh - 65px - 1px);
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }

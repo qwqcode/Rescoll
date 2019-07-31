@@ -2,7 +2,9 @@
   <Sidebar title="设置" class="show">
     <div class="settings">
       <div v-for="(grp, i) in list" :key="i" class="setting-grp">
-        <h2 class="grp-title">{{ grp.label }}</h2>
+        <h2 class="grp-title">
+          {{ grp.label }}
+        </h2>
         <div v-for="(item, o) in grp.items" :key="o" class="item">
           <div :class="`${item.type}-type`">
             <template v-if="item.type === 'btn'">
@@ -10,16 +12,18 @@
             </template>
 
             <template v-else-if="item.type === 'toggle-btn'">
-              <div class="left-text">{{ item.opts.label }}</div>
+              <div class="left-text">
+                {{ item.opts.label }}
+              </div>
               <div class="toggle" :class="{ 'turn-on': item.opts.value }">
-                <div class="toggle-bar"></div>
-                <div class="toggle-circle"></div>
+                <div class="toggle-bar" />
+                <div class="toggle-circle" />
               </div>
             </template>
 
             <template v-else-if="item.type === 'double-line'">
               <span class="label">{{ item.opts.label }}</span>
-              <span class="value" v-html="item.opts.value"></span>
+              <span class="value" v-html="item.opts.value" />
             </template>
           </div>
         </div>
@@ -39,7 +43,7 @@ import Sidebar from './_Sidebar.vue'
 export default class Settings extends Vue {
   list: SettingGrp[] = []
 
-  created() {
+  created () {
     this.newGrp('download', '下载内容', [
       this.btn('下载列表清空', () => {
         /* Downloads.removeDataList()
@@ -110,18 +114,18 @@ export default class Settings extends Vue {
     ])
   }
 
-  newGrp(name: string, label: string, items: SettingItem[]) {
+  newGrp (name: string, label: string, items: SettingItem[]) {
     this.list.push({ name, label, items })
   }
 
-  btn(label: string, clickEvt: Function): SettingItem {
+  btn (label: string, clickEvt: Function): SettingItem {
     return {
       type: 'btn',
       opts: { label, clickEvt }
     }
   }
 
-  toggleBtn(
+  toggleBtn (
     label: string,
     clickEvt: Function,
     defaultVal?: boolean
@@ -134,7 +138,7 @@ export default class Settings extends Vue {
     }
   }
 
-  doubleLine(label: string, value: string): SettingItem {
+  doubleLine (label: string, value: string): SettingItem {
     return {
       type: 'double-line',
       opts: { label, value }
@@ -259,7 +263,7 @@ interface SettingItem {
         color: #757575;
         font-size: 13px;
 
-        a {
+        /deep/ a {
           color: #757575;
           text-decoration: none;
         }

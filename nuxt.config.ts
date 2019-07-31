@@ -28,7 +28,7 @@ const config: NuxtConfiguration = {
   ],
   axios: {},
   build: {
-    extend(config, { isDev, isClient }) {
+    extend (config, { isDev, isClient }) {
       if (isDev && isClient) {
         // ...
       }

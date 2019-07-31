@@ -2,14 +2,16 @@
   <div class="sidebar">
     <!-- Header -->
     <div class="header">
-      <div class="left">{{ title }}</div>
+      <div class="left">
+        {{ title }}
+      </div>
       <div class="right">
-        <span class="close-btn"><i class="zmdi zmdi-close"></i></span>
+        <span class="close-btn"><i class="zmdi zmdi-close" /></span>
       </div>
     </div>
     <!-- Content -->
     <div class="content">
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>
@@ -43,13 +45,15 @@ export default class Sidebar extends Vue {
     transform: translate(0) !important;
   }
 
+  $header-height: 50px;
+
   .header {
     background-color: #2196f3;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.12);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 50px;
+    height: $header-height;
     padding: 0 15px;
 
     & > * {
@@ -75,8 +79,7 @@ export default class Sidebar extends Vue {
     overflow-x: hidden;
     overflow-y: auto;
     width: 100%;
-    height: 100%;
-    padding-bottom: 55px;
+    height: calc(100% - #{$header-height});
   }
 }
 </style>

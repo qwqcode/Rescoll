@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <div>
-      <img width="256" src="~/assets/img/logo.svg" />
+      <img width="256" src="~/assets/img/logo.svg">
       <h1>{{ title }}}</h1>
       <h2>⚔ Web crawling & scraping integration platform for everyone.</h2>
       <a
