@@ -3,11 +3,7 @@ export const state = () => ({
 })
 
 export const mutations = {
-  showSidebar (state, name) {
+  setSidebar (state, name) {
     state.sidebar = name
-  },
-
-  hideSidebar (state) {
-    state.sidebar = null
   }
 }

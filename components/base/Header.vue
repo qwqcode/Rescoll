@@ -70,10 +70,10 @@
         <span class="btn">
           <i class="zmdi zmdi-folder-outline" />
         </span>
-        <span class="btn">
+        <span class="btn" @click="() => { $store.commit('ui/setSidebar', 'downloads') }">
           <i class="zmdi zmdi-download" />
         </span>
-        <span class="btn" @click="() => { $store.commit('ui/showSidebar', 'settings') }">
+        <span class="btn" @click="() => { $store.commit('ui/setSidebar', 'settings') }">
           <i class="zmdi zmdi-settings" />
         </span>
       </div>

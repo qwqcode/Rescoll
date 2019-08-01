@@ -1,5 +1,5 @@
 <template>
-  <Sidebar title="设置" :class="{ 'show': $store.state.ui.sidebar === 'settings' }">
+  <Sidebar name="settings" title="设置">
     <div class="settings">
       <div v-for="(grp, i) in list" :key="i" class="setting-grp">
         <h2 class="grp-title">

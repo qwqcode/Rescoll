@@ -1,12 +1,12 @@
 <template>
-  <div ref="sidebar" class="sidebar">
+  <div ref="sidebar" class="sidebar" :class="{ 'show': $store.state.ui.sidebar === name }">
     <!-- Header -->
     <div class="header">
       <div class="left">
         {{ title }}
       </div>
       <div class="right">
-        <span class="close-btn" @click="onClose"><i class="zmdi zmdi-close" /></span>
+        <span class="close-btn" @click="close"><i class="zmdi zmdi-close" /></span>
       </div>
     </div>
     <!-- Content -->
@@ -17,27 +17,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'nuxt-property-decorator'
+import { Component, Vue, Prop } from 'nuxt-property-decorator'
 
 @Component
 export default class Sidebar extends Vue {
   @Prop({ required: true, type: String }) title!: string
+  @Prop({ required: true, type: String }) name!: string
 
-  onClose () {
-    this.$store.commit('ui/hideSidebar')
-  }
-
-  private outClickFn: any
-
-  @Watch('$store.state.ui.sidebar')
-  onSidebarNameChange (name: string|null) {
-    if (name === null) {
-      (this.$refs.sidebar as any).removeEventListener('outclick', this.outClickFn)
-    } else {
-      window.setTimeout(() => {
-        this.outClickFn = (this.$refs.sidebar as any).addEventListener('outclick', this.onClose)
-      }, 120)
-    }
+  close () {
+    this.$store.commit('ui/setSidebar', null)
   }
 }
 </script>
