@@ -22,9 +22,9 @@ const config: NuxtConfiguration = {
   },
   modules: ['@nuxtjs/axios', '@nuxtjs/style-resources'],
   plugins: [
-    '@/plugins/jquery',
-    '@/plugins/outclick.min.js',
-    '@/plugins/tooltip.js'
+    '~/plugins/jquery',
+    '~/plugins/outclick.min.js',
+    '~/plugins/tooltip.js'
   ],
   axios: {},
   build: {

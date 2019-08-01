@@ -1,12 +1,12 @@
 <template>
-  <div class="sidebar">
+  <div ref="sidebar" class="sidebar">
     <!-- Header -->
     <div class="header">
       <div class="left">
         {{ title }}
       </div>
       <div class="right">
-        <span class="close-btn"><i class="zmdi zmdi-close" /></span>
+        <span class="close-btn" @click="onClose"><i class="zmdi zmdi-close" /></span>
       </div>
     </div>
     <!-- Content -->
@@ -17,11 +17,28 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop, Watch } from 'nuxt-property-decorator'
 
 @Component
 export default class Sidebar extends Vue {
   @Prop({ required: true, type: String }) title!: string
+
+  onClose () {
+    this.$store.commit('ui/hideSidebar')
+  }
+
+  private outClickFn: any
+
+  @Watch('$store.state.ui.sidebar')
+  onSidebarNameChange (name: string|null) {
+    if (name === null) {
+      (this.$refs.sidebar as any).removeEventListener('outclick', this.outClickFn)
+    } else {
+      window.setTimeout(() => {
+        this.outClickFn = (this.$refs.sidebar as any).addEventListener('outclick', this.onClose)
+      }, 120)
+    }
+  }
 }
 </script>
 
@@ -54,7 +71,7 @@ export default class Sidebar extends Vue {
     justify-content: space-between;
     align-items: center;
     height: $header-height;
-    padding: 0 15px;
+    padding: 0 15px 0 20px;
 
     & > * {
       display: flex;
@@ -63,15 +80,18 @@ export default class Sidebar extends Vue {
     }
 
     .close-btn {
-      background: transparent;
-      border: none;
-      padding: 0;
-      margin: 0;
+      background-color: transparent;
       color: #fff;
       cursor: pointer;
       width: 25px;
       height: 25px;
-      outline: none;
+      line-height: 25px;
+      text-align: center;
+      border-radius: 3px;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
     }
   }
 

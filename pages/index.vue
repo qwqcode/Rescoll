@@ -10,7 +10,7 @@
         class="btn btn-primary"
         style="color: #FFF"
       >
-        Documentation
+        233
       </a>
       <a
         href="https://github.com/nuxt/nuxt.js"
@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component({
   components: {}

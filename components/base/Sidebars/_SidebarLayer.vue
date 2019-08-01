@@ -1,12 +1,12 @@
 <template>
-  <div class="sidebar-layer show">
+  <div class="sidebar-layer" :class="{ 'show': $store.state.ui.sidebar !== null }">
     <Settings />
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-import Settings from './sidebar/Settings.vue'
+import { Vue, Component } from 'nuxt-property-decorator'
+import Settings from './Settings.vue'
 
 @Component({
   components: { Settings }

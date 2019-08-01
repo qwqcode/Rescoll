@@ -23,6 +23,4 @@ $ yarn run generate
 
 [《Nacollector 用户使用许可协议》](./LICENSE)
 
-[Nacollector](https://github.com/qwqcode/Nacollector) Copyright (C) 2018 [qwqaq.com](https://qwqaq.com)
-
-未经允许代码和衍生品不得用于商业用途，侵权必究
+[Nacollector](https://github.com/qwqcode/Nacollector) Copyright (C) 2019 [qwqaq.com](https://qwqaq.com)

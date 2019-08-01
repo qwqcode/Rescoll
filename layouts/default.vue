@@ -10,10 +10,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-import Header from '../components/frame/Header.vue'
-import NavSidebar from '../components/frame/NavSidebar.vue'
-import SidebarLayer from '../components/frame/SidebarLayer.vue'
+import { Vue, Component } from 'nuxt-property-decorator'
+import Header from '../components/base/Header.vue'
+import NavSidebar from '../components/base/NavSidebar.vue'
+import SidebarLayer from '../components/base/Sidebars/_SidebarLayer.vue'
 
 @Component({
   components: { Header, NavSidebar, SidebarLayer }

@@ -73,7 +73,7 @@
         <span class="btn">
           <i class="zmdi zmdi-download" />
         </span>
-        <span class="btn">
+        <span class="btn" @click="() => { $store.commit('ui/showSidebar', 'settings') }">
           <i class="zmdi zmdi-settings" />
         </span>
       </div>
@@ -82,10 +82,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component
-export default class ControlBox extends Vue {
+export default class Header extends Vue {
   isBlur: boolean = false
   isMaximized: boolean = false
 

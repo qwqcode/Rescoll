@@ -1,5 +1,5 @@
 <template>
-  <Sidebar title="设置" class="show">
+  <Sidebar title="设置" :class="{ 'show': $store.state.ui.sidebar === 'settings' }">
     <div class="settings">
       <div v-for="(grp, i) in list" :key="i" class="setting-grp">
         <h2 class="grp-title">
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import Utils from '../../../core/Utils'
 import Sidebar from './_Sidebar.vue'
 
