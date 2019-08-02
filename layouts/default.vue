@@ -7,6 +7,7 @@
     </div>
     <SidebarLayer />
     <Notifications />
+    <Dialogs />
   </div>
 </template>
 
@@ -16,9 +17,10 @@ import Header from '../components/base/Header.vue'
 import NavSidebar from '../components/base/NavSidebar.vue'
 import SidebarLayer from '../components/base/Sidebars/_SidebarLayer.vue'
 import Notifications from '../components/base/Notifications.vue'
+import Dialogs from '../components/base/Dialogs.vue'
 
 @Component({
-  components: { Header, NavSidebar, SidebarLayer, Notifications }
+  components: { Header, NavSidebar, SidebarLayer, Notifications, Dialogs }
 })
 export default class extends Vue {
   mounted () {

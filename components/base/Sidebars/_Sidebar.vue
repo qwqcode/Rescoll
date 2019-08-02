@@ -1,19 +1,21 @@
 <template>
-  <div ref="sidebar" class="sidebar" :class="{ 'show': $store.state.ui.sidebar === name }">
-    <!-- Header -->
-    <div class="header">
-      <div class="left">
-        {{ title }}
+  <transition name="slide">
+    <div v-if="$store.state.ui.sidebar === name" ref="sidebar" class="sidebar">
+      <!-- Header -->
+      <div class="header">
+        <div class="left">
+          {{ title }}
+        </div>
+        <div class="right">
+          <span class="close-btn" @click="close"><i class="zmdi zmdi-close" /></span>
+        </div>
       </div>
-      <div class="right">
-        <span class="close-btn" @click="close"><i class="zmdi zmdi-close" /></span>
+      <!-- Content -->
+      <div class="content">
+        <slot />
       </div>
     </div>
-    <!-- Content -->
-    <div class="content">
-      <slot />
-    </div>
-  </div>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -31,6 +33,14 @@ export default class Sidebar extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.slide-enter-active, .slide-leave-active {
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+}
+
+.slide-enter, .slide-leave-to {
+  transform: translate(370px) !important;
+}
+
 .sidebar {
   position: fixed;
   z-index: 998;
@@ -40,15 +50,10 @@ export default class Sidebar extends Vue {
   right: 0;
   color: rgba(0, 0, 0, 0.87);
   background: #fff;
-  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1) 0ms;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.23);
   border-radius: 0;
   padding: 0;
-  transform: translate(370px);
-
-  &.show {
-    transform: translate(0) !important;
-  }
+  transform: translate(0);
 
   $header-height: 50px;
 

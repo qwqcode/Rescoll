@@ -16,7 +16,7 @@
   top: 0;
   right: -100%;
   background-color: rgba(0,0,0,.54);
-  transition: left 0ms cubic-bezier(.23,1,.32,1) 0ms,opacity .4s cubic-bezier(.23,1,.32,1) 0ms;
+  transition: left 0ms cubic-bezier(.23,1,.32,1) 0ms, opacity .4s cubic-bezier(.23,1,.32,1) 0ms;
 
   &.show {
     opacity: 1;

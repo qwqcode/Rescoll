@@ -123,14 +123,11 @@ button, input, select, textarea {
 }
 
 .anim-fade-in {
-  animation-name: fadeIn;
-  animation-fill-mode: both;
-  animation-duration: .3s;
+  animation: fadeIn both .3s;
 }
 
 .anim-fade-out {
-  animation-name: fadeOut;
-  animation-duration: .2s;
+  animation: fadeOut both .2s;
 }
 
 .anim-flash {
