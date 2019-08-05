@@ -23,3 +23,8 @@
     right: 0;
   }
 }
+
+%app-content {
+  margin-top: 65px;
+  height: calc(100vh - 65px - 1px);
+}

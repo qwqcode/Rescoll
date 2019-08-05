@@ -36,13 +36,12 @@ body, html {
 
   .app-page-wrap {
     position: relative;
-    margin-top: 65px;
-    margin-left: 4px;
-    margin-right: 4px;
-    padding: 0 7px;
-    height: calc(100vh - 65px - 1px);
     overflow-x: hidden;
     overflow-y: auto;
+    padding: 0 7px;
+    margin-left: 4px;
+    margin-right: 4px;
+    @extend %app-content;
   }
 }
 

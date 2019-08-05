@@ -31,41 +31,8 @@
     </div>
 
     <div class="app-action-bar">
-      <div class="tab-box" @mousewheel="tabBoxMouseWheel">
-        <div class="tab active">
-          <div class="name">
-            首页
-          </div><div class="close-btn">
-            <i class="zmdi zmdi-close" />
-          </div>
-        </div>
-        <div class="tab">
-          <div class="name">
-            [结束] 商品详情页图片解析
-          </div><div class="close-btn">
-            <i class="zmdi zmdi-close" />
-          </div>
-        </div>
-        <div class="tab">
-          <div class="name">
-            [执行中] 商品详情页视频抓取
-          </div><div class="close-btn">
-            <i class="zmdi zmdi-close" />
-          </div>
-        </div>
-        <div class="tab">
-          <div class="name">
-            [结束] 淘宝店铺搜索卖家ID名采集
-          </div><div class="close-btn">
-            <i class="zmdi zmdi-close" />
-          </div>
-        </div>
-        <div class="tab fixed">
-          <div class="add-btn">
-            <i class="zmdi zmdi-plus" />
-          </div>
-        </div>
-      </div>
+      <HeaderTabBox />
+
       <div class="btn-group">
         <span class="btn">
           <i class="zmdi zmdi-folder-outline" />
@@ -83,8 +50,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
+import HeaderTabBox from './HeaderTabBox.vue'
 
-@Component
+@Component({
+  components: { HeaderTabBox }
+})
 export default class Header extends Vue {
   isBlur: boolean = false
   isMaximized: boolean = false
@@ -121,13 +91,6 @@ export default class Header extends Vue {
 
   close () {
     // win.close()
-  }
-
-  tabBoxMouseWheel (e: WheelEvent) {
-    const delta = Math.max(-1, Math.min(1, -e.deltaY))
-    const el = e.currentTarget as HTMLElement
-    el.scrollLeft -= (delta * 40)
-    e.preventDefault()
   }
 }
 </script>
@@ -230,7 +193,7 @@ $bg: #21252b;
   }
 }
 
-.app-action-bar {
+/deep/ .app-action-bar {
   $height: 35px;
 
   @extend %app-top-bar;
@@ -243,98 +206,6 @@ $bg: #21252b;
   background-color: $bg;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 3px, rgba(0, 0, 0, 0.12) 0px 1px 1px;
   -webkit-app-region: drag;
-
-  .tab-box {
-    position: relative;
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    margin-top: 1px;
-    padding-left: 10px;
-    overflow: scroll !important;
-
-    &::-webkit-scrollbar {
-      height: 3px;
-    }
-
-    &::-webkit-scrollbar-corner {
-      background: transparent;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: rgba(255, 255, 255, 0.1);
-
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.3);
-      }
-    }
-
-    .tab {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      height: $height;
-      width: 140px;
-      min-width: fit-content;
-      color: #FFF;
-      white-space: nowrap;
-      cursor: default;
-      -webkit-app-region: no-drag;
-      font-size: 12px;
-      box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 3px;
-
-      &.active {
-        background-color: #132b5a;
-      }
-
-      &:hover:not(.active) {
-        background-color: $hover-bg;
-      }
-
-      &:not(:last-child) {
-        margin-right: 1px;
-      }
-
-      & > .name {
-        flex: 1;
-        padding-left: 14px;
-      }
-
-      & > .close-btn {
-        height: $height;
-        line-height: $height;
-        padding: 0 5px 0 5px;
-        margin: 0 3px 0 0;
-        justify-content: flex-end;
-
-        & > i {
-          border-radius: 100px;
-          font-size: 14px;
-          padding: 3px 6px;
-        }
-
-        &:hover > i {
-          background-color: $hover-bg;
-        }
-      }
-
-      &.fixed {
-        width: $height;
-        height: $height;
-        min-width: $height;
-
-        & > .add-btn {
-          width: 100%;
-          text-align: center;
-          font-size: 15px;
-        }
-      }
-    }
-  }
 
   .btn-group {
     display: flex;

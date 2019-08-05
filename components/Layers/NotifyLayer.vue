@@ -6,23 +6,9 @@
 import { Vue, Component } from 'nuxt-property-decorator'
 
 @Component
-export default class Notifications extends Vue {
+export default class NotifyLayer extends Vue {
   mounted () {
-    Vue.prototype.$notify = new Notify(this.$el)
-  }
-}
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    $notify: Notify
-  }
-}
-
-class Notify {
-  private layerEl: Element
-
-  constructor (layerEl: Element) {
-    this.layerEl = layerEl
+    Vue.prototype.$notify = this
   }
 
   add (message: string, level?: string, timeout: number = 1000): void {
@@ -31,7 +17,7 @@ class Notify {
     const notifyElem = document.createElement('div')
     notifyElem.className = `notify-item anim-fade-in ${(level ? 'type-' + level : '')}`
     notifyElem.innerHTML = `<p class="notify-content">${message.replace('\n', '<br/>')}</p>`
-    this.layerEl.prepend(notifyElem)
+    this.$el.prepend(notifyElem)
 
     const notifyRemove = function () {
       notifyElem.className += ' anim-fade-out'

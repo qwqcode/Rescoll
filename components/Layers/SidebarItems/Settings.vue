@@ -34,8 +34,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import Utils from '../../../core/Utils'
 import Sidebar from './_Sidebar.vue'
+import Utils from '~/core/Utils'
 
 @Component({
   components: { Sidebar }

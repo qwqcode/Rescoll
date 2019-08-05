@@ -9,8 +9,8 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'nuxt-property-decorator'
-import Settings from './Settings.vue'
-import Downloads from './Downloads.vue'
+import Settings from './SidebarItems/Settings.vue'
+import Downloads from './SidebarItems/Downloads.vue'
 
 @Component({
   components: { Settings, Downloads }

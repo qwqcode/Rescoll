@@ -26,18 +26,21 @@ interface DialogItem {
   noBtn?: [string, Function?]
 }
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    $dialog: DialogFunctions
-  }
-}
-
 @Component
-export default class Dialogs extends Vue {
+export default class DialogLayer extends Vue {
   dialogList: DialogItem[] = []
 
   mounted () {
-    Vue.prototype.$dialog = new DialogFunctions(this)
+    Vue.prototype.$dialog = this
+  }
+
+  public open (title: string, content: string, yesBtn?: [string, Function?], noBtn?: [string, Function?]) {
+    this.dialogList.push({
+      title,
+      content,
+      yesBtn,
+      noBtn
+    })
   }
 
   removeDialog (index: number) {
@@ -49,23 +52,6 @@ export default class Dialogs extends Vue {
     } else {
       this.dialogList.splice(index, 1)
     }
-  }
-}
-
-class DialogFunctions {
-  private dialogs: Dialogs
-
-  constructor (dialogs: Dialogs) {
-    this.dialogs = dialogs
-  }
-
-  public open (title: string, content: string, yesBtn?: [string, Function?], noBtn?: [string, Function?]) {
-    this.dialogs.dialogList.push({
-      title,
-      content,
-      yesBtn,
-      noBtn
-    })
   }
 }
 </script>

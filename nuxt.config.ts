@@ -33,6 +33,10 @@ const config: NuxtConfiguration = {
         // ...
       }
     }
+  },
+  server: {
+    port: 8080, // default: 3000
+    host: 'localhost' // default: localhost
   }
 }
 
