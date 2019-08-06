@@ -1,6 +1,6 @@
 <template>
   <div class="tab-box" @mousewheel="tabBoxMouseWheel">
-    <div class="tab fixed">
+    <div v-if="$tabBox.count() > 0" class="tab fixed" @click="$launchPad.toggle()">
       <div class="add-btn">
         <i class="zmdi zmdi-view-carousel" />
       </div>
@@ -24,7 +24,7 @@ import Tab from '~/core/models/Tab'
 export default class HeaderTabBox extends Vue {
   tabList: Tab[] = []
 
-  mounted () {
+  created () {
     Vue.prototype.$tabBox = this
   }
 
@@ -44,6 +44,10 @@ export default class HeaderTabBox extends Vue {
       throw new Error('tab Not found')
     }
     this.tabList.splice(this.tabList.indexOf(tab), 1)
+  }
+
+  count () {
+    return this.tabList.length
   }
 }
 </script>
@@ -91,10 +95,11 @@ $bg: #21252b;
     min-width: fit-content;
     color: #FFF;
     white-space: nowrap;
-    cursor: default;
+    cursor: pointer;
     -webkit-app-region: no-drag;
     font-size: 12px;
     box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 3px;
+    transition: background 0.15s ease;
 
     &.active {
       background-color: #132b5a;
@@ -121,13 +126,14 @@ $bg: #21252b;
       justify-content: flex-end;
 
       & > i {
-      border-radius: 100px;
-      font-size: 14px;
-      padding: 3px 6px;
+        transition: background 0.15s ease;
+        border-radius: 100px;
+        font-size: 14px;
+        padding: 3px 6px;
       }
 
       &:hover > i {
-      background-color: $hover-bg;
+        background-color: $hover-bg;
       }
     }
 

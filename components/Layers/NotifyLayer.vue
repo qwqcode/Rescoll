@@ -7,7 +7,7 @@ import { Vue, Component } from 'nuxt-property-decorator'
 
 @Component
 export default class NotifyLayer extends Vue {
-  mounted () {
+  created () {
     Vue.prototype.$notify = this
   }
 

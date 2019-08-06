@@ -27,6 +27,9 @@ const config: NuxtConfiguration = {
     '~/plugins/tooltip.js'
   ],
   axios: {},
+  router: {
+    mode: 'hash'
+  },
   build: {
     extend (config, { isDev, isClient }) {
       if (isDev && isClient) {

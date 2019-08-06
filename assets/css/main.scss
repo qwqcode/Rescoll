@@ -38,7 +38,7 @@ body, html {
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;
-    padding: 0 7px;
+    padding: 20px 20px;
     margin-left: 4px;
     margin-right: 4px;
     @extend %app-content;
@@ -75,3 +75,6 @@ body, html {
   0% {
   }
 }
+
+$animationDuration: 0.5s;
+@import "~vue2-animate/src/sass/vue2-animate.scss";

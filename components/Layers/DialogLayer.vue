@@ -30,7 +30,7 @@ interface DialogItem {
 export default class DialogLayer extends Vue {
   dialogList: DialogItem[] = []
 
-  mounted () {
+  created () {
     Vue.prototype.$dialog = this
   }
 
@@ -115,6 +115,7 @@ export default class DialogLayer extends Vue {
         text-align: center;
         cursor: pointer;
         font-size: 20px;
+        transition: color 0.15s ease;
 
         &:hover {
           color: #03A9F4;

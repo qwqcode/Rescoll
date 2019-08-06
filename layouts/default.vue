@@ -19,13 +19,19 @@ import SidebarLayer from '../components/Layers/SidebarLayer.vue'
 import NotifyLayer from '../components/Layers/NotifyLayer.vue'
 import DialogLayer from '../components/Layers/DialogLayer.vue'
 import Tab from '~/core/models/Tab'
+import TaskModel from '~/core/models/Task'
 
 @Component({
   components: { Header, LaunchPad, SidebarLayer, NotifyLayer, DialogLayer }
 })
 export default class extends Vue {
+  taskList: TaskModel[] = []
+
+  created () {
+    Vue.prototype.$taskList = this.taskList
+  }
+
   mounted () {
-    this.$tabBox.push(new Tab('233', ''))
   }
 }
 </script>

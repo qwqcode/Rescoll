@@ -81,6 +81,7 @@ export default class Sidebar extends Vue {
       line-height: 25px;
       text-align: center;
       border-radius: 3px;
+      transition: background 0.15s ease;
 
       &:hover {
         background-color: rgba(255, 255, 255, 0.1);

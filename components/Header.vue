@@ -223,6 +223,7 @@ $bg: #21252b;
       cursor: pointer;
       user-select: none;
       -webkit-app-region: no-drag;
+      transition: background 0.15s ease;
 
       &:hover {
         background-color: $hover-bg;
