@@ -1,4 +1,5 @@
 import Terminal from './Terminal'
+import Tab from './Tab'
 
 export default class Task {
   /** 任务ID */
@@ -13,6 +14,8 @@ export default class Task {
   public isInProgress: boolean = true
   /** terminal */
   public terminal: Terminal = new Terminal()
+  /** Header Tab */
+  public headerTab?: Tab
 
   public constructor (id: string, title: string, collerType: string, parms: object) {
     this.id = id

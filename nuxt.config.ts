@@ -12,7 +12,7 @@ const config: NuxtConfiguration = {
       { name: 'author', content: 'https://github.com/qwqcode' }
     ]
   },
-  loading: { color: '#FFF' },
+  loading: false,
   css: [
     '@/assets/css/main.scss',
     'material-design-iconic-font/dist/css/material-design-iconic-font.min.css'

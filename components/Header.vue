@@ -97,18 +97,18 @@ export default class Header extends Vue {
 
 <style lang="scss" scoped>
 $hover-bg: hsla(0, 0%, 100%, 0.1);
-$bg: #21252b;
+$bg: #1565c0;
 
 .app-header {
   user-select: none;
 }
 
 .app-control-box {
-  $height: 29px;
+  $height: 30px;
 
   @extend %app-top-bar;
   z-index: 102;
-  top: 1px;
+  top: 0;
   height: $height;
   background-color: $bg;
 

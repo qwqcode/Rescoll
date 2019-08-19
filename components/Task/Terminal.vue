@@ -1,41 +1,29 @@
 <template>
   <div class="terminal">
-    <div class="line">
-      This is Test Terminal
-    </div>
-    <div class="line" data-level="S">
-      <span class="tag">[成功]</span>
-      <span class="text">
-        This is Test Terminal. This is Test Terminal. This is Test Terminal. This is Test Terminal.This is Test Terminal. This is Test Terminal. This is Test Terminal. This is Test Terminal.This is Test Terminal. This is Test Terminal. This is Test Terminal. This is Test Terminal.
-      </span>
-    </div>
-    <div class="line" data-level="E">
-      <span class="tag">[错误]</span>
-      <span class="text">
-        This is Test Terminal
-      </span>
-    </div>
-    <div class="line" data-level="W">
-      <span class="tag">[警告]</span><span class="text">
-        This is Test Terminal
-      </span>
-    </div>
-    <div class="line" data-level="I">
-      <span class="tag">[消息]</span><span class="text">
-        This is Test Terminal
-      </span>
-    </div>
+    <div v-for="(line, i) in task.terminal.lines" :key="i" class="line" :data-level="line.level" v-html="line.text" />
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator'
+import { Vue, Component, Prop } from 'nuxt-property-decorator'
+import Task from '~/core/models/Task'
 
-export default class Terminal extends Vue {}
+@Component
+export default class Terminal extends Vue {
+  @Prop({ required: true })
+  task!: Task
+
+  mounted () {
+  }
+}
 </script>
 
 <style lang="scss" scoped>
 .terminal {
+  background: #161d29;
+  padding: 30px 35px;
+  @extend %app-content;
+
   .line {
     display: block;
     overflow: hidden;

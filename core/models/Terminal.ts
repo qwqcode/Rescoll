@@ -1,3 +1,3 @@
 export default class Terminal {
-  public lines: string[] = []
+  public lines: { text: string, level: string|'S'|'W'|'E'|'I'|''|undefined }[] = []
 }

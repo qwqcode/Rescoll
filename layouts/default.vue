@@ -20,15 +20,16 @@ import NotifyLayer from '../components/Layers/NotifyLayer.vue'
 import DialogLayer from '../components/Layers/DialogLayer.vue'
 import Tab from '~/core/models/Tab'
 import TaskModel from '~/core/models/Task'
+import AppData from '~/core/AppData'
 
 @Component({
   components: { Header, LaunchPad, SidebarLayer, NotifyLayer, DialogLayer }
 })
 export default class extends Vue {
-  taskList: TaskModel[] = []
+  appData: AppData = new AppData()
 
   created () {
-    Vue.prototype.$taskList = this.taskList
+    Vue.prototype.$appData = this.appData
   }
 
   mounted () {

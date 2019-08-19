@@ -10,7 +10,10 @@ module.exports = {
   ],
   rules: {
     '@typescript-eslint/no-unused-vars': 'off',
-    'no-unused-vars': 'off'
+    'vue/no-unused-vars': 'off',
+    'vue/no-v-html': 'off',
+    'no-unused-vars': 'off',
+    'no-useless-constructor': 'off'
   },
   env: {
     browser: true,
