@@ -162,7 +162,7 @@ interface SettingItem {
 .settings {
   .setting-grp {
     .grp-title {
-      color: #2196f3;
+      color: #008eff;
       font-size: 13px;
       font-weight: 500;
       margin: 20px 0 5px;
@@ -218,7 +218,7 @@ interface SettingItem {
           }
 
           .toggle-circle {
-            background-color: #2196f3;
+            background-color: #008eff;
             margin-left: 20px;
           }
         }

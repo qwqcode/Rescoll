@@ -83,21 +83,40 @@ export default class Header extends Vue {
     } else {
       win.maximize()
     } */
+    (window as any).AppAction.appMaxMini()
   }
 
   minimize () {
     // win.minimize()
+    (window as any).AppAction.appMin()
   }
 
   close () {
     // win.close()
+    /* if (!!App.AppUpdate.panel && App.AppUpdate.panel.isUpdating) {
+      this.$notify.error(`Nacollector 正在升级中，暂时无法退出，请稍等片刻`)
+      return
+    } */
+
+    const dlInProgressNum = this.$downloads.countInProgress() // 正在执行的下载任务数
+    if (dlInProgressNum > 0) {
+      this.$dialog.open('退出 Nacollector', `有 ${dlInProgressNum} 个下载任务仍在继续！是否结束下载并退出 Nacollector？`, ['确定', () => {
+        (window as any).AppAction.appClose()
+      }], ['取消'])
+    } else {
+      try {
+        (window as any).AppAction.appClose()
+      } catch {
+        console.error('AppAction.appClose 调用失败')
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 $hover-bg: hsla(0, 0%, 100%, 0.1);
-$bg: #1565c0;
+$bg: #3367d6;
 
 .app-header {
   user-select: none;

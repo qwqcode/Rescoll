@@ -151,7 +151,7 @@ export default class DialogLayer extends Vue {
 
     .confirm-btn {
       display: inline-block;
-      color: #2196f3;
+      color: #008eff;
       font-weight: 500;
       cursor: pointer;
       border: 0;

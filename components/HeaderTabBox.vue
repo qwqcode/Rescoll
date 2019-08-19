@@ -145,7 +145,7 @@ $activeBg: #132b5a;
     }
 
     &.fixed .tab {
-      background: #1565c0;
+      background: #3367d6;
       position: fixed;
       left: 0;
       top: 30px;

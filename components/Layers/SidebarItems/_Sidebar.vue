@@ -58,7 +58,7 @@ export default class Sidebar extends Vue {
   $header-height: 50px;
 
   .header {
-    background-color: #2196f3;
+    background-color: #008eff;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.12);
     display: flex;
     justify-content: space-between;

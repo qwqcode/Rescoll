@@ -4,6 +4,7 @@ import NotifyLayer from '~/components/Layers/NotifyLayer.vue'
 import DialogLayer from '~/components/Layers/DialogLayer.vue'
 import HeaderTabBox from '~/components/HeaderTabBox.vue'
 import AppData from '~/core/AppData'
+import Downloads from '~/components/Layers/SidebarItems/Downloads.vue'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -12,5 +13,6 @@ declare module 'vue/types/vue' {
     $dialog: DialogLayer
     $tabBox: HeaderTabBox
     $appData: AppData
+    $downloads: Downloads
   }
 }
