@@ -105,7 +105,7 @@ export default class HeaderTabBox extends Vue {
 <style lang="scss" scoped>
 $height: 35px;
 $hover-bg: hsla(0, 0%, 100%, 0.1);
-$activeBg: #132b5a;
+$activeBg: #0d47a1;
 
 .tab-box {
   position: relative;
@@ -145,7 +145,7 @@ $activeBg: #132b5a;
     }
 
     &.fixed .tab {
-      background: #3367d6;
+      background: #1565c0;
       position: fixed;
       left: 0;
       top: 30px;
@@ -154,7 +154,7 @@ $activeBg: #132b5a;
       min-width: $height;
 
       &:hover, &.active {
-        background: $activeBg;
+        background: #1651aa;
       }
 
       & > .add-btn {

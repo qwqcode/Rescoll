@@ -116,7 +116,7 @@ export default class Header extends Vue {
 
 <style lang="scss" scoped>
 $hover-bg: hsla(0, 0%, 100%, 0.1);
-$bg: #3367d6;
+$bg: #1565c0;
 
 .app-header {
   user-select: none;
