@@ -8,7 +8,7 @@
             <span class="title">{{ dlTask.title }}</span>
             <span class="url" @click="openUrl(dlTask)">{{ dlTask.url }}</span>
           </div>
-          <div :if="dlTask.descInProgress !== ''" class="desc">
+          <div v-if="dlTask.descInProgress !== ''" class="desc">
             {{ dlTask.descInProgress }}
           </div>
           <div v-if="dlTask.isInProgress" class="progress" :class="{ 'indeterminate': !dlTask.hasPercentage }">
@@ -16,25 +16,30 @@
           </div>
           <div class="action-bar">
             <!-- 正在下载 -->
-            <template :if="dlTask.status === DlStatus.Downloading">
+            <template v-if="dlTask.status === DlStatus.Downloading">
               <span @click="takeAction(dlTask, DlAction.Pause)">暂停</span>
               <span @click="takeAction(dlTask, DlAction.Cancel)">取消</span>
             </template>
+            <!-- 暂停 -->
+            <template v-if="dlTask.status === DlStatus.Pause">
+              <span @click="takeAction(dlTask, DlAction.Resume)">恢复</span>
+              <span @click="takeAction(dlTask, DlAction.Cancel)">取消</span>
+            </template>
             <!-- 下载完成 -->
-            <template :if="dlTask.status === DlStatus.Done">
+            <template v-if="dlTask.status === DlStatus.Done">
               <span @click="showInExplorer(dlTask)">在文件夹中显示</span>
             </template>
             <!-- 下载失败 -->
-            <template :if="dlTask.status === DlStatus.Fail || dlTask.status == DlStatus.Cancelled">
+            <template v-if="dlTask.status === DlStatus.Fail || dlTask.status == DlStatus.Cancelled">
               <span @click="takeAction(dlTask, DlAction.Resume)">重试下载</span>
             </template>
           </div>
-          <div class="remove-btn" title="从列表中移除" @click="remove(dlTask)">
+          <div class="remove-btn" title="从列表中移除" @click="removeBtn(dlTask)">
             <i class="zmdi zmdi-close" />
           </div>
         </div>
       </div>
-      <div class="empty-dl-list">
+      <div v-if="count() <= 0" class="empty-dl-list">
         <div class="illustration" />
         <div class="text">
           暂无内容
@@ -50,6 +55,18 @@ import Sidebar from './_Sidebar.vue'
 import DlTask from '~/core/models/DlTask'
 import { DlStatus, DlAction } from '~/core/models/DlEnums'
 
+interface BackendCallObj {
+  key: string
+  fullPath: string
+  downloadUrl: string
+
+  totalBytes: number
+  receivedBytes: number
+  currentSpeed: number
+
+  status: DlStatus
+}
+
 @Component({
   components: { Sidebar }
 })
@@ -60,14 +77,29 @@ export default class Settings extends Vue {
   DlAction = DlAction
 
   created () {
-    Vue.prototype.$downloads = this
+    Vue.prototype.$downloads = this;
+    (window as any).Downloads = this
   }
 
   mounted () {
   }
 
+  get (dlTaskId: string) {
+    return this.dlTaskList.find(o => o.id === dlTaskId)
+  }
+
   push (dlTask: DlTask) {
     this.dlTaskList.push(dlTask)
+  }
+
+  removeBtn (dlTask: DlTask) {
+    /**
+     * TODO 曲线救国.....
+     * 解决：当点击 removeBtn 时，由于执行 this.remove 会先删除 item 的 DOM，导致触发 outclick 事件（隐藏 sidebar）
+     */
+    window.setTimeout(() => {
+      this.remove(dlTask)
+    }, 80)
   }
 
   remove (dlTask: DlTask) {
@@ -107,6 +139,36 @@ export default class Settings extends Vue {
   openUrl (dlTask: DlTask) {
     (window as any).CrDownloadsCallBack.urlOpenInDefaultBrowser(dlTask.url)
   }
+
+  /** 下载 URL */
+  downloadURL (url: string) {
+    (window as any).AppAction.downloadUrl(url)
+  }
+
+  addTask ({ key, fullPath, downloadUrl, totalBytes }: BackendCallObj) {
+    if (this.get(key)) { throw new Error(`${key} 下载任务已存在，无需再新建`) }
+
+    const dlTask = new DlTask(key, fullPath, downloadUrl)
+    dlTask.sizeTotal = totalBytes
+    this.dlTaskList.push(dlTask)
+  }
+
+  updateTask ({ key, receivedBytes, currentSpeed, status, fullPath, downloadUrl }: BackendCallObj) {
+    const dlTask = this.get(key)
+    if (!dlTask) { throw new Error(`${key} 下载任务不存在，或许已被删除`) }
+
+    this.$set(dlTask, 'sizeReceived', receivedBytes)
+    this.$set(dlTask, 'speed', currentSpeed)
+    this.$set(dlTask, 'status', status)
+
+    if (!!fullPath && dlTask.localPath !== fullPath) {
+      this.$set(dlTask, 'localPath', fullPath)
+    }
+
+    if (!!downloadUrl && dlTask.url !== downloadUrl) {
+      this.$set(dlTask, 'url', downloadUrl)
+    }
+  }
 }
 </script>
 
@@ -119,10 +181,7 @@ export default class Settings extends Vue {
   & > .item {
     position: relative;
     padding: 10px 10px;
-
-    &:not(:last-child) {
-      border-bottom: 1px solid #efefef;
-    }
+    border-bottom: 1px solid #efefef;
 
     .header {
       margin-bottom: 10px;

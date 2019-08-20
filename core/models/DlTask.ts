@@ -63,7 +63,7 @@ export default class DlTask {
 
   /** 执行中的描述 */
   public get descInProgress () {
-    if ([DlStatus.Fail, DlStatus.Cancelled].indexOf(this.status)) { return '' }
+    if ([DlStatus.Fail, DlStatus.Cancelled].includes(this.status)) { return '' }
     if (this.status === DlStatus.Done) { return `总大小：${this.sizeTotalFormatted}` }
 
     let desc = ''
