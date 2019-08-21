@@ -1,4 +1,4 @@
-import $ from 'jQuery'
+import $ from 'jquery'
 import { html } from 'common-tags'
 import LaunchPad from '~/components/LaunchPad.vue'
 
@@ -97,7 +97,7 @@ export default class Form {
   public formCheck () {
     let isInputAllRight = true
     for (const [i, obj] of Object.entries(this.curtInputs)) {
-      if (!obj.inputSel || $(obj.inputSel).length === 0) { throw new Error(`表单输入元素 ${i} 的 Selector 无效`) }
+      if (!obj.inputSel || $(obj.inputSel).length === 0) { throw new TypeError(`表单输入元素 ${i} 的 Selector 无效`) }
 
       const inputSel = obj.inputSel
       const inputDom = $(inputSel)

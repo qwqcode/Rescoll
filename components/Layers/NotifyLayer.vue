@@ -73,8 +73,7 @@ export default class NotifyLayer extends Vue {
     color: #FFF;
     cursor: pointer;
     pointer-events: all;
-    box-shadow: 0 1px 4px rgba(25, 25, 25, 0.4);
-    border-radius: 2px;
+    border-radius: 1px;
 
     &:not(:last-child) {
       margin-bottom: 13px;
@@ -83,30 +82,26 @@ export default class NotifyLayer extends Vue {
     &.type-s {
       color: #FFF;
       background: rgba(87, 213, 159, 0.83);
-      box-shadow: 0 1px 4px rgba(87, 213, 159, 0.4);
     }
 
     &.type-e {
       color: #FFF;
       background: rgba(255, 111, 108, 0.83);
-      box-shadow: 0 1px 4px rgba(255, 111, 108, 0.4);
     }
 
     &.type-w {
       color: #FFF;
       background: rgba(255, 199, 33, 0.83);
-      box-shadow: 0 1px 4px rgba(255, 199, 33, 0.4);
     }
 
     &.type-i {
       color: #FFF;
       background: rgba(46, 188, 252, 0.83);
-      box-shadow: 0 1px 4px rgba(46, 188, 252, 0.4);
     }
 
     p {
       line-height: 1.8;
-      padding: 5px 20px;
+      padding: 6px 20px;
       margin: 0;
       text-align: center;
     }

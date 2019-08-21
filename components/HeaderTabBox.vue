@@ -21,6 +21,7 @@
 </template>
 
 <script lang="ts">
+import $ from 'jquery'
 import { Vue, Component, Watch } from 'nuxt-property-decorator'
 import Tab from '~/core/models/Tab'
 import Task from '~/core/models/Task'
@@ -57,7 +58,7 @@ export default class HeaderTabBox extends Vue {
   remove (tab: Tab) {
     const tabIndex = this.tabList.indexOf(tab)
     if (tabIndex <= -1) {
-      throw new Error('tab Not found')
+      throw new TypeError('tab Not found')
     }
 
     // 退回到一个存在的 Tab

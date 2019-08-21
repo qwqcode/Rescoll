@@ -23,4 +23,14 @@ export default class Task {
     this.collerType = collerType
     this.parms = parms
   }
+
+  /** TASK 已结束 */
+  public setTaskIsDone () {
+    this.isInProgress = false
+  }
+
+  /** @deprecated 旧接口 */
+  public taskIsEnd () {
+    this.setTaskIsDone()
+  }
 }

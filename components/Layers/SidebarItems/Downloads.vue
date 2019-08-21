@@ -34,7 +34,7 @@
               <span @click="takeAction(dlTask, DlAction.Resume)">重试下载</span>
             </template>
           </div>
-          <div class="remove-btn" title="从列表中移除" @click="removeBtn(dlTask)">
+          <div class="remove-btn" title="从列表中移除" @click="removeBtnClick(dlTask)">
             <i class="zmdi zmdi-close" />
           </div>
         </div>
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import Sidebar from './_Sidebar.vue'
 import DlTask from '~/core/models/DlTask'
 import { DlStatus, DlAction } from '~/core/models/DlEnums'
@@ -76,9 +76,13 @@ export default class Settings extends Vue {
   DlStatus = DlStatus
   DlAction = DlAction
 
+  readonly LocalStorageName = 'AppDownloads'
+
   created () {
     Vue.prototype.$downloads = this;
     (window as any).Downloads = this
+
+    this.restoreLocal()
   }
 
   mounted () {
@@ -89,10 +93,46 @@ export default class Settings extends Vue {
   }
 
   push (dlTask: DlTask) {
-    this.dlTaskList.push(dlTask)
+    this.dlTaskList.unshift(dlTask) // 头部插入
   }
 
-  removeBtn (dlTask: DlTask) {
+  @Watch('dlTaskList')
+  onDlTaskListChanged () {
+    this.saveLocal()
+  }
+
+  /** 下载列表持久化保存 */
+  saveLocal () {
+    localStorage.setItem(this.LocalStorageName, JSON.stringify(this.dlTaskList))
+  }
+
+  /** 从 localStorage 中恢复下载列表 */
+  restoreLocal () {
+    const rawData = localStorage.getItem(this.LocalStorageName)
+    if (!rawData) { return }
+    const obj = JSON.parse(rawData)
+    if (!Array.isArray(obj)) { return }
+
+    const newList: DlTask[] = []
+    obj.forEach((item) => {
+      const dlTask = Object.assign(new (DlTask as any)(), item)
+      if (dlTask.isInProgress) { dlTask.status = DlStatus.Cancelled }
+      newList.push(dlTask)
+    })
+
+    this.dlTaskList = newList
+  }
+
+  /** 清空下载列表 */
+  clearAll () {
+    if (this.countInProgress() > 0) {
+      throw new TypeError('下载任务执行时，无法清空下载列表')
+    }
+
+    this.dlTaskList = []
+  }
+
+  removeBtnClick (dlTask: DlTask) {
     /**
      * TODO 曲线救国.....
      * 解决：当点击 removeBtn 时，由于执行 this.remove 会先删除 item 的 DOM，导致触发 outclick 事件（隐藏 sidebar）
@@ -104,7 +144,7 @@ export default class Settings extends Vue {
 
   remove (dlTask: DlTask) {
     const index = this.dlTaskList.indexOf(dlTask)
-    if (index <= -1) { throw new Error('dlTask Not found') }
+    if (index <= -1) { throw new TypeError('dlTask Not found') }
     if (dlTask.isInProgress) {
       this.takeAction(dlTask, DlAction.Cancel)
     }
@@ -122,6 +162,14 @@ export default class Settings extends Vue {
 
   /** 下载任务执行操作 */
   takeAction (dlTask: DlTask, action: DlAction) {
+    if (action === DlAction.Resume) {
+      // 重试下载
+      if (dlTask.url) {
+        this.downloadURL(dlTask.url)
+        this.removeBtnClick(dlTask)
+      }
+      return
+    }
     (window as any).CrDownloadsCallBack.downloadingTaskAction(dlTask.id, action)
   }
 
@@ -146,16 +194,16 @@ export default class Settings extends Vue {
   }
 
   addTask ({ key, fullPath, downloadUrl, totalBytes }: BackendCallObj) {
-    if (this.get(key)) { throw new Error(`${key} 下载任务已存在，无需再新建`) }
+    if (this.get(key)) { throw new TypeError(`${key} 下载任务已存在，无需再新建`) }
 
     const dlTask = new DlTask(key, fullPath, downloadUrl)
     dlTask.sizeTotal = totalBytes
-    this.dlTaskList.push(dlTask)
+    this.dlTaskList.unshift(dlTask)
   }
 
   updateTask ({ key, receivedBytes, currentSpeed, status, fullPath, downloadUrl }: BackendCallObj) {
     const dlTask = this.get(key)
-    if (!dlTask) { throw new Error(`${key} 下载任务不存在，或许已被删除`) }
+    if (!dlTask) { throw new TypeError(`${key} 下载任务不存在，或许已被删除`) }
 
     this.$set(dlTask, 'sizeReceived', receivedBytes)
     this.$set(dlTask, 'speed', currentSpeed)
@@ -182,6 +230,28 @@ export default class Settings extends Vue {
     position: relative;
     padding: 10px 10px;
     border-bottom: 1px solid #efefef;
+
+    &[data-status="Pause"] .progress .progress-bar {
+      background-color: #b7b7b7;
+    }
+
+    &[data-status="Fail"] .progress {
+      .progress-bar {
+        background: #f95c57;
+      }
+
+      &.indeterminate .progress-bar {
+        width: 100% !important;
+        animation: none;
+      }
+    }
+
+    &[data-status="Cancelled"] {
+      .header .title {
+        color: rgba(19, 19, 19, 0.6);
+        text-decoration: line-through;
+      }
+    }
 
     .header {
       margin-bottom: 10px;
@@ -280,31 +350,10 @@ export default class Settings extends Vue {
       width: 30px;
       height: 30px;
       cursor: pointer;
+      text-align: center;
 
       & > i {
         color: #93adb9;
-      }
-    }
-
-    &[data-status="Pause"] .progress .progress-bar {
-      background-color: #b7b7b7;
-    }
-
-    &[dl-status="Fail"] .progress {
-      .progress-bar {
-        background: #f95c57;
-      }
-
-      &.indeterminate .progress-bar {
-        width: 100% !important;
-        animation: none;
-      }
-    }
-
-    &[dl-status="Cancelled"] {
-      .header .title {
-        color: rgba(19, 19, 19, 0.6);
-        text-decoration: line-through;
       }
     }
   }

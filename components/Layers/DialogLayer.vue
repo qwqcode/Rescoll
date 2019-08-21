@@ -1,29 +1,34 @@
 <template>
-  <div class="dialogs-layer" :class="{ 'show': dialogList.length > 0 }">
-    <div v-for="(dialog, i) in dialogList" :key="i" class="dialog">
-      <div class="inner">
-        <div class="header">
-          <span class="title">{{ dialog.title }}</span>
-          <span v-if="!dialog.yesBtn && !dialog.noBtn" class="close-btn" @click="removeDialog(i)"><i class="zmdi zmdi-close" /></span>
+  <transition name="fade">
+    <div v-if="dialogList.length > 0" class="dialogs-layer show" style="animation-duration: 0.2s">
+      <transition-group name="fade">
+        <div v-for="dialog in dialogList" :key="dialog.id" class="dialog" style="animation-duration: 0.2s">
+          <div class="inner">
+            <div class="header">
+              <span class="title">{{ dialog.title }}</span>
+              <span v-if="!dialog.yesBtn && !dialog.noBtn" class="close-btn" @click="removeDialog(dialog)"><i class="zmdi zmdi-close" /></span>
+            </div>
+            <div class="content" v-html="dialog.content" />
+            <div v-if="!!dialog.yesBtn || !!dialog.yesBtn" class="bottom">
+              <span v-if="!!dialog.yesBtn" class="confirm-btn" @click="onClickBtn(dialog, dialog.yesBtn)">{{ dialog.yesBtn[0] || '确认' }}</span>
+              <span v-if="!!dialog.noBtn" class="confirm-btn" @click="onClickBtn(dialog, dialog.noBtn)">{{ dialog.noBtn[0] || '取消' }}</span>
+            </div>
+          </div>
         </div>
-        <div class="content" v-html="dialog.content" />
-        <div v-if="!!dialog.yesBtn || !!dialog.yesBtn" class="bottom">
-          <span v-if="!!dialog.yesBtn" class="confirm-btn" @click="!!dialog.yesBtn && !!dialog.yesBtn[1] ? dialog.yesBtn[1]() : null">{{ dialog.yesBtn[0] }}</span>
-          <span v-if="!!dialog.noBtn" class="confirm-btn" @click="!!dialog.noBtn && !!dialog.noBtn[1] ? dialog.noBtn[1] : null">{{ dialog.noBtn[0] }}</span>
-        </div>
-      </div>
+      </transition-group>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
 
 interface DialogItem {
+  id: string,
   title: string,
   content: string,
-  yesBtn?: [string, Function?],
-  noBtn?: [string, Function?]
+  yesBtn?: [string, (() => void|boolean)?],
+  noBtn?: [string, (() => void|boolean)?]
 }
 
 @Component
@@ -34,8 +39,9 @@ export default class DialogLayer extends Vue {
     Vue.prototype.$dialog = this
   }
 
-  public open (title: string, content: string, yesBtn?: [string, Function?], noBtn?: [string, Function?]) {
+  public open (title: string, content: string, yesBtn?: [string, (() => void|boolean)?], noBtn?: [string, (() => void|boolean)?]) {
     this.dialogList.push({
+      id: new Date().getTime().toString(),
       title,
       content,
       yesBtn,
@@ -43,14 +49,19 @@ export default class DialogLayer extends Vue {
     })
   }
 
-  removeDialog (index: number) {
-    if ((this.dialogList.length - 1) <= 0) {
-      this.$el.classList.add('anim-fade-out')
-      window.setTimeout(() => {
-        this.dialogList.splice(index, 1)
-      }, 200)
-    } else {
-      this.dialogList.splice(index, 1)
+  removeDialog (dialog: DialogItem) {
+    this.dialogList.splice(this.dialogList.indexOf(dialog), 1)
+  }
+
+  onClickBtn (dialog: DialogItem, btn?: [string, (() => void|boolean)?]) {
+    if (!btn || !btn[1]) {
+      this.removeDialog(dialog)
+      return
+    }
+
+    const result = btn[1]()
+    if (result === undefined || result === false) {
+      this.removeDialog(dialog)
     }
   }
 }

@@ -1,6 +1,9 @@
 <template>
   <div class="terminal">
-    <div v-for="(line, i) in task.terminal.lines" :key="i" class="line" :data-level="line.level" v-html="line.text" />
+    <div v-for="(line, i) in task.terminal.lines" :key="i" class="line" :data-level="line.level">
+      <span v-if="!!line.level" class="tag">[{{ { I: '消息', S: '成功', W: '警告', E: '错误' }[line.level] }}]</span>
+      <span class="text" v-html="line.text" />
+    </div>
   </div>
 </template>
 
@@ -24,7 +27,7 @@ export default class Terminal extends Vue {
   padding: 30px 35px;
   @extend %app-content;
 
-  .line {
+  /deep/ .line {
     display: block;
     overflow: hidden;
     position: relative;

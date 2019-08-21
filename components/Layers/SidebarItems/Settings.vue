@@ -5,26 +5,24 @@
         <h2 class="grp-title">
           {{ grp.label }}
         </h2>
-        <div v-for="(item, o) in grp.items" :key="o" class="item">
-          <div :class="`${item.type}-type`">
-            <template v-if="item.type === 'btn'">
+        <div v-for="(item, o) in grp.items" :key="o" class="item" :class="`${item.type}-type`">
+          <div v-if="item.type === 'btn'" @click="!!item.opts.clickEvt ? item.opts.clickEvt() : null">
+            {{ item.opts.label }}
+          </div>
+
+          <div v-else-if="item.type === 'toggle-btn'" @click="onToggleClick(item)">
+            <div class="left-text">
               {{ item.opts.label }}
-            </template>
+            </div>
+            <div class="toggle" :class="{ 'turn-on': item.opts.value }">
+              <div class="toggle-bar" />
+              <div class="toggle-circle" />
+            </div>
+          </div>
 
-            <template v-else-if="item.type === 'toggle-btn'">
-              <div class="left-text">
-                {{ item.opts.label }}
-              </div>
-              <div class="toggle" :class="{ 'turn-on': item.opts.value }">
-                <div class="toggle-bar" />
-                <div class="toggle-circle" />
-              </div>
-            </template>
-
-            <template v-else-if="item.type === 'double-line'">
-              <span class="label">{{ item.opts.label }}</span>
-              <span class="value" v-html="item.opts.value" />
-            </template>
+          <div v-else-if="item.type === 'double-line'">
+            <span class="label">{{ item.opts.label }}</span>
+            <span class="value" v-html="item.opts.value" />
           </div>
         </div>
       </div>
@@ -33,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import Sidebar from './_Sidebar.vue'
 import Utils from '~/core/Utils'
 
@@ -44,47 +42,73 @@ export default class Settings extends Vue {
   list: SettingGrp[] = []
 
   created () {
+    Vue.prototype.$settings = this
+  }
+
+  readonly LocalStorageName = 'AppSetting'
+
+  get (key: string): any {
+    const data = JSON.parse(localStorage.getItem(this.LocalStorageName) || '{}')
+    return data.hasOwnProperty(key) ? data[key] : null
+  }
+
+  set (key: string, val: any): void {
+    const data = JSON.parse(localStorage.getItem(this.LocalStorageName) || '{}')
+    data[key] = val
+    localStorage.setItem(this.LocalStorageName, JSON.stringify(data))
+  }
+
+  @Watch('$store.state.ui.sidebar')
+  onSidebarChanged (sidebar: string) {
+    if (sidebar !== 'settings') { return }
+
+    this.$el.scrollTop = 0
+    this.list = [] // 清空
+
     this.newGrp('download', '下载内容', [
       this.btn('下载列表清空', () => {
-        /* Downloads.removeDataList()
-      AppLayer.Notify.success('下载列表已清空')
-       */
-        console.log(this.$root)
+        if (this.$downloads.countInProgress() > 0) {
+          this.$notify.warning('下载任务正在进行，无法清空')
+          return
+        }
+
+        this.$downloads.clearAll()
+        this.$notify.success('下载列表已清空')
       })
     ])
 
     this.newGrp('internet', '网络配置', [
       this.toggleBtn(
         '采集请求跟随 IE 代理配置',
-        (value: boolean) => {
-          Utils.callBackendMethod(`AppAction.utilsReqIeProxy(${value})`)
+        async (value: boolean) => {
+          try {
+            await (window as any).AppAction._utilsReqIeProxy(value)
+            this.set('ReqIeProxy', value)
+          } catch {
+            console.error('AppAction._utilsReqIeProxy 调用失败')
+            return false
+          }
         },
-        Utils.callBackendMethod("Setting.get('UtilsReqIeProxy')")
+        !!this.get('ReqIeProxy')
       )
     ])
 
     this.newGrp('maintenance', '维护', [
       this.btn('日志文件清理', () => {
-        Utils.callBackendMethod(`
-        AppAction.logFileClear().then(() => {
-          AppLayer.Notify.success('日志文件已清理')
+        (window as any).AppAction.logFileClear().then(() => {
+          this.$notify.success('日志文件已清理')
         })
-        `)
       }),
       this.btn('检查更新', () => {
-        /* AppUpdate.openPanel()
-        Setting.getSidebar().hide() */
+        this.$updater.open()
+        this.$store.commit('ui/setSidebar', null)
       })
     ])
 
     this.newGrp('about', '关于', [
       this.doubleLine(
         '主程序版本号',
-        Utils.callBackendMethod(`
-      AppAction.tryGetVersion((version: string) => {
-        infoAppVersion.text(version || '未知版本号')
-      }
-      `)
+        this.$appData.appVersion
       ),
       this.doubleLine(
         '作者',
@@ -109,7 +133,7 @@ export default class Settings extends Vue {
       ),
       this.doubleLine(
         '',
-        `<a href="https://github.com/qwqcode/Nacollector" target="_blank">Rescoll</a> Copyright (C) ${new Date().getFullYear()} <a href="https://qwqaq.com" target="_blank">qwqaq.com</a>`
+        `<a href="https://github.com/qwqcode/Nacollector" target="_blank">Nacollector</a> Copyright (C) ${new Date().getFullYear()} <a href="https://qwqaq.com" target="_blank">qwqaq.com</a>`
       )
     ])
   }
@@ -127,7 +151,7 @@ export default class Settings extends Vue {
 
   toggleBtn (
     label: string,
-    clickEvt: Function,
+    clickEvt: (afterValue: boolean) => boolean|void|Promise<boolean|undefined>,
     defaultVal?: boolean
   ): SettingItem {
     defaultVal = typeof defaultVal === 'undefined' ? false : defaultVal
@@ -135,6 +159,18 @@ export default class Settings extends Vue {
     return {
       type: 'toggle-btn',
       opts: { label, clickEvt, value: defaultVal }
+    }
+  }
+
+  async onToggleClick (item: SettingItem) {
+    if (typeof item.opts.value !== 'boolean') {
+      throw new TypeError('onToggleClick(): item.opts.value 必须为 boolean 类型')
+    }
+    if (typeof item.opts.clickEvt === 'function') {
+      const result = await item.opts.clickEvt(!item.opts.value)
+      if (result === undefined || result === true) {
+        item.opts.value = !item.opts.value
+      }
     }
   }
 
@@ -182,8 +218,8 @@ interface SettingItem {
       }
     }
 
-    .item > .btn-type,
-    .item > .toggle-btn-type {
+    .item.btn-type > div,
+    .item.toggle-btn-type > div {
       color: #212121;
       width: 100%;
       cursor: pointer;
@@ -195,7 +231,7 @@ interface SettingItem {
       white-space: nowrap;
     }
 
-    .item > .toggle-btn-type {
+    .item.toggle-btn-type > div {
       .left-text {
         float: left;
         position: relative;
@@ -247,7 +283,7 @@ interface SettingItem {
       }
     }
 
-    .item > .double-line-type {
+    .item.double-line-type > div {
       overflow: hidden;
       padding: 0 20px;
 

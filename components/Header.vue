@@ -34,7 +34,7 @@
       <HeaderTabBox />
 
       <div class="btn-group">
-        <span class="btn">
+        <span class="btn" @click="() => { $notify.info('文件管理器，敬请期待') }">
           <i class="zmdi zmdi-folder-outline" />
         </span>
         <span class="btn" @click="() => { $store.commit('ui/setSidebar', 'downloads') }">
@@ -126,7 +126,7 @@ $bg: #1565c0;
   $height: 30px;
 
   @extend %app-top-bar;
-  z-index: 102;
+  z-index: 99999;
   top: 0;
   height: $height;
   background-color: $bg;
@@ -142,7 +142,7 @@ $bg: #1565c0;
     -webkit-app-region: drag;
     user-select: none;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
   }
 

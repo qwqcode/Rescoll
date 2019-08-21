@@ -42,8 +42,8 @@
 </template>
 
 <script lang="ts">
+import $ from 'jquery'
 import { Vue, Component, Watch } from 'nuxt-property-decorator'
-import $ from 'jQuery'
 import { Base64 } from 'js-base64'
 import { html } from 'common-tags'
 import Form from '~/core/launcher/Form'
@@ -64,6 +64,7 @@ export default class LaunchPad extends Vue {
   }
 
   created () {
+    /** @deprecated 旧接口 */
     (window as any).TaskGen = this;
     (window as any).Task = this;
     (window as any).InputValidators = InputValidators
@@ -88,7 +89,7 @@ export default class LaunchPad extends Vue {
 
   newSpider (grpName: string, name: string, label: string, genFormFunc: Function) {
     const grp = this.collerGrpList.find(o => o.name === grpName)
-    if (!grp) { throw new Error('找不到该 grp：' + grpName) }
+    if (!grp) { throw new TypeError('找不到该 grp：' + grpName) }
 
     grp.collers.push({ name, label, genForm: genFormFunc })
   }
@@ -96,6 +97,11 @@ export default class LaunchPad extends Vue {
   loadSpiderList () {
     // 打开第一项
     this.changeColler(0)
+  }
+
+  clearCollerGrpList () {
+    this.$appData.collerGrpList = []
+    $('#LaunchForm').html('') // 清除当前表单
   }
 
   /* @Watch('$tabBox.tabList.length')
@@ -123,7 +129,7 @@ export default class LaunchPad extends Vue {
       .click(() => {
         if (!this.form.formCheck()) { return false }
 
-        console.log('FormSubmitData', formDom.find(':input').serializeArray())
+        // console.log('FormSubmitData', formDom.find(':input').serializeArray())
         this.createTask(coller.label, grp.name + '.' + coller.name, formDom.find(':input').serializeArray())
 
         return false
@@ -141,6 +147,15 @@ export default class LaunchPad extends Vue {
     task.headerTab = new Tab('TASK_' + id, task.title, '/task/' + id)
     task.headerTab.onClosing = () => {
       // 结束任务
+      if (task.isInProgress) {
+        this.$dialog.open('是否中止任务？', `任务 “${task.title}” 正在执行中...`, ['中止并删除任务', () => {
+          this.abortTask(task)
+        }], ['取消', () => { }])
+        return false
+      }
+
+      this.removeTask(task)
+      return true
     }
     this.$appData.taskList.push(task)
     this.$tabBox.push(task.headerTab)
@@ -158,15 +173,61 @@ export default class LaunchPad extends Vue {
     return task
   }
 
+  /** 删除任务 */
+  removeTask (task: Task) {
+    const taskList = this.$appData.taskList
+    taskList.splice(taskList.indexOf(task), 1)
+  }
+
+  /** 中止任务 */
+  abortTask (task: Task) {
+    const taskList = this.$appData.taskList
+    if (!taskList.includes(task)) { throw new TypeError('任务不存在') }
+
+    if (!task.isInProgress) {
+      // 若任务已执行完毕，直接删除
+      if (task.headerTab) { this.$tabBox.remove(task.headerTab) }
+      this.removeTask(task)
+      return
+    }
+
+    try {
+      (window as any).TaskController.abortTask(task.id).then((isSuccess: boolean) => {
+        if (isSuccess) {
+          if (task.headerTab) { this.$tabBox.remove(task.headerTab) }
+          this.removeTask(task)
+        } else {
+          this.$notify.error('任务中止失败')
+        }
+      })
+    } catch (e) {
+      this.$notify.error('任务中止失败')
+      throw e
+    }
+  }
+
+  /**
+   * Terminal 写日志
+   * @deprecated 旧接口
+   */
   log (taskId: string, text: string, level?: string, timeStamp?: string, textIsBase64?: boolean) {
     const task = this.$appData.taskList.find(o => o.id === taskId)
-    if (!task) { throw new Error(`未找到任务 ${taskId}`) }
+    if (!task) { throw new TypeError(`未找到任务 ${taskId}`) }
 
     if (typeof textIsBase64 === 'boolean' && textIsBase64 === true) {
       text = Base64.decode(text)
     }
 
     task.terminal.lines.push({ text, level })
+    window.console.log(`[TaskTerminal][${taskId}][${level}][${new Date().toLocaleString()}] ${text}`)
+  }
+
+  /**
+   * 获取 Task
+   * @deprecated 旧接口
+   */
+  get (id: string) {
+    return this.$appData.taskList.find(o => o.id === id)
   }
 }
 </script>
