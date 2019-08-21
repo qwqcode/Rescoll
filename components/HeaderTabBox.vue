@@ -80,6 +80,14 @@ export default class HeaderTabBox extends Vue {
     return this.tabList.length
   }
 
+  @Watch('$route.path')
+  onRoutePathChanged (path: string) {
+    const tab = this.tabList.find(o => o.location === path)
+    if (tab) {
+      this.setActive(tab)
+    }
+  }
+
   setActive (targetTab: Tab) {
     this.tabList.forEach((tabItem) => {
       tabItem.isActive = tabItem === targetTab
@@ -89,7 +97,6 @@ export default class HeaderTabBox extends Vue {
   linkTo (tab: Tab) {
     this.$launchPad.hide()
     this.$router.replace(tab.location)
-    this.setActive(tab)
   }
 
   closeTab (tab: Tab) {
