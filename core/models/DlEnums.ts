@@ -14,8 +14,10 @@ export enum DlStatus {
 export enum DlAction {
   /** 暂停 */
   Pause = 1,
-  /** 重试 */
+  /** 恢复 */
   Resume = 2,
   /** 取消 */
-  Cancel = 3
+  Cancel = 3,
+  /** 重启 */
+  Restart = 4
 }

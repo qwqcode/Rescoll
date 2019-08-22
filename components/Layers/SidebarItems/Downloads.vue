@@ -5,8 +5,8 @@
         <!-- e.g. data-status="Downloading" -->
         <div v-for="dlTask in dlTaskList" :key="dlTask.id" class="item" :data-status="DlStatus[dlTask.status]">
           <div class="header">
-            <span class="title">{{ dlTask.title }}</span>
-            <span class="url" @click="openUrl(dlTask)">{{ dlTask.url }}</span>
+            <span class="title" @click="dlTask.status === DlStatus.Done ? launchFile(dlTask) : null">{{ dlTask.title || dlTask.id }}</span>
+            <a class="url" :href="dlTask.url" target="_blank">{{ dlTask.url }}</a>
           </div>
           <div v-if="dlTask.descInProgress !== ''" class="desc">
             {{ dlTask.descInProgress }}
@@ -31,7 +31,7 @@
             </template>
             <!-- 下载失败 -->
             <template v-if="dlTask.status === DlStatus.Fail || dlTask.status == DlStatus.Cancelled">
-              <span @click="takeAction(dlTask, DlAction.Resume)">重试下载</span>
+              <span @click="takeAction(dlTask, DlAction.Restart)">重试下载</span>
             </template>
           </div>
           <div class="remove-btn" title="从列表中移除" @click="removeBtnClick(dlTask)">
@@ -54,6 +54,7 @@ import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import Sidebar from './_Sidebar.vue'
 import DlTask from '~/core/models/DlTask'
 import { DlStatus, DlAction } from '~/core/models/DlEnums'
+import Utils from '~/core/Utils'
 
 interface BackendCallObj {
   key: string
@@ -82,7 +83,19 @@ export default class Settings extends Vue {
     Vue.prototype.$downloads = this;
     (window as any).Downloads = this
 
-    this.restoreLocal()
+    this.restoreLocal();
+
+    // 下载文件
+    (window as any).window.downloadFile = (url: string) => {
+      this.downloadURL(url)
+    }
+
+    // 保存本地文件
+    (window as any).window.saveLocalFile = (path: string) => {
+      const key = 'LocalFile_' + new Date().getTime().toString()
+      this.push(new DlTask(key, Utils.extractFilename(path), undefined, undefined, DlStatus.Downloading));
+      (window as any).AppAction.saveLocalFile(path, key)
+    }
   }
 
   mounted () {
@@ -94,6 +107,7 @@ export default class Settings extends Vue {
 
   push (dlTask: DlTask) {
     this.dlTaskList.unshift(dlTask) // 头部插入
+    this.setAppHeaderDownloadsNum(this.inProgressNum)
   }
 
   @Watch('dlTaskList')
@@ -125,7 +139,7 @@ export default class Settings extends Vue {
 
   /** 清空下载列表 */
   clearAll () {
-    if (this.countInProgress() > 0) {
+    if (this.inProgressNum > 0) {
       throw new TypeError('下载任务执行时，无法清空下载列表')
     }
 
@@ -155,14 +169,19 @@ export default class Settings extends Vue {
     return this.dlTaskList.length
   }
 
-  /** 获取正在执行的任务数 */
-  countInProgress () {
+  /** 正在执行的任务数 */
+  get inProgressNum () {
     return this.dlTaskList.filter(o => o.isInProgress).length
+  }
+
+  /** 设置 header 下载按钮角标 */
+  setAppHeaderDownloadsNum (num: number) {
+    this.$header.downloadsNum = num
   }
 
   /** 下载任务执行操作 */
   takeAction (dlTask: DlTask, action: DlAction) {
-    if (action === DlAction.Resume) {
+    if (action === DlAction.Restart) {
       // 重试下载
       if (dlTask.url) {
         this.downloadURL(dlTask.url)
@@ -183,6 +202,17 @@ export default class Settings extends Vue {
     })
   }
 
+  /** 启动文件 */
+  public launchFile (dlTask: DlTask) {
+    if (dlTask.status !== DlStatus.Done) { return }
+
+    (window as any).CrDownloadsCallBack.fileLaunch(dlTask.localPath).then((isSuccess: boolean) => {
+      if (!isSuccess) {
+        dlTask.status = DlStatus.Cancelled
+      }
+    })
+  }
+
   /** URL 在系统默认浏览器中打开 */
   openUrl (dlTask: DlTask) {
     (window as any).CrDownloadsCallBack.urlOpenInDefaultBrowser(dlTask.url)
@@ -196,9 +226,9 @@ export default class Settings extends Vue {
   addTask ({ key, fullPath, downloadUrl, totalBytes }: BackendCallObj) {
     if (this.get(key)) { throw new TypeError(`${key} 下载任务已存在，无需再新建`) }
 
-    const dlTask = new DlTask(key, fullPath, downloadUrl)
+    const dlTask = new DlTask(key, Utils.extractFilename(downloadUrl), downloadUrl)
     dlTask.sizeTotal = totalBytes
-    this.dlTaskList.unshift(dlTask)
+    this.push(dlTask)
   }
 
   updateTask ({ key, receivedBytes, currentSpeed, status, fullPath, downloadUrl }: BackendCallObj) {
@@ -211,6 +241,7 @@ export default class Settings extends Vue {
 
     if (!!fullPath && dlTask.localPath !== fullPath) {
       this.$set(dlTask, 'localPath', fullPath)
+      this.$set(dlTask, 'title', Utils.extractFilename(fullPath))
     }
 
     if (!!downloadUrl && dlTask.url !== downloadUrl) {
@@ -231,18 +262,28 @@ export default class Settings extends Vue {
     padding: 10px 10px;
     border-bottom: 1px solid #efefef;
 
+    &[data-status="Done"] .header .title {
+      cursor: pointer;
+    }
+
     &[data-status="Pause"] .progress .progress-bar {
       background-color: #b7b7b7;
     }
 
-    &[data-status="Fail"] .progress {
-      .progress-bar {
-        background: #f95c57;
+    &[data-status="Fail"] {
+      .header .title {
+        color: #f95c57;
       }
 
-      &.indeterminate .progress-bar {
-        width: 100% !important;
-        animation: none;
+      .progress {
+        .progress-bar {
+          background: #f95c57;
+        }
+
+        &.indeterminate .progress-bar {
+          width: 100% !important;
+          animation: none;
+        }
       }
     }
 
@@ -261,10 +302,13 @@ export default class Settings extends Vue {
         display: block;
         font-size: 16px;
         margin-bottom: 6px;
+        word-wrap: break-word;
+        word-break: normal;
       }
 
       .url {
         display: block;
+        cursor: pointer;
         font-size: 12px;
         overflow: hidden;
         text-overflow: ellipsis;

@@ -67,7 +67,7 @@ export default class Settings extends Vue {
 
     this.newGrp('download', '下载内容', [
       this.btn('下载列表清空', () => {
-        if (this.$downloads.countInProgress() > 0) {
+        if (this.$downloads.inProgressNum > 0) {
           this.$notify.warning('下载任务正在进行，无法清空')
           return
         }

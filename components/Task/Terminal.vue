@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'nuxt-property-decorator'
+import { Vue, Component, Prop, Watch } from 'nuxt-property-decorator'
 import Task from '~/core/models/Task'
 
 @Component
@@ -16,7 +16,23 @@ export default class Terminal extends Vue {
   @Prop({ required: true })
   task!: Task
 
+  @Watch('task.terminal.lines')
+  onLinesChanged () {
+    this.keepBottom()
+  }
+
+  @Watch('task.isInProgress')
+  onIsInProgressChanged () {
+    this.keepBottom()
+  }
+
   mounted () {
+    this.keepBottom()
+  }
+
+  /** 保持置于底部 */
+  keepBottom () {
+    this.$el.scrollTop = this.$el.scrollHeight
   }
 }
 </script>

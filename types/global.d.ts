@@ -1,5 +1,6 @@
 import Marked from 'marked'
 import TaskModel from '~/core/models/Task'
+import Header from '~/components/Header.vue'
 import LaunchPad from '~/components/LaunchPad.vue'
 import NotifyLayer from '~/components/Layers/NotifyLayer.vue'
 import DialogLayer from '~/components/Layers/DialogLayer.vue'
@@ -11,6 +12,7 @@ import Updater from '~/components/Updater.vue'
 
 declare module 'vue/types/vue' {
   interface Vue {
+    $header: Header
     $launchPad: LaunchPad
     $notify: NotifyLayer
     $dialog: DialogLayer

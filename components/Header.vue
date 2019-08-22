@@ -37,8 +37,9 @@
         <span class="btn" @click="() => { $notify.info('文件管理器，敬请期待') }">
           <i class="zmdi zmdi-folder-outline" />
         </span>
-        <span class="btn" @click="() => { $store.commit('ui/setSidebar', 'downloads') }">
+        <span class="btn" @click="() => { $store.commit('ui/setSidebar', 'downloads'); downloadsNum = 0 }">
           <i class="zmdi zmdi-download" />
+          <span v-if="downloadsNum > 0" class="btn-badge">{{ downloadsNum }}</span>
         </span>
         <span class="btn" @click="() => { $store.commit('ui/setSidebar', 'settings') }">
           <i class="zmdi zmdi-settings" />
@@ -49,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import HeaderTabBox from './HeaderTabBox.vue'
 
 @Component({
@@ -58,6 +59,11 @@ import HeaderTabBox from './HeaderTabBox.vue'
 export default class Header extends Vue {
   isBlur: boolean = false
   isMaximized: boolean = false
+  downloadsNum = 0
+
+  created () {
+    Vue.prototype.$header = this
+  }
 
   mounted () {
     /* win.on('blur', () => {
@@ -98,7 +104,7 @@ export default class Header extends Vue {
       return
     } */
 
-    const dlInProgressNum = this.$downloads.countInProgress() // 正在执行的下载任务数
+    const dlInProgressNum = this.$downloads.inProgressNum // 正在执行的下载任务数
     if (dlInProgressNum > 0) {
       this.$dialog.open('退出 Nacollector', `有 ${dlInProgressNum} 个下载任务仍在继续！是否结束下载并退出 Nacollector？`, ['确定', () => {
         (window as any).AppAction.appClose()
@@ -233,6 +239,7 @@ $bg: #1565c0;
     justify-content: flex-end;
 
     .btn {
+      position: relative;
       width: 50px;
       height: $height;
       line-height: $height;
@@ -249,6 +256,19 @@ $bg: #1565c0;
       }
 
       & > i {
+      }
+
+      & > .btn-badge {
+        position: absolute;
+        top: 1px;
+        right: 7px;
+        pointer-events: none;
+        background: rgba(255, 64, 61, 0.774);
+        height: 13px;
+        line-height: 10px;
+        padding: 1px 4px;
+        font-size: 12px;
+        border-radius: 2px;
       }
     }
   }
