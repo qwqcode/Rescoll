@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"],
+      "@/*": ["./assets/*"]
+    },
+    "outDir": "./dist",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+  },
+  "include": ["./main.ts"],
+  "exclude": ["node_modules"]
+}

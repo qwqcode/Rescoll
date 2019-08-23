@@ -1,0 +1,215 @@
+@import "normalize.css";
+
+@font-face {
+  font-family: SAOUI;
+  src: url('../fonts/SAOUI.otf');
+}
+
+body, html {
+  font-family: "Helvetica Neue", "PingFangSC-Light", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+  color: #FFF;
+  background-color: #282c34;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  line-height: 1.42857143;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(197, 197, 197, 0.71);
+
+  &:hover {
+    background: rgba(197, 197, 197, 0.95);
+  }
+}
+
+a {
+  color: #008eff;
+  text-decoration: none;
+  transition: color .2s ease-in-out;
+}
+
+.app-main {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+
+  .app-page-wrap {
+    
+  }
+}
+
+/* anim */
+.anim-fade-in {
+  animation-name: fadeIn;
+  animation-fill-mode: both;
+  animation-duration: .3s;
+}
+
+.anim-fade-out {
+  animation-name: fadeOut;
+  animation-duration: .2s;
+}
+
+@keyframes fadeIn {
+  0% {
+      opacity: 0
+  }
+
+  to {
+      opacity: 1
+  }
+}
+
+@keyframes fadeOut {
+  100% {
+      opacity: 0;
+  }
+
+  0% {
+  }
+}
+
+$animationDuration: 0.5s;
+@import "~vue2-animate/src/sass/vue2-animate.scss";
+
+/* Widgets */
+.widget-float-img {
+  position: absolute;
+  z-index: 1000;
+  width: 250px;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 1px;
+  background: #efefef;
+  padding: 10px;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.49);
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  > img {
+    height: auto;
+    width: auto;
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 100%;
+    border-radius: 2px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Loading Indicator */
+.loading-indicator {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  .inner {
+    position: relative;
+    width: 50px;
+    height: 50px;
+  }
+  svg {
+    animation: loading-indicator-rotate 2s linear infinite;
+    transform-origin: center center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    circle {
+      stroke-dasharray: 1,200;
+      stroke-dashoffset: 0;
+      animation: loading-indicator-dash 1.5s ease-in-out infinite,loading-indicator-color 6s ease-in-out infinite;
+      stroke-linecap: round;
+    }
+  }
+}
+
+@keyframes loading-indicator-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+@keyframes loading-indicator-dash {
+  0% {
+    stroke-dasharray: 1,200;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 89,200;
+    stroke-dashoffset: -35px;
+  }
+
+  100% {
+    stroke-dasharray: 89,200;
+    stroke-dashoffset: -124px;
+  }
+}
+
+
+@keyframes loading-indicator-color {
+  0%,100% {
+    stroke: #ff5652;
+  }
+
+  40% {
+    stroke: #2196F3;
+  }
+
+  66% {
+    stroke: #32c787;
+  }
+
+  80%,90% {
+    stroke: #ffc107;
+  }
+}
+
+.loading-css-icon {
+  border-radius: 100%;
+  margin: 0;
+  border: 1px solid #43aee2;
+  border-bottom-color: transparent;
+  height: 15px;
+  width: 15px;
+  background: 0 0 !important;
+  display: inline-block;
+  -webkit-animation: loading-css-icon-rotate .75s 0s linear infinite;
+  animation: loading-css-icon-rotate .75s 0s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes loading-css-icon-rotate {
+  0% {
+      -webkit-transform: rotate(0);
+      transform: rotate(0)
+  }
+
+  50% {
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg)
+  }
+
+  100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg)
+  }
+}
