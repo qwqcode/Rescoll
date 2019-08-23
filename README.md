@@ -1,19 +1,19 @@
 # Rescoll
 
-> A data collection tool
+> ⚔ Web crawling & scraping integration platform for everyone.
 
 #### Build Setup
 
 ``` bash
 # install dependencies
-npm install
+yarn
 
-# serve with hot reload at localhost:9080
-npm run dev
+# start development
+yarn dev
 
 # build electron application for production
-npm run build
+yarn build
 
-# lint all JS/Vue component files in `src/`
-npm run lint
+# lint all TS/JS/Vue files
+yarn lint
 ```
