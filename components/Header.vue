@@ -50,8 +50,10 @@
 </template>
 
 <script lang="ts">
+import { remote } from 'electron'
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import HeaderTabBox from './HeaderTabBox.vue'
+const win = remote.getCurrentWindow()
 
 @Component({
   components: { HeaderTabBox }
@@ -66,7 +68,7 @@ export default class Header extends Vue {
   }
 
   mounted () {
-    /* win.on('blur', () => {
+    win.on('blur', () => {
       this.isBlur = true
     })
 
@@ -80,25 +82,23 @@ export default class Header extends Vue {
 
     win.on('unmaximize', () => {
       this.isMaximized = false
-    }) */
+    })
   }
 
   maximize () {
-    /* if (win.isMaximized()) {
+    if (win.isMaximized()) {
       win.unmaximize()
     } else {
       win.maximize()
-    } */
-    (window as any).AppAction.appMaxMini()
+    }
   }
 
   minimize () {
-    // win.minimize()
-    (window as any).AppAction.appMin()
+    win.minimize()
   }
 
   close () {
-    // win.close()
+    win.close()
     /* if (!!App.AppUpdate.panel && App.AppUpdate.panel.isUpdating) {
       this.$notify.error(`Nacollector 正在升级中，暂时无法退出，请稍等片刻`)
       return

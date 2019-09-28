@@ -14,6 +14,7 @@
 
 <script lang="ts">
 import $ from 'jquery'
+import { ipcRenderer } from 'electron'
 import { Vue, Component } from 'nuxt-property-decorator'
 import Header from '../components/Header.vue'
 import LaunchPad from '../components/LaunchPad.vue'
@@ -37,6 +38,13 @@ export default class extends Vue {
     (window as any).AppWidget = Utils;
     (window as any).$app = this
     Vue.prototype.$appData = this.appData
+
+    // 打开 开发者工具
+    $(document).keydown((e) => {
+      if (e.altKey && e.keyCode === 123) {
+        ipcRenderer.send('open-dev-tools')
+      }
+    })
   }
 
   mounted () {

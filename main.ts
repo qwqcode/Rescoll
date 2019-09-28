@@ -1,4 +1,5 @@
-import { app, BrowserWindow } from 'electron'
+import * as http from 'http'
+import { app, BrowserWindow, ipcMain } from 'electron'
 
 let mainWindow: BrowserWindow | null
 const winURL = process.env.NODE_ENV === 'development'
@@ -12,20 +13,14 @@ function createWindow () {
    */
   mainWindow = new BrowserWindow({
     useContentSize: true,
-    width: 1200,
-    height: 650,
-    minWidth: 1200,
-    minHeight: 650,
+    width: 1160,
+    height: 715,
+    minWidth: 1160,
+    minHeight: 715,
     frame: false,
     webPreferences: {
       nodeIntegration: true // 集成 node
     }
-  })
-
-  mainWindow.loadURL(winURL)
-
-  mainWindow.on('closed', () => {
-    mainWindow = null
   })
 
   if (process.env.NODE_ENV === 'development') {
@@ -36,10 +31,32 @@ function createWindow () {
     } = require('electron-devtools-installer')
 
     // Installing devtools
-    installExtension(VUEJS_DEVTOOLS).then(() => {})
+    installExtension(VUEJS_DEVTOOLS).then((name: string) => {
+      console.log(`Added Extension:  ${name}`)
+    }).catch((err: any) => console.log('An error occurred: ', err))
+
+    // Wait for nuxt to build
+    const pollServer = () => {
+      http.get(winURL, (res) => {
+        if (res.statusCode === 200) { if (mainWindow !== null) { mainWindow.loadURL(winURL) } } else { setTimeout(pollServer, 300) }
+      }).on('error', pollServer)
+    }
+    pollServer()
+
+    mainWindow.webContents.openDevTools()
+  } else {
+    mainWindow.loadURL(winURL)
   }
 
-  mainWindow.webContents.openDevTools()
+  mainWindow.on('closed', () => {
+    mainWindow = null
+  })
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    if (mainWindow !== null) {
+      mainWindow.webContents.send('')
+    }
+  })
 }
 
 app.on('ready', createWindow)
@@ -54,4 +71,13 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+ipcMain.on('close-app', (evt, arg) => {
+  app.quit()
+})
+
+ipcMain.on('open-dev-tools', (evt, arg) => {
+  if (mainWindow === null) { return }
+  mainWindow.webContents.openDevTools()
 })

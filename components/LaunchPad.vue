@@ -71,6 +71,31 @@ export default class LaunchPad extends Vue {
     Vue.prototype.$launchPad = this
   }
 
+  mounted () {
+    this.newSpiderType('Business', 'EC')
+    this.newSpider('Business', 'CollItemDescImg', '商品详情页图片解析', (form) => {
+      form.textInput('PageUrl', '详情页链接', '', InputValidators.isUrl)
+      form.selectInput('PageType', '链接类型', {
+        'Tmall': '天猫',
+        'Taobao': '淘宝',
+        'TaobaoMobile': '淘宝/天猫 手机网页',
+        'Alibaba': '阿里巴巴',
+        'Suning': '苏宁易购',
+        'Gome': '国美在线'
+      }); form.selectInput('ImgType', '图片类型', {
+        'Thumb': '主图',
+        'Category': '分类图',
+        'Desc': '详情图'
+      }); form.selectInput('CollType', '采集模式', {
+        'collImgSrcUrl': '显示图片链接',
+        'collDownloadImgSrc': '显示图片链接 并 下载打包保存'
+      })
+    })
+    this.newSpider('Business', 'CollItemDescVideo', '商品详情页视频抓取', (form) => { form.textInput('PageUrl', '详情页链接', '', InputValidators.isUrl) })
+    this.newSpiderType('Picture', 'Picture')
+    this.loadSpiderList()
+  }
+
   show () {
     this.isShow = true
   }
@@ -87,7 +112,7 @@ export default class LaunchPad extends Vue {
     this.collerGrpList.push({ name, label, collers: [] })
   }
 
-  newSpider (grpName: string, name: string, label: string, genFormFunc: Function) {
+  newSpider (grpName: string, name: string, label: string, genFormFunc: ((form: Form) => void)) {
     const grp = this.collerGrpList.find(o => o.name === grpName)
     if (!grp) { throw new TypeError('找不到该 grp：' + grpName) }
 
