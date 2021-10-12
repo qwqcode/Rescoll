@@ -54,7 +54,7 @@
     "common-tags": "^1.8.0",
     "concurrently": "^4.1.2",
     "cross-env": "^5.2.0",
-    "electron": "^6.0.3",
+    "electron": "^11.5.0",
     "electron-builder": "^21.2.0",
     "electron-devtools-installer": "^2.2.4",
     "eslint": "^6.1.0",
