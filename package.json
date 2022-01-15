@@ -26,7 +26,7 @@
     "jquery": "^3.4.1",
     "js-base64": "^2.5.1",
     "lodash": "^4.17.15",
-    "marked": "^0.7.0",
+    "marked": "^4.0.10",
     "material-design-iconic-font": "^2.2.0",
     "normalize.css": "^8.0.1",
     "nuxt": "2.8.1",
